@@ -3,12 +3,11 @@ import React, { Component } from "react";
 import {
   EditorState,
   convertToRaw,
-  ContentState,
-  convertFromHTML,
 } from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import { FiUsers } from "react-icons/fi";
-import { BsQuestionCircle } from "react-icons/bs";
+// import { BiShowAlt } from "react-icons/bs";
+import { BiShowAlt } from "react-icons/bi";
 
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
@@ -17,8 +16,11 @@ import DatePicker from "react-datepicker";
 import { TailSpin } from "react-loader-spinner";
 import Header from './common/header';
 import { Link    } from 'react-router-dom'
-
+import {withRouter} from './withRouter'
 import moment from "moment";
+
+import "react-datepicker/dist/react-datepicker.css";
+import { Helmet } from "react-helmet";
 
 let htmlToDraft = null;
 if (typeof window === "object") {
@@ -26,9 +28,7 @@ if (typeof window === "object") {
 }
 
 
-
-
-export default class Event extends Component {
+class Event extends Component {
   constructor(props) {
     super(props);
 
@@ -209,6 +209,7 @@ export default class Event extends Component {
               virtual: false,
             });
             alert("Event Add Successfully.")
+            this.props.navigate('/events')
           } else {
             this.setState({
               loading: false,
@@ -232,11 +233,14 @@ export default class Event extends Component {
       eventName: "",
       hideImage: true,
       profileImg: "",
-      validFrom: "",
-      validUpto: "",
+      validFrom: new Date(),
+      validUpto: new Date(),
       location: "",
       registrationLink: "",
       type: "",
+      physical: false,
+      system: false,
+      virtual: false,
     });
   }
 
@@ -267,6 +271,11 @@ export default class Event extends Component {
 
     return (
       <>
+
+<Helmet>
+          <title>Event</title>
+        </Helmet>
+      
  <Header/>
 
         <div className="txt" id="pddd">
@@ -289,7 +298,7 @@ export default class Event extends Component {
               <div className="page-title-actions">
                   <Link to={"/events"}>
                     <button type="button" className="mr-1 btn btn-success">
-                      <BsQuestionCircle
+                      <BiShowAlt
                         className="fa pe-7s-help1"
                         style={{ marginBottom: "3%" }}
                       />{" "}
@@ -684,3 +693,6 @@ export default class Event extends Component {
     );
   }
 }
+
+
+export default withRouter(Event)

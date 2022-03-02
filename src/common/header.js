@@ -256,8 +256,8 @@ export default class header extends Component {
                                         <div className="widget-content-wrapper">
                                             <div className="widget-content-left  ml-3 header-user-info">
                                                 <div className="btn-group">
-                                                        <a href="#" className="p-0 btn">
-                                                            <div onClick={() => this.showDrop()}>
+                                                    <Link to={"#"} className="p-0 btn">
+                                                    <div onClick={() => this.showDrop()}>
                                                                 <div className="widget-heading">{this.state.userName}<MdKeyboardArrowDown style={{
                                                                     height: "5%",
                                                                     width: "20px"
@@ -265,8 +265,11 @@ export default class header extends Component {
                                                                 </div>
                                                                 <div className="widget-subheading">Library User</div>
                                                             </div>
+                                                    </Link>
+                                                        {/* <a href="#" className="p-0 btn">
+                                                            
 
-                                                        </a>
+                                                        </a> */}
 
                                                     <div style={{ display: this.state.showDropdown ? "block" : "none" }} className="dropdown-menu dropdown-menu-right"
                                                     >
@@ -276,10 +279,14 @@ export default class header extends Component {
                                                             &nbsp;Change Password</span>
 
                                                         <form action="/Account/Logout" method="post">
-                                                                <a  href={"/login"} onClick={() => this.logOUt()}
+                                                            <Link to="/login" onClick={() => this.logOUt()}
+                                                                    className="dropdown-item">
+                                                            <MdKeyboardArrowDown />&nbsp;Logout
+                                                            </Link>
+                                                                {/* <a  href={"/login"} onClick={() => this.logOUt()}
                                                                     className="dropdown-item"
                                                                 >
-                                                                    <MdKeyboardArrowDown />&nbsp;Logout</a>
+                                                                    </a> */}
 
                                                         </form>
                                                     </div>

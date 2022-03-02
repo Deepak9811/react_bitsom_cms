@@ -2,12 +2,15 @@ import React, { Component } from 'react';
 import DatePicker from "react-datepicker";
 import { TailSpin } from 'react-loader-spinner'
 import { FiUsers } from "react-icons/fi";
-import { BsQuestionCircle } from "react-icons/bs";
+// import { BiShowAlt } from "react-icons/bs";
+import { BiShowAlt } from "react-icons/bi";
 import moment from "moment";
 import Header from './common/header';
 import { Link    } from 'react-router-dom'
+import {withRouter} from './withRouter'
+import { Helmet } from "react-helmet";
 
-export default class feedback extends Component {
+class feedback extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -73,7 +76,7 @@ export default class feedback extends Component {
 
     getFeedBackData(id, libconCode) {
 
-        fetch(`${process.env.PATH_URL}getquestion?libcode=${libconCode}&questionid=${id}`, {
+        fetch(`http://192.168.1.217:1003/api/getquestion?libcode=${libconCode}&questionid=${id}`, {
             method: "GET",
             headers: {
                 Accepts: "application/json",
@@ -105,7 +108,7 @@ export default class feedback extends Component {
 
                     console.log(this.state.mcqNewData)
 
-                    if (this.state.mcqNewData.length != 0) {
+                    if (this.state.mcqNewData.length !== 0) {
                         this.setState({
                             showNewMcqData: true,
                             hideSaveBttn: false
@@ -130,7 +133,7 @@ export default class feedback extends Component {
             this.setState({
                 loading: true
             })
-            fetch(`${process.env.PATH_URL}questions`, {
+            fetch(`http://192.168.1.217:1003/api/questions`, {
                 method: "POST",
                 headers: {
                     Accept: "application/json",
@@ -183,6 +186,7 @@ export default class feedback extends Component {
                                 active: false
                             })
                             alert("Feedback Question Add Successfully.")
+                            this.props.navigate('/feedback/questions')
                             // Router.push('/feedback/questions')
                         }
                     } else {
@@ -210,7 +214,7 @@ export default class feedback extends Component {
             this.setState({
                 loading: true
             })
-            fetch(`${process.env.PATH_URL}insertmcq`, {
+            fetch(`http://192.168.1.217:1003/api/insertmcq`, {
                 method: "POST",
                 headers: {
                     Accept: "application/json",
@@ -347,7 +351,7 @@ export default class feedback extends Component {
         })
         console.log(JSON.stringify(mcqNewData))
 
-        fetch(`${process.env.PATH_URL}updatemcq`, {
+        fetch(`http://192.168.1.217:1003/api/updatemcq`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -372,6 +376,7 @@ export default class feedback extends Component {
                         activeMcq: false,
                         active: false
                     })
+                    this.props.navigate('/feedback/questions')
                     // Router.push('/feedback/questions')
                     alert("Feedback Question Add Successfully.")
                 } else {
@@ -397,6 +402,9 @@ export default class feedback extends Component {
         // console.log(this.state)
         return (
             <>
+            <Helmet>
+          <title>New Feedback</title>
+        </Helmet>
                 <Header/>
                 <div className='txt' id='pddd'>
 
@@ -417,7 +425,7 @@ export default class feedback extends Component {
                             <div className="page-title-actions">
                                     <Link to={"/feedback/questions"}>
                                         <button type="button" className="mr-1 btn btn-success" >
-                                            <BsQuestionCircle className="fa pe-7s-help1" style={{ marginBottom: "3%" }} /> {" "}Show Feedbacks
+                                            <BiShowAlt className="fa pe-7s-help1" style={{ marginBottom: "3%" }} /> {" "}Show Feedbacks
                                         </button>
                                     </Link>
                             </div>
@@ -878,3 +886,6 @@ export default class feedback extends Component {
         );
     }
 }
+
+
+export default  withRouter(feedback)

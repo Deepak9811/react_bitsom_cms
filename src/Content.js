@@ -2,23 +2,24 @@ import React, { Component } from "react";
 import {
   EditorState,
   convertToRaw,
-  ContentState,
-  convertFromHTML,
 } from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import { FiUsers } from "react-icons/fi";
-import { BsQuestionCircle } from "react-icons/bs";
+import { BiShowAlt } from "react-icons/bi";
 
 import { TailSpin } from "react-loader-spinner";
 import { Editor } from "react-draft-wysiwyg";
 import Header from './common/header';
-import {withRouter,withParams} from './withRouter'
 import { Link    } from 'react-router-dom'
+import { Helmet } from "react-helmet";
+
+import {withRouter} from './withRouter'
 
 let htmlToDraft = null;
 if (typeof window === "object") {
   htmlToDraft = require("html-to-draftjs").default;
 }
+
 
  class Content extends Component {
   constructor(props) {
@@ -40,7 +41,10 @@ if (typeof window === "object") {
   }
 
   componentDidMount() {
-    console.log("props :- ",this.props)
+    // const id = this.props.params[0].get('id');
+    // const type = this.props.params[0].get('type');
+    // console.log("props :- ",id)
+    // console.log("props  type :- ",type)
     const libconCode = JSON.parse(localStorage.getItem("libCode"));
     console.log("libconCode :- ", libconCode);
     this.setState({
@@ -167,6 +171,7 @@ if (typeof window === "object") {
               app: false,
               profileImg: "",
             });
+            this.props.navigate('/contents')
             alert("Content Add Successfully.");
           } else {
             this.setState({
@@ -200,6 +205,9 @@ if (typeof window === "object") {
     console.log("props :- ",this.props)
     return (
       <>
+       <Helmet>
+          <title>Content</title>
+        </Helmet>
           <Header/>
         <div className="txt" id="pddd">
           <div className="app-page-title">
@@ -221,7 +229,7 @@ if (typeof window === "object") {
               <div className="page-title-actions">
                   <Link to={"/contents"}>
                     <button type="button" className="mr-1 btn btn-success">
-                      <BsQuestionCircle
+                      <BiShowAlt
                         className="fa pe-7s-help1"
                         style={{ marginBottom: "3%" }}
                       />{" "}
@@ -475,4 +483,23 @@ if (typeof window === "object") {
 }
 
 
-export default withParams(Content)
+export default withRouter(Content)
+
+// import React, { Component } from 'react'
+// import {withParams} from './withParams'
+
+// class Content extends Component {
+
+//     componentDidMount(){
+//         console.log(this.props.useParams)
+//     }
+
+//   render() {
+//     return (
+//       <div>Content</div>
+//     )
+//   }
+// }
+
+
+// export default  withParams(Content)

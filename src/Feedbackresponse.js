@@ -1,12 +1,20 @@
 import React, { Component } from "react";
 import { FaClipboardList } from "react-icons/fa";
 import { FaEdit } from "react-icons/fa";
-import { BsQuestionCircle } from "react-icons/bs";
+// import { BiShowAlt } from "react-icons/bs";
+import { BiShowAlt } from "react-icons/bi";
 import { TailSpin } from "react-loader-spinner";
 import ProgressBar from "react-bootstrap/ProgressBar";
 import Header from "./common/header";
+import { Link  ,useSearchParams  } from 'react-router-dom'
+import { Helmet } from "react-helmet";
 
-export default class showfeedbackresponse extends Component {
+
+function withParams(Component) {
+  return props => <Component {...props} params={useSearchParams()} />;
+}
+
+class showfeedbackresponse extends Component {
   constructor(props) {
     super(props);
 
@@ -25,6 +33,11 @@ export default class showfeedbackresponse extends Component {
   }
 
   componentDidMount() {
+
+    const id = this.props.params[0].get('id');
+    const type = this.props.params[0].get('type');
+
+
     const libconCode = JSON.parse(localStorage.getItem("libCode"));
     console.log("libconCode :- ", libconCode);
     this.setState({
@@ -32,11 +45,19 @@ export default class showfeedbackresponse extends Component {
     });
 
     if (this.props) {
-      if (this.props.data) {
-        console.log(this.props.data);
-        this.getResponse(this.props.data.id, this.props.data.type, libconCode);
+      if (this.props.params) {
+          if (this.props.params[0].get('id')) {
+              this.getResponse(id, type, libconCode);
+          }
       }
-    }
+  }
+
+    // if (this.props) {
+    //   if (this.props.data) {
+    //     console.log(this.props.data);
+    //     this.getResponse(this.props.data.id, this.props.data.type, libconCode);
+    //   }
+    // }
   }
 
   getResponse(questionID, type, libconCode) {
@@ -123,6 +144,9 @@ export default class showfeedbackresponse extends Component {
     const { contentData, loading } = this.state;
     return (
       <>
+       <Helmet>
+          <title>feedback Response</title>
+        </Helmet>
         <Header />
         <div className="txt" id="pddd">
           <div className="app-main__inner">
@@ -141,15 +165,15 @@ export default class showfeedbackresponse extends Component {
                   </div>
                 </div>
                 <div className="page-title-actions">
-                  <a href="/feedback/questions">
+                  <Link to="/feedback/questions">
                     <button type="button" className="mr-1 btn btn-success">
-                      <BsQuestionCircle
+                      <BiShowAlt
                         className="fa pe-7s-help1"
                         style={{ marginBottom: "3%" }}
                       />{" "}
                       Show Feedbacks
                     </button>
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -221,7 +245,7 @@ export default class showfeedbackresponse extends Component {
                         width: "100%",
                       }}
                     >
-                      <a href="/feedback/questions">
+                      <Link to="/feedback/questions">
                         <input
                           type="reset"
                           value="BACK"
@@ -229,7 +253,7 @@ export default class showfeedbackresponse extends Component {
                           id="btnClear"
                           style={{ marginLeft: "43%" }}
                         />
-                      </a>
+                      </Link>
                     </div>
                   </div>
                 </div>
@@ -250,3 +274,6 @@ export default class showfeedbackresponse extends Component {
     );
   }
 }
+
+
+export default  withParams(showfeedbackresponse)

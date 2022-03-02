@@ -2,6 +2,7 @@ import React, { Component } from "react";
 
 import { TailSpin } from "react-loader-spinner";
 import { Bars } from "react-loader-spinner";
+import { Helmet } from "react-helmet";
 
 import {withRouter} from './withRouter'
 
@@ -42,18 +43,20 @@ import { useNavigate ,Link    } from 'react-router-dom'
   loginCheck = (e) => {
     e.preventDefault();
 
-    if (this.state.email === "" || this.state.pass === "") {
-      this.setState({ message: "Please enter your account details to login." });
-    } else if(this.state.email === "dk" && this.state.pass === "9811"){
-      localStorage.setItem("user_name", JSON.stringify("Deepak singh"));
-      this.props.navigate('/Content'+"?id="+1)
-    }
-
     // if (this.state.email === "" || this.state.pass === "") {
     //   this.setState({ message: "Please enter your account details to login." });
-    // } else if (this.state.email !== "" && this.state.pass !== "") {
-    //   this.login();
+    // } else if(this.state.email === "dk" && this.state.pass === "9811"){
+    //   localStorage.setItem("user_name", JSON.stringify("Deepak singh"));
+    //   localStorage.setItem("isLogged", true);
+    //   this.props.navigate('/')
+
     // }
+
+    if (this.state.email === "" || this.state.pass === "") {
+      this.setState({ message: "Please enter your account details to login." });
+    } else if (this.state.email !== "" && this.state.pass !== "") {
+      this.login();
+    }
   };
 
   login() {
@@ -77,12 +80,13 @@ import { useNavigate ,Link    } from 'react-router-dom'
             localStorage.setItem("user_name", JSON.stringify(resp.data.Name));
             localStorage.setItem("user_email", JSON.stringify(resp.data.Email));
             localStorage.setItem("user_info", JSON.stringify(resp.data));
+            localStorage.setItem("isLogged", true);
             if (this.state.remberLogin === true) {
               localStorage.setItem("logged_in",JSON.stringify(true));
             }
             // <Redirect to='/'/>
             // Router.push(`/`);
-            this.props.navigate('/Content')
+            this.props.navigate('/')
           } else {
             this.setState({
               message: "No data found please check your details.",
@@ -108,7 +112,9 @@ import { useNavigate ,Link    } from 'react-router-dom'
     console.log(this.state);
     return (
       <>
-       
+        <Helmet>
+          <title>Login</title>
+        </Helmet>
 
         {!this.state.showpage ? (
           <div className="bckLog">
@@ -201,11 +207,13 @@ import { useNavigate ,Link    } from 'react-router-dom'
                 </div>
 
                 <div className="modal-footer clearfix">
-                  <Link to={"/Content"+"?id="+1}>
+
                   <div className="float-left">
-                      <a href="#" className="btn-lg btn btn-link">Recover Password</a>
-                  </div>
+                  <Link to={"/Content"+"?id="+1} className="btn-lg btn btn-link" style={{display: "none"}}>
+                     Recover Password
                   </Link>
+                  </div>
+
                   <div className="float-right">
                     {!this.state.loading ? (
                       <button

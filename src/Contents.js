@@ -1,10 +1,13 @@
 import React, { Component, Props } from "react";
 import { FaClipboardList } from "react-icons/fa";
 import { FaEdit } from "react-icons/fa";
-import { BsQuestionCircle } from "react-icons/bs";
+// import { BiShowAlt } from "react-icons/bs";
+import { BiShowAlt } from "react-icons/bi";
 import { TailSpin } from "react-loader-spinner";
-import { Link } from "react-router-dom";
+import { Link  ,useNavigate  } from 'react-router-dom'
 import Header from './common/header';
+import { Helmet } from "react-helmet";
+
 
 export default class showcontent extends Component {
   constructor(props) {
@@ -18,9 +21,7 @@ export default class showcontent extends Component {
   }
 
   componentDidMount() {
-    window.onbeforeunload = function () {
-      window.scrollTo(0, 0);
-    };
+  
 
     const libconCode = JSON.parse(localStorage.getItem("libCode"));
     console.log("libconCode :- ", libconCode);
@@ -57,13 +58,19 @@ export default class showcontent extends Component {
         });
       })
       .catch((error) => {
-        alert(error.message);
+        // alert(error.message);
+        // alert("There is problem in your credentials.");
+        this.setState({
+          loading: false,
+          messageShow: "Something went wrong. Please try again.",
+          hideTable: true,
+        });
       });
   }
 
-  static async getInitialProps({ query }) {
-    return { path: query.id };
-  }
+  // static async getInitialProps({ query }) {
+  //   return { path: query.id };
+  // }
 
   editContent(item) {
     console.log(item.contentId);
@@ -78,7 +85,14 @@ export default class showcontent extends Component {
   render() {
     return (
       <>
+
+<Helmet>
+          <title>Contents</title>
+        </Helmet>
             <Header/>
+
+
+
         <div className="txt" id="pddd">
           <div className="app-main__inner">
             <div className="app-page-title">
@@ -95,9 +109,9 @@ export default class showcontent extends Component {
                   </div>
                 </div>
                 <div className="page-title-actions">
-                  <Link href="/content">
+                  <Link to="/content">
                     <button type="button" className="mr-1 btn btn-success">
-                      <BsQuestionCircle
+                      <BiShowAlt
                         className="fa pe-7s-help1"
                         style={{ marginBottom: "3%" }}
                       />{" "}
@@ -137,18 +151,13 @@ export default class showcontent extends Component {
                                   <td>
                                     <p>{item.Active.toString()}</p>
                                   </td>
-                                  <td
-                                    className="edt"
-                                    onClick={() => {
-                                      this.editContent(item);
-                                    }}
-                                  >
-                                    <Link to={"/Contentedit"+"?id="+item.contentId}>
+                                    <Link to={"/Contentedit"+"?id="+item.contentId} className="wd-100">
+                                  <td className="edt wd-100" >
                                       <p>
                                         <FaEdit></FaEdit>
                                       </p>
-                                    </Link>
                                   </td>
+                                    </Link>
                                 </tr>
                               </React.Fragment>
                             );

@@ -151,7 +151,7 @@ a {
 
 .preImage {
   width: 100%;
-  height: 80px;
+  height: 100%;
   border-radius: 5px;
   cursor: pointer;
 }
@@ -178,6 +178,7 @@ a {
 
 .imghImage {
   width: 100%;
+  height: 100%;
   float: left;
   min-height: calc(100vh - 212px);
   padding: 1%;
@@ -196,10 +197,24 @@ a {
 
 .edt {
   cursor: pointer;
+  /* width: 100%; */
+  /* float: left; */
 }
 
 .edt:hover{
   border-bottom: 1px solid rgb(255, 51, 0);
+}
+
+.edt a:hover{
+  text-decoration: none;
+  color: #fd7e14;
+}
+
+.ldbi{
+  position: absolute;
+    left: 55%;
+    z-index: 9999999999999999999999999;
+    top: 60%;
 }
 
 .edt:hover span {
@@ -436,4 +451,25 @@ a {
 .add-more-feild svg {
   width: 50px;
   margin: 0 auto;
+}
+
+
+/* ------------ERROR-PAGE--------------------------------- */
+
+.error{
+  width: 100%;
+  display: flex;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: auto;
+    min-height: 100vh;
+}
+
+.errorh{
+  display: flex;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: auto;
+    margin-bottom: auto;
+    color: rgb(255, 83, 83);
 }
