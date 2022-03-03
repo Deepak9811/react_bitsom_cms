@@ -80,7 +80,7 @@
 //     }
 
 //     getContentDetails(libconCode,id) {
-//         fetch(`http://192.168.1.217:1003/api/showevent?libid=${libconCode}&id=${id}`, {
+//         fetch(`http://bitsom.libcon.co.in/api/showevent?libid=${libconCode}&id=${id}`, {
 //             method: "GET",
 //             headers: {
 //                 Accepts: "application/json",
@@ -840,7 +840,7 @@ function Eventedit() {
 
 
       const getContentDetails=(libconCode,id)=> {
-          fetch(`http://192.168.1.217:1003/api/showevent?libid=${libconCode}&id=${id}`, {
+          fetch(`http://bitsom.libcon.co.in/api/showevent?libid=${libconCode}&id=${id}`, {
               method: "GET",
               headers: {
                   Accepts: "application/json",
@@ -988,7 +988,7 @@ function Eventedit() {
 
     console.log("chekcing")
 
-    fetch(`http://192.168.1.217:1003/api/saveevent`, {
+    fetch(`http://bitsom.libcon.co.in/api/saveevent`, {
         method: "POST",
         headers: {
             Accept: "application/json",

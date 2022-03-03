@@ -28,7 +28,7 @@ export default class showfeedbacks extends Component {
     });
 
     fetch(
-      `http://192.168.1.217:1003/api/getquestion?libcode=${libconCode}&questionid=0`,
+      `http://bitsom.libcon.co.in/api/getquestion?libcode=${libconCode}&questionid=0`,
       {
         method: "GET",
         headers: {

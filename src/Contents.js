@@ -30,7 +30,7 @@ export default class showcontent extends Component {
     });
 
     fetch(
-      `http://192.168.1.217:1003/api/showcontent?libid=${libconCode}&id=0`,
+      `http://bitsom.libcon.co.in/api/showcontent?libid=${libconCode}&id=0`,
       {
         method: "GET",
         headers: {

@@ -76,7 +76,7 @@ class feedback extends Component {
 
     getFeedBackData(id, libconCode) {
 
-        fetch(`http://192.168.1.217:1003/api/getquestion?libcode=${libconCode}&questionid=${id}`, {
+        fetch(`http://bitsom.libcon.co.in/api/getquestion?libcode=${libconCode}&questionid=${id}`, {
             method: "GET",
             headers: {
                 Accepts: "application/json",
@@ -133,7 +133,7 @@ class feedback extends Component {
             this.setState({
                 loading: true
             })
-            fetch(`http://192.168.1.217:1003/api/questions`, {
+            fetch(`http://bitsom.libcon.co.in/api/questions`, {
                 method: "POST",
                 headers: {
                     Accept: "application/json",
@@ -214,7 +214,7 @@ class feedback extends Component {
             this.setState({
                 loading: true
             })
-            fetch(`http://192.168.1.217:1003/api/insertmcq`, {
+            fetch(`http://bitsom.libcon.co.in/api/insertmcq`, {
                 method: "POST",
                 headers: {
                     Accept: "application/json",
@@ -351,7 +351,7 @@ class feedback extends Component {
         })
         console.log(JSON.stringify(mcqNewData))
 
-        fetch(`http://192.168.1.217:1003/api/updatemcq`, {
+        fetch(`http://bitsom.libcon.co.in/api/updatemcq`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',

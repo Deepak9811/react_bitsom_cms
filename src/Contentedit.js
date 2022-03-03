@@ -81,7 +81,7 @@
 //     // const libconCode =  localStorage.setItem("user_name", JSON.stringify(resp.data.Name));
 
 //     fetch(
-//       `http://192.168.1.217:1003/api/showcontent?libid=${libconCode}&id=${id}`,
+//       `http://bitsom.libcon.co.in/api/showcontent?libid=${libconCode}&id=${id}`,
 //       {
 //         method: "GET",
 //         headers: {
@@ -221,7 +221,7 @@
 //       contentId,
 //       libconCode,
 //     } = this.state;
-//     fetch(`http://192.168.1.217:1003/api/savecontent`, {
+//     fetch(`http://bitsom.libcon.co.in/api/savecontent`, {
 //       method: "POST",
 //       headers: {
 //         Accept: "application/json",
@@ -654,7 +654,7 @@ export default function Contentedit() {
     // const libconCode =  localStorage.setItem("user_name", JSON.stringify(resp.data.Name));
 
     fetch(
-      `http://192.168.1.217:1003/api/showcontent?libid=${libconCode}&id=${id}`,
+      `http://bitsom.libcon.co.in/api/showcontent?libid=${libconCode}&id=${id}`,
       {
         method: "GET",
         headers: {
@@ -799,7 +799,7 @@ export default function Contentedit() {
   
   const saveContent=()=> {
   
-    fetch(`http://192.168.1.217:1003/api/savecontent`, {
+    fetch(`http://bitsom.libcon.co.in/api/savecontent`, {
       method: "POST",
       headers: {
         Accept: "application/json",

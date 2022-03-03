@@ -166,7 +166,7 @@ class Event extends Component {
       libconCode
     } = this.state;
 
-    fetch(`http://192.168.1.217:1003/api/saveevent`, {
+    fetch(`http://bitsom.libcon.co.in/api/saveevent`, {
       method: "POST",
       headers: {
         Accept: "application/json",

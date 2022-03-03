@@ -124,7 +124,7 @@ export default class header extends Component {
 
     updatePass() {
         const { newPass, newPassRetype } = this.state
-        fetch(`http://192.168.1.217:1003/api/Changepassword?email=${newPass}&password=${newPassRetype}`, {
+        fetch(`http://bitsom.libcon.co.in/api/Changepassword?email=${newPass}&password=${newPassRetype}`, {
             method: "POST",
             headers: {
                 Accept: "application/json",

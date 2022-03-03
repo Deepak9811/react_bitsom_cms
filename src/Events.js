@@ -26,7 +26,7 @@ export default class Showevent extends Component {
       libconCode: libconCode,
     });
 
-    fetch(`http://192.168.1.217:1003/api/showevent?libid=${libconCode}&id=0`, {
+    fetch(`http://bitsom.libcon.co.in/api/showevent?libid=${libconCode}&id=0`, {
       method: "GET",
       headers: {
         Accepts: "application/json",

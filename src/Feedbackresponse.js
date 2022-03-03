@@ -61,10 +61,10 @@ class showfeedbackresponse extends Component {
   }
 
   getResponse(questionID, type, libconCode) {
-    // http://192.168.1.217:1003/api/showpercentage?libcode=CLBITSOM&QUESTIONID=1
+    // http://bitsom.libcon.co.in/api/showpercentage?libcode=CLBITSOM&QUESTIONID=1
 
     fetch(
-      `http://192.168.1.217:1003/api/showpercentage?libcode=${libconCode}&QUESTIONID=${questionID}`,
+      `http://bitsom.libcon.co.in/api/showpercentage?libcode=${libconCode}&QUESTIONID=${questionID}`,
       {
         method: "GET",
         headers: {

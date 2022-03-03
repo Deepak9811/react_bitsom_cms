@@ -79,7 +79,7 @@
 
 //   getFeedBackData(id, libconCode) {
 //     fetch(
-//       `http://192.168.1.217:1003/api/getquestion?libcode=${libconCode}&questionid=${id}`,
+//       `http://bitsom.libcon.co.in/api/getquestion?libcode=${libconCode}&questionid=${id}`,
 //       {
 //         method: "GET",
 //         headers: {
@@ -171,7 +171,7 @@
 //       this.setState({
 //         loading: true,
 //       });
-//       fetch(`http://192.168.1.217:1003/api/questions`, {
+//       fetch(`http://bitsom.libcon.co.in/api/questions`, {
 //         method: "POST",
 //         headers: {
 //           Accept: "application/json",
@@ -255,7 +255,7 @@
 //       loading: true,
 //     });
 
-//     fetch(`http://192.168.1.217:1003/api/insertmcq`, {
+//     fetch(`http://bitsom.libcon.co.in/api/insertmcq`, {
 //       method: "POST",
 //       headers: {
 //         Accept: "application/json",
@@ -387,7 +387,7 @@
 //       Updateloading: true,
 //     });
 
-//     fetch(`http://192.168.1.217:1003/api/updatemcq`, {
+//     fetch(`http://bitsom.libcon.co.in/api/updatemcq`, {
 //       method: "POST",
 //       headers: {
 //         Accept: "application/json",
@@ -1198,7 +1198,7 @@ const FeedbackEdit = () => {
 
   const getFeedBackData = (id, libconCode) => {
     fetch(
-      `http://192.168.1.217:1003/api/getquestion?libcode=${libconCode}&questionid=${id}`,
+      `http://bitsom.libcon.co.in/api/getquestion?libcode=${libconCode}&questionid=${id}`,
       {
         method: "GET",
         headers: {
@@ -1300,7 +1300,7 @@ const FeedbackEdit = () => {
       // console.log("cheking :- ", question_type,  " question :-",    question );
       setloading(true);
 
-      fetch(`http://192.168.1.217:1003/api/questions`, {
+      fetch(`http://bitsom.libcon.co.in/api/questions`, {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -1404,7 +1404,7 @@ const FeedbackEdit = () => {
   const addMcq = () => {
     setloading(true);
 
-    fetch(`http://192.168.1.217:1003/api/insertmcq`, {
+    fetch(`http://bitsom.libcon.co.in/api/insertmcq`, {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -1529,7 +1529,7 @@ const FeedbackEdit = () => {
 
     setUpdateloading(true);
 
-    fetch(`http://192.168.1.217:1003/api/updatemcq`, {
+    fetch(`http://bitsom.libcon.co.in/api/updatemcq`, {
       method: "POST",
       headers: {
         Accept: "application/json",

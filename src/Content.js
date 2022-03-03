@@ -138,7 +138,7 @@ if (typeof window === "object") {
     } = this.state;
 
     console.log(order,system,app)
-    fetch(`http://192.168.1.217:1003/api/savecontent`, {
+    fetch(`http://bitsom.libcon.co.in/api/savecontent`, {
       method: "POST",
       headers: {
         Accept: "application/json",
