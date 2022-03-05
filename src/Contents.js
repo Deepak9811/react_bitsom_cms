@@ -4,10 +4,9 @@ import { FaEdit } from "react-icons/fa";
 // import { BiShowAlt } from "react-icons/bs";
 import { BiShowAlt } from "react-icons/bi";
 import { TailSpin } from "react-loader-spinner";
-import { Link  ,useNavigate  } from 'react-router-dom'
-import Header from './common/header';
+import { Link, useNavigate } from "react-router-dom";
+import Header from "./common/header";
 import { Helmet } from "react-helmet";
-
 
 export default class showcontent extends Component {
   constructor(props) {
@@ -21,8 +20,7 @@ export default class showcontent extends Component {
   }
 
   componentDidMount() {
-  
-
+    window.scrollTo(0, 0)
     const libconCode = JSON.parse(localStorage.getItem("libCode"));
     console.log("libconCode :- ", libconCode);
     this.setState({
@@ -58,8 +56,7 @@ export default class showcontent extends Component {
         });
       })
       .catch((error) => {
-        // alert(error.message);
-        // alert("There is problem in your credentials.");
+     
         this.setState({
           loading: false,
           messageShow: "Something went wrong. Please try again.",
@@ -68,9 +65,6 @@ export default class showcontent extends Component {
       });
   }
 
-  // static async getInitialProps({ query }) {
-  //   return { path: query.id };
-  // }
 
   editContent(item) {
     console.log(item.contentId);
@@ -85,13 +79,10 @@ export default class showcontent extends Component {
   render() {
     return (
       <>
-
-<Helmet>
+        <Helmet>
           <title>Contents</title>
         </Helmet>
-            <Header/>
-
-
+        <Header />
 
         <div className="txt" id="pddd">
           <div className="app-main__inner">
@@ -137,7 +128,7 @@ export default class showcontent extends Component {
                             <th>Heading</th>
                             <th>Sort Order</th>
                             <th>Active</th>
-                            <th>Action</th>
+                            <th>Edit</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -151,13 +142,18 @@ export default class showcontent extends Component {
                                   <td>
                                     <p>{item.Active.toString()}</p>
                                   </td>
-                                    <Link to={"/Contentedit"+"?id="+item.contentId} className="wd-100">
-                                  <td className="edt wd-100" >
+                                  <Link
+                                    to={
+                                      "/Contentedit" + "?id=" + item.contentId
+                                    }
+                                    className="wd-100"
+                                  >
+                                    <td className="edt wd-100">
                                       <p>
                                         <FaEdit></FaEdit>
                                       </p>
-                                  </td>
-                                    </Link>
+                                    </td>
+                                  </Link>
                                 </tr>
                               </React.Fragment>
                             );

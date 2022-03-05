@@ -20,6 +20,7 @@ export default class Showevent extends Component {
   }
 
   componentDidMount() {
+    window.scrollTo(0, 0)
     const libconCode = JSON.parse(localStorage.getItem("libCode"));
     console.log("libconCode :- ", libconCode);
     this.setState({
@@ -124,7 +125,7 @@ export default class Showevent extends Component {
                             <th>Valid From</th>
                             <th>Valid Upto</th>
                             <th>Organiser</th>
-                            <th>Action</th>
+                            <th>Edit</th>
                           </tr>
                         </thead>
 

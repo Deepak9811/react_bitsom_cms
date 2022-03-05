@@ -124,7 +124,7 @@ class feedback extends Component {
 
 
     checkFeed() {
-        if (this.state.question_type === "" || this.state.question === "") {
+        if (this.state.question_type === "" || this.state.question === "" || this.state.heading === "") {
             alert("Please fill the details...")
             console.log("cheking :- ", this.state.question_type, " question :-", this.state.question)
         } else {
@@ -395,6 +395,14 @@ class feedback extends Component {
     }
 
 
+    onlyNuberAllow(e){
+        const re = /^[0-9\b]+$/;
+          if (e.target.value === '' || re.test(e.target.value)) {
+             this.setState({order: e.target.value})
+          }
+      }
+
+
 
 
     render() {
@@ -462,13 +470,13 @@ class feedback extends Component {
                                                     <option value="" hidden>Type of Question</option>
                                                     <option value="GEN">GENERAL</option>
                                                     <option value="MCQ" style={{padding:"5%"}}>MULTIPLE CHOICE QUESTIONS</option>
-                                                    <option value="Rate">RATING</option>
+                                                    <option value="RATE">RATING</option>
                                                 </select>
                                             </div>
                                         </div>
 
                                         <div className="col-md-8 mb-1">
-                                            <label>Heading</label>
+                                            <label>Heading</label><span className="text-danger">*</span>
                                             <input
                                                 type="text"
                                                 value={this.state.heading}
@@ -676,10 +684,12 @@ class feedback extends Component {
                                             <div className="position-relative form-group ">
 
                                                 <input
-                                                    type="number"
+                                                    type="text"
                                                     value={this.state.sortOrder}
+                                                    maxLength={3}
                                                     onChange={(e) =>
-                                                        this.setState({ sortOrder: e.target.value })
+                                                        this.onlyNuberAllow(e)
+                                                        // this.setState({ sortOrder: e.target.value })
                                                     }
                                                     className="form-control"
                                                     placeholder="Short Order..."

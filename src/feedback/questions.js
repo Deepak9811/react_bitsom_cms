@@ -129,11 +129,11 @@ export default class showfeedbacks extends Component {
                         <thead>
                           <tr>
                             <th>Type</th>
-                            <th>Question</th>
+                            <th>Heading</th>
                             <th>Valid From</th>
                             <th>Valid Upto</th>
                             <th>Active</th>
-                            <th>Check</th>
+                            <th>Response</th>
                             <th>Edit</th>
                           </tr>
                         </thead>
@@ -144,7 +144,7 @@ export default class showfeedbacks extends Component {
                               <React.Fragment key={i}>
                                 <tr>
                                   <td>{item.type}</td>
-                                  <td>{item.question}</td>
+                                  <td>{item.heading}</td>
                                   <td>{item.validFrom.replace("T", " ")}</td>
                                   <td>{item.validUpto.replace("T", " ")}</td>
                                   <td>{item.active.toString()}</td>

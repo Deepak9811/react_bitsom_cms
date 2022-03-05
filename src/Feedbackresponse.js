@@ -1,17 +1,16 @@
 import React, { Component } from "react";
 import { FaClipboardList } from "react-icons/fa";
-import { FaEdit } from "react-icons/fa";
+import { GiRoundStar } from "react-icons/gi";
 // import { BiShowAlt } from "react-icons/bs";
 import { BiShowAlt } from "react-icons/bi";
 import { TailSpin } from "react-loader-spinner";
 import ProgressBar from "react-bootstrap/ProgressBar";
 import Header from "./common/header";
-import { Link  ,useSearchParams  } from 'react-router-dom'
+import { Link, useSearchParams } from "react-router-dom";
 import { Helmet } from "react-helmet";
 
-
 function withParams(Component) {
-  return props => <Component {...props} params={useSearchParams()} />;
+  return (props) => <Component {...props} params={useSearchParams()} />;
 }
 
 class showfeedbackresponse extends Component {
@@ -20,10 +19,12 @@ class showfeedbackresponse extends Component {
 
     this.state = {
       contentData: [],
+      rating: "",
       loading: true,
       colorProg: "",
       answer: [],
       hideRate: true,
+      showRate: true,
       showError: false,
     };
   }
@@ -33,10 +34,8 @@ class showfeedbackresponse extends Component {
   }
 
   componentDidMount() {
-
-    const id = this.props.params[0].get('id');
-    const type = this.props.params[0].get('type');
-
+    const id = this.props.params[0].get("id");
+    const type = this.props.params[0].get("type");
 
     const libconCode = JSON.parse(localStorage.getItem("libCode"));
     console.log("libconCode :- ", libconCode);
@@ -46,18 +45,11 @@ class showfeedbackresponse extends Component {
 
     if (this.props) {
       if (this.props.params) {
-          if (this.props.params[0].get('id')) {
-              this.getResponse(id, type, libconCode);
-          }
+        if (this.props.params[0].get("id")) {
+          this.getResponse(id, type, libconCode);
+        }
       }
-  }
-
-    // if (this.props) {
-    //   if (this.props.data) {
-    //     console.log(this.props.data);
-    //     this.getResponse(this.props.data.id, this.props.data.type, libconCode);
-    //   }
-    // }
+    }
   }
 
   getResponse(questionID, type, libconCode) {
@@ -75,11 +67,12 @@ class showfeedbackresponse extends Component {
     )
       .then((data) => {
         data.json().then((resp) => {
-          // console.log("questionID :- ",resp)
+          console.log("questionID :- ", resp);
           if (resp.response === "Success") {
             console.log("questionID :- ", resp.data[0].Answer);
             this.setState({
               contentData: resp.data,
+              rating: resp.data[0].question,
               loading: false,
               answer: resp.data[0].Answer,
             });
@@ -89,6 +82,13 @@ class showfeedbackresponse extends Component {
               this.setState({
                 hideRate: false,
                 wdGen: "95%",
+              });
+            }
+
+            if (type === "RATE") {
+              console.log(type);
+              this.setState({
+                showRate: false,
               });
             }
 
@@ -102,12 +102,22 @@ class showfeedbackresponse extends Component {
             }
           } else {
             // Router.push("/feedback/showfeedbacks")
-            alert("No data found.");
+            // alert("No data found.");
+            this.setState({
+              showError: true,
+              loading: false,
+              messageShow: "No data found.",
+            });
           }
         });
       })
       .catch((erro) => {
         console.log("There is problem in " + erro.message);
+        this.setState({
+          showError: true,
+          loading: false,
+          messageShow: "Something Went wrong. Please try again.",
+        });
       });
   }
 
@@ -144,7 +154,7 @@ class showfeedbackresponse extends Component {
     const { contentData, loading } = this.state;
     return (
       <>
-       <Helmet>
+        <Helmet>
           <title>feedback Response</title>
         </Helmet>
         <Header />
@@ -170,7 +180,7 @@ class showfeedbackresponse extends Component {
                       <BiShowAlt
                         className="fa pe-7s-help1"
                         style={{ marginBottom: "3%" }}
-                      />{" "}
+                      />
                       Show Feedbacks
                     </button>
                   </Link>
@@ -185,8 +195,10 @@ class showfeedbackresponse extends Component {
                     List of Feedback Response
                   </div>
 
-                  <div className="card-body">
+                  {this.state.showRate ?(
+                    <div className="card-body">
                     {contentData.map((item, i) => {
+                      
                       // console.log(item.Percentage)
                       return (
                         <React.Fragment key={i}>
@@ -256,6 +268,141 @@ class showfeedbackresponse extends Component {
                       </Link>
                     </div>
                   </div>
+                  ):(
+                    <div className="card-body">
+                    <div className="resp">
+                      <div className="flx">
+                        <h3> {this.state.contentData[0].question}</h3>
+                      </div>
+
+                      {this.state.showError && (
+                        <h5 className="err">{this.state.messageShow}</h5>
+                      )}
+
+                      <div className="pdanswer">
+                        <div className="flr">
+                          <div ><h5>{this.state.answer[0].answer} </h5> </div>
+                            <div className="rt">
+                            <GiRoundStar size={21} color="#ffc83d"/>
+                            </div>
+                          :
+                          <div className="prgbr">
+                            <ProgressBar
+                              max={100}
+                              min={0}
+                              variant={this.state.colorProg}
+                              now={Number(this.state.answer[0].percentage) + 4}
+                              label={`${Number(
+                                this.state.answer[0].percentage
+                              )} %`}
+                            />
+                          </div>
+                        </div>
+
+                        <div className="flr">
+                          <div ><h5>{this.state.answer[1].answer} </h5> </div>
+                            <div className="rt">
+                            <GiRoundStar size={21} color="#ffc83d"/> <GiRoundStar size={21} color="#ffc83d"/>
+                            </div>
+                          :
+                          <div className="prgbr">
+                            <ProgressBar
+                              max={100}
+                              min={0}
+                              variant={this.state.colorProg}
+                              now={Number(this.state.answer[1].percentage) + 4}
+                              label={`${Number(
+                                this.state.answer[1].percentage
+                              )} %`}
+                            />
+                          </div>
+                        </div>
+
+                        <div className="flr">
+                          <div ><h5>{this.state.answer[2].answer} </h5> </div>
+                            <div className="rt">
+                            <GiRoundStar size={21} color="#ffc83d"/> <GiRoundStar size={21} color="#ffc83d"/> <GiRoundStar size={21} color="#ffc83d"/>
+                            </div>
+                          :
+                          <div className="prgbr">
+                            <ProgressBar
+                              max={100}
+                              min={0}
+                              variant={this.state.colorProg}
+                              now={Number(this.state.answer[2].percentage) + 4}
+                              label={`${Number(
+                                this.state.answer[2].percentage
+                              )} %`}
+                            />
+                          </div>
+                        </div>
+
+                        <div className="flr">
+                          <div ><h5>{this.state.answer[3].answer} </h5> </div>
+                            <div className="rt">
+                            <GiRoundStar size={21} color="#ffc83d"/> <GiRoundStar size={21} color="#ffc83d"/> <GiRoundStar size={21} color="#ffc83d"/> <GiRoundStar size={21} color="#ffc83d"/>
+                            </div>
+                          :
+                          <div className="prgbr">
+                            <ProgressBar
+                              max={100}
+                              min={0}
+                              variant={this.state.colorProg}
+                              now={Number(this.state.answer[3].percentage) + 4}
+                              label={`${Number(
+                                this.state.answer[3].percentage
+                              )} %`}
+                            />
+                          </div>
+                        </div>
+
+                        <div className="flr">
+                          <div ><h5>{this.state.answer[4].answer} </h5> </div>
+                            <div className="rt">
+                            <GiRoundStar size={21} color="#ffc83d"/> <GiRoundStar size={21} color="#ffc83d"/> <GiRoundStar size={21} color="#ffc83d"/> <GiRoundStar size={21} color="#ffc83d"/> <GiRoundStar size={21} color="#ffc83d"/>
+                            </div>
+                          :
+                          <div className="prgbr">
+                            <ProgressBar
+                              max={100}
+                              min={0}
+                              variant={this.state.colorProg}
+                              now={Number(this.state.answer[4].percentage) + 4}
+                              label={`${Number(
+                                this.state.answer[4].percentage
+                              )} %`}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div
+                      style={{
+                        justifyContent: "center",
+                        alignItems: "center",
+                        width: "100%",
+                      }}
+                    >
+                      <Link to="/feedback/questions">
+                        <input
+                          type="reset"
+                          value="BACK"
+                          className="btn-wide btn btn-light"
+                          id="btnClear"
+                          style={{ marginLeft: "43%" }}
+                        />
+                      </Link>
+                    </div>
+                  </div>
+                  )}
+
+                  
+
+                
+
+
+
                 </div>
               </>
             ) : (
@@ -275,5 +422,4 @@ class showfeedbackresponse extends Component {
   }
 }
 
-
-export default  withParams(showfeedbackresponse)
+export default withParams(showfeedbackresponse);

@@ -813,13 +813,14 @@ function Eventedit() {
     const [libconCode, setlibconCode] = useState("")
     const [hideImage, sethideImage] = useState(true)
     const [bigLoader, setbigLoader] = useState(true)
+    const [imageTypes, setimageTypes] = useState(".jpg")
 
     let naviagte = useNavigate()
     let [searchParams,setSearchParams]=useSearchParams()
 
 
     useEffect(() => {
-
+        window.scrollTo(0, 0)
         const componentwillMount = async () => {
           const id = searchParams.get('id');
         const type = searchParams.get('type');
@@ -868,7 +869,7 @@ function Eventedit() {
                       setid(resp.data[0].id)
                       setbigLoader(false)
   
-                      if(resp.data[0].contentImage === null){
+                      if(resp.data[0].contentImage === ""){
                         setshowimage(require('./image/noimage.png'))
                         setshowimgHover(true)
                         sethideImage(false)
@@ -876,7 +877,7 @@ function Eventedit() {
                         setshowimgHover(true)
                         sethideImage(false)
 
-                        let img = "data:image/png;base64," + resp.data[0].contentImage 
+                        let img = resp.data[0].contentImage 
                         setshowimage(img)
                       }
   
@@ -955,6 +956,12 @@ function Eventedit() {
     // if (this.state.eventName != "" && this.state.editorState != "" && location != "" && registrationLink != "" && type != "") {
     if (eventName !== "" && editorState !== "" && location != "" && registrationLink != "" && type != "") {
       setloading(true)
+
+      if(profileImg.length === 0){
+        let typ = ""
+        setimageTypes(typ)
+        // console.log("this.state.profileImg :- ",this.state.profileImg.length,this.state.imageTypes)
+      }
       saveContent();
 
     // console.log(
@@ -1001,7 +1008,7 @@ function Eventedit() {
             type: type,
             description: draftToHtml(convertToRaw(editorState.getCurrentContent())),
             organiser: "BITSoM",
-            imageType: ".jpg",
+            imageType: imageTypes,
             virtualMode: virtual,
             physicalMode: physical,
             validFrom: moment(validFrom).format("MM-DD-YYYY hh:mm:ss a"),

@@ -36,7 +36,9 @@ if (typeof window === "object") {
       loading: false,
       contentId: "",
       showBackBtn: false,
-      heading: "",
+      heading : "",
+      imageTypes :".jpg",
+      dk:""
     };
   }
 
@@ -45,12 +47,18 @@ if (typeof window === "object") {
     // const type = this.props.params[0].get('type');
     // console.log("props :- ",id)
     // console.log("props  type :- ",type)
+
+    window.scrollTo(0, 0)
+   
+
     const libconCode = JSON.parse(localStorage.getItem("libCode"));
     console.log("libconCode :- ", libconCode);
     this.setState({
       libconCode: libconCode,
     });
   }
+
+ 
 
   onEditorStateChange = (editorState) => {
     this.setState({
@@ -108,6 +116,12 @@ if (typeof window === "object") {
       this.setState({
         loading: true,
       });
+      if(this.state.profileImg.length === 0){
+        let typ = ""
+          this.state.imageTypes=typ
+        // console.log("this.state.profileImg :- ",this.state.profileImg.length,this.state.imageTypes)
+      }
+      // console.log("this.state.profileImg :- ",this.state.profileImg.length," type :- ",this.state.imageTypes,JSON.stringify(this.state.dk))
       this.saveContent();
     } else {
       this.setState({
@@ -137,6 +151,8 @@ if (typeof window === "object") {
       libconCode,
     } = this.state;
 
+    
+
     console.log(order,system,app)
     fetch(`http://bitsom.libcon.co.in/api/savecontent`, {
       method: "POST",
@@ -150,7 +166,7 @@ if (typeof window === "object") {
         heading: this.state.heading,
         text: draftToHtml(convertToRaw(editorState.getCurrentContent())),
         SortOrder: this.state.order,
-        imageType: ".jpg",
+        imageType: this.state.imageTypes,
         Active: this.state.system,
         Show: this.state.app,
         contentimage: this.state.profileImg,
@@ -199,6 +215,14 @@ if (typeof window === "object") {
       system: false,
       app: false,
     });
+  }
+
+
+  onlyNuberAllow(e){
+    const re = /^[0-9\b]+$/;
+      if (e.target.value === '' || re.test(e.target.value)) {
+         this.setState({order: e.target.value})
+      }
   }
 
   render() {
@@ -358,12 +382,16 @@ if (typeof window === "object") {
                     className="form-control"
                     id="SortOrder"
                     name="SortOrder"
-                    type="number"
+                    type="text"
+
+                    size={3}
+                    maxLength={3}
                     value={this.state.order}
                     onChange={(e) =>
-                      this.setState({
-                        order: e.target.value,
-                      })
+                      this.onlyNuberAllow(e)
+                      // this.setState({
+                      //   order: e.target.value,
+                      // })
                     }
                   />
                 </div>
@@ -484,22 +512,3 @@ if (typeof window === "object") {
 
 
 export default withRouter(Content)
-
-// import React, { Component } from 'react'
-// import {withParams} from './withParams'
-
-// class Content extends Component {
-
-//     componentDidMount(){
-//         console.log(this.props.useParams)
-//     }
-
-//   render() {
-//     return (
-//       <div>Content</div>
-//     )
-//   }
-// }
-
-
-// export default  withParams(Content)

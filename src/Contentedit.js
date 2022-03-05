@@ -625,12 +625,13 @@ export default function Contentedit() {
    const [showimgHover, setshowimgHover] = useState(false)
    const [hideImage, sethideImage] = useState(true)
    const [bigLoader, setbigLoader] = useState(true)
+   const [imageTypes, setimageTypes] = useState(".jpg")
    let [searchParams,setSearchParams]=useSearchParams()
    let naviagte = useNavigate()
 
 
    useEffect(() => {
-
+    window.scrollTo(0, 0)
     const componentwillMount = async () => {
       const id = searchParams.get('id');
     const type = searchParams.get('type');
@@ -677,7 +678,7 @@ export default function Contentedit() {
           sethideImage(false)
           setbigLoader(false)
 
-          if (resp.data[0].contentimage === null) {
+          if (resp.data[0].contentimage === "") {
             setshowimage(require('./image/noimage.png'))
             setshowimgHover(true)
             sethideImage(false)
@@ -685,7 +686,7 @@ export default function Contentedit() {
           } else {
             setshowimgHover(true)
             sethideImage(false)
-            let img = "data:image/png;base64," + resp.data[0].contentimage 
+            let img = resp.data[0].contentimage 
             setshowimage(img)
           
           }
@@ -714,9 +715,6 @@ export default function Contentedit() {
 
  const onEditorStateChange = (editorState) => {
     setEditorState(editorState)
-    // this.setState({
-    //   editorState,
-    // });
     console.log(draftToHtml(convertToRaw(editorState.getCurrentContent())));
   };
 
@@ -765,9 +763,11 @@ export default function Contentedit() {
   const checkSaveContent=()=> {
     if (heading !== "" && order !== "") {
       setloading(true)
-      // this.setState({
-      //   loading: true,
-      // });
+      if(profileImg.length === 0){
+        let typ = ""
+        setimageTypes(typ)
+        // console.log("this.state.profileImg :- ",this.state.profileImg.length,this.state.imageTypes)
+      }
 
       // console.log( "contentId : ", contentId,
       //   "libcode : ", libconCode,
@@ -781,9 +781,6 @@ export default function Contentedit() {
       saveContent();
     } else {
       setloading(false)
-      // this.setState({
-      //   loading: false,
-      // });
       alert("Please fill the details...");
       console.log(
         "heading :- ",
@@ -811,7 +808,7 @@ export default function Contentedit() {
         heading: heading,
         text: draftToHtml(convertToRaw(editorState.getCurrentContent())),
         SortOrder: order,
-        imageType: ".jpg",
+        imageType: imageTypes,
         Active: system,
         Show: app,
         contentimage: profileImg,
@@ -829,34 +826,18 @@ export default function Contentedit() {
             setapp(false)
             setsystem(false)
             setprofileImg("")
-            // this.setState({
-            //   loading: false,
-            //   contentId: "",
-            //   // libcode: "",
-            //   heading: "",
-            //   editorState: "",
-            //   order: "",
-            //   system: false,
-            //   app: false,
-            //   profileImg: "",
-            // });
-            // Router.push('/contents')
+          
             alert("Content Update Successfully.");
             naviagte('/contents')
           } else {
             setloading(false)
-            // this.setState({
-            //   loading: false,
-            // });
+            
             alert("Something went wrong.");
           }
         });
       })
       .catch((error) => {
         setloading(false)
-        // this.setState({
-        //   loading: false,
-        // });
         console.log("There is problem in your credentials." + error.message);
       });
   }
@@ -872,15 +853,15 @@ export default function Contentedit() {
             setsystem(false)
             setprofileImg("")
             sethideImage(true)
-    // this.setState({
-    //   editorState: "",
-    //   profileImg: [],
-    //   hideImage: true,
-    //   heading: "",
-    //   order: false,
-    //   system: false,
-    //   app: false,
-    // });
+    
+  }
+
+  const onlyNuberAllow=(e)=>{
+    const re = /^[0-9\b]+$/;
+      if (e.target.value === '' || re.test(e.target.value)) {
+        setorder(e.target.value)
+        //  this.setState({order: e.target.value})
+      }
   }
 
   return (
@@ -911,7 +892,7 @@ export default function Contentedit() {
             </div>
           </div>
           <div className="page-title-actions">
-            <Link to={"/content"}>
+            <Link to={"/contents"}>
               <button type="button" className="mr-1 btn btn-success">
                 <BiShowAlt
                   className="fa pe-7s-help1"
@@ -980,8 +961,8 @@ export default function Contentedit() {
                     src={showimage}
                     alt="profile"
                     className="ImghImage"
-                    width={500}
-                    height={500}
+                    width={400}
+                                                height={400}
                   />
                 </div>
               </div>
@@ -1036,9 +1017,13 @@ export default function Contentedit() {
                 className="form-control"
                 id="SortOrder"
                 name="SortOrder"
-                type="number"
+                type="text"
+                maxLength={3}
                 value={order}
-                onChange={(e)=>setorder(e.target.value)} 
+                onChange={(e)=>
+                  onlyNuberAllow(e)
+                  // setorder(e.target.value)
+                 } 
                 // onChange={(e) =>
                 //   {setorder( e.target.value)}
                  

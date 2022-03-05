@@ -1178,6 +1178,7 @@ const FeedbackEdit = () => {
   let naviagte = useNavigate();
 
   useEffect(() => {
+    window.scrollTo(0, 0)
     const componentwillMount = async () => {
       const id = searchParams.get("id");
       const type = searchParams.get("type");
@@ -1293,7 +1294,7 @@ const FeedbackEdit = () => {
   };
 
   const checkFeed = () => {
-    if (question_type === "" || question === "") {
+    if (question_type === "" || question === "" || heading === "") {
       alert("Please fill the details...");
       // console.log("cheking :- ",  question_type, " question :-",   question   );
     } else {
@@ -1488,15 +1489,24 @@ const FeedbackEdit = () => {
   };
 
   const updateOrder = (newName, index) => {
+    const re = /^[0-9\b]+$/;
+    if (newName === '' || re.test(newName)) {
+      // setorder(newName)
+      const newmcqNewData = [...mcqNewData];
+
+      newmcqNewData[index].sortorder = Number(newName);
+      setmcqNewData(newmcqNewData);
+      console.log(newmcqNewData);
+    }
     // const { mcqNewData } = this.state;
     // const date = { name, email }
-    const newmcqNewData = [...mcqNewData];
+    // const newmcqNewData = [...mcqNewData];
 
-    newmcqNewData[index].sortorder = Number(newName);
-    setmcqNewData(newmcqNewData);
+    // newmcqNewData[index].sortorder = Number(newName);
+    // setmcqNewData(newmcqNewData);
     // this.setState({ mcqNewData: newmcqNewData });
 
-    console.log(newmcqNewData);
+    // console.log(newmcqNewData);
   };
 
   const updateActive = (newName, index) => {
@@ -1642,15 +1652,30 @@ const FeedbackEdit = () => {
   };
 
   const addMoreOrder = (newName, index) => {
-    const other = other_fields;
-    // const date = { name, email }
-    const newmcqNewData = [...other];
 
-    newmcqNewData[index].sortorder = Number(newName);
-    setother_fields(newmcqNewData);
-    // this.setState({ other_fields: newmcqNewData });
+    const re = /^[0-9\b]+$/;
+      if (newName === '' || re.test(newName)) {
+        const other = other_fields;
+        // const date = { name, email }
+        const newmcqNewData = [...other];
+    
+        newmcqNewData[index].sortorder = Number(newName);
+        setother_fields(newmcqNewData);
+        // this.setState({ other_fields: newmcqNewData });
+    
+        console.log(newmcqNewData);
+      }
 
-    console.log(newmcqNewData);
+
+    // const other = other_fields;
+    // // const date = { name, email }
+    // const newmcqNewData = [...other];
+
+    // newmcqNewData[index].sortorder = Number(newName);
+    // setother_fields(newmcqNewData);
+    // // this.setState({ other_fields: newmcqNewData });
+
+    // console.log(newmcqNewData);
   };
 
   const addMoreActives = (newName, index) => {
@@ -1673,6 +1698,14 @@ const FeedbackEdit = () => {
     console.log(newName, index);
     console.log(newmcqNewData);
   };
+
+  const onlyNuberAllow=(e)=>{
+    const re = /^[0-9\b]+$/;
+      if (e.target.value === '' || re.test(e.target.value)) {
+        setsortOrder(e.target.value)
+        //  this.setState({order: e.target.value})
+      }
+  }
 
   return (
     <>
@@ -1746,7 +1779,7 @@ const FeedbackEdit = () => {
                   </div>
 
                   <div className="col-md-8 mb-1">
-                    <label>Heading</label>
+                    <label>Heading</label><span className="text-danger">*</span>
                     <input
                       type="text"
                       value={heading}
@@ -1950,11 +1983,13 @@ const FeedbackEdit = () => {
                     <span className="text-danger">*</span>
                     <div className="position-relative form-group ">
                       <input
-                        type="number"
+                        type="text"
                         value={sortOrder}
+                        maxLength={3}
                         onChange={(e) =>
+                          onlyNuberAllow(e)
                           //  this.setState({ sortOrder: e.target.value })
-                          setsortOrder(e.target.value)
+                          // setsortOrder(e.target.value)
                         }
                         className="form-control"
                         placeholder="Short Order..."
@@ -2073,7 +2108,8 @@ const FeedbackEdit = () => {
                             <span className="text-danger">*</span>
                             <div className="position-relative form-group ">
                               <input
-                                type="number"
+                                type="text"
+                                maxLength={3}
                                 value={item.sortorder}
                                 onChange={(e) =>
                                   updateOrder(e.target.value, index)
@@ -2153,7 +2189,8 @@ const FeedbackEdit = () => {
                         <span className="text-danger">*</span>
                         <div className="position-relative form-group ">
                           <input
-                            type="number"
+                            type="text"
+                            maxLength={3}
                             value={item.sortorder}
                             onChange={(e) =>
                               addMoreOrder(e.target.value, addMoreIndex)

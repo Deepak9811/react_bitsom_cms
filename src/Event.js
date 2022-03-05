@@ -47,7 +47,8 @@ class Event extends Component {
       showBackBtn: false,
       registrationLink: "",
       location: "",
-      type: ""
+      type: "",
+      imageTypes :".jpg",
     };
   }
 
@@ -56,6 +57,7 @@ class Event extends Component {
   }
 
   componentDidMount() {
+    window.scrollTo(0, 0)
 
     const libconCode = JSON.parse(localStorage.getItem("libCode"));
     console.log("libconCode :- ", libconCode, "editorState ", this.state.editorState)
@@ -136,10 +138,15 @@ class Event extends Component {
       id,
       libconCode
     } = this.state;
-    if (this.state.eventName != "" && this.state.editorState != "" && location != "" && registrationLink != "" && type != "") {
+    if (this.state.eventName !== "" && this.state.editorState !== "" && location !== "" && registrationLink !== "" && type !== "") {
       this.setState({
         loading: true,
       });
+      if(this.state.profileImg.length === 0){
+        let typ = ""
+          this.state.imageTypes=typ
+        // console.log("this.state.profileImg :- ",this.state.profileImg.length,this.state.imageTypes)
+      }
       this.saveContent();
     } else {
       this.setState({
@@ -179,7 +186,7 @@ class Event extends Component {
         type: type,
         description: draftToHtml(convertToRaw(editorState.getCurrentContent())),
         organiser: "BITSoM",
-        imageType: ".jpg",
+        imageType: this.state.imageTypes,
         virtualMode: virtual,
         physicalMode: physical,
         validFrom: moment(this.state.validFrom).format("MM-DD-YYYY hh:mm:ss a"),
@@ -376,7 +383,7 @@ class Event extends Component {
                     value={this.state.location}
                     onChange={(e) => this.setState({ location: e.target.value })}
                     className="form-control"
-                    placeholder="location..."
+                    placeholder="Location..."
                     required=""
                     autoFocus=""
                     autoComplete="on"
