@@ -34,6 +34,10 @@ a {
   
 }
 
+.fl-r{
+  float: right !important;
+}
+
 .wd-3 {
   width: 12%;
   float: right;
@@ -51,6 +55,10 @@ a {
 .mg {
   margin-right: 5%;
   margin-top: 0.8%;
+}
+
+.mrr-15{
+  margin-right: 15%;
 }
 
 .mg-b-3{
@@ -269,6 +277,8 @@ a {
 }
 
 /* -------------LOGIN---------------------------- */
+
+
 /* .modal-content {
   position: relative;
   display: flex;
@@ -505,7 +515,7 @@ a {
   margin-right: auto;
   margin-top: auto;
   margin-bottom: auto;
-  color: rgb(255, 83, 83);
+  color: rgb(255, 255, 255);
 }
 
 /* ----------------------HOME------------------------------------------- */
@@ -611,4 +621,12 @@ a {
 
 .pr-1, .px-1 {
   padding-right: 0.25rem!important;
+}
+
+
+/* -------------------CONTENT----------------------------------- */
+
+.ps-a {
+  position: absolute;
+  right: 0;
 }

@@ -94,7 +94,7 @@ export default class showfeedbacks extends Component {
       let id = item.questionID;
       
      
-      let url = `http://192.168.1.217:1003/Delete?id=${id}&type=question`;
+      let url = `${process.env.REACT_APP_API_kEY}Delete?id=${id}&type=question`;
   
       fetch(url, {
         method: "POST",

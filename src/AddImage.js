@@ -28,7 +28,7 @@ const AddImage = () => {
         console.log("checking image get")
         const libconCode = JSON.parse(localStorage.getItem("libCode"));
 
-        let url = `http://192.168.1.217:1003/showimage?id=0&libcode=${libconCode}`;
+        let url = `${process.env.REACT_APP_API_kEY}showimage?id=0&libcode=${libconCode}`;
 
         fetch(url, {
             method: "GET",
@@ -76,7 +76,7 @@ const AddImage = () => {
 
         console.log("image :- ", profileImg)
 
-        fetch(`http://192.168.1.217:1003/saveimage`, {
+        fetch(`${process.env.REACT_APP_API_kEY}saveimage`, {
             method: "POST",
             headers: {
                 Accept: "application/json",
@@ -165,7 +165,7 @@ const AddImage = () => {
 
             setbigloader(true)
             let id = currEle.iID;
-            let url = `http://192.168.1.217:1003/Delete?id=${id}&type=image`;
+            let url = `${process.env.REACT_APP_API_kEY}Delete?id=${id}&type=image`;
 
             fetch(url, {
                 method: "POST",

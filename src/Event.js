@@ -1,9 +1,6 @@
 import React, { Component } from "react";
 
-import {
-  EditorState,
-  convertToRaw,
-} from "draft-js";
+import { EditorState, convertToRaw } from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import { FiUsers } from "react-icons/fi";
 // import { BiShowAlt } from "react-icons/bs";
@@ -14,9 +11,9 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
 import DatePicker from "react-datepicker";
 import { TailSpin } from "react-loader-spinner";
-import Header from './common/header';
-import { Link } from 'react-router-dom'
-import { withRouter } from './withRouter'
+import Header from "./common/header";
+import { Link } from "react-router-dom";
+import { withRouter } from "./withRouter";
 import moment from "moment";
 
 import "react-datepicker/dist/react-datepicker.css";
@@ -26,7 +23,6 @@ let htmlToDraft = null;
 if (typeof window === "object") {
   htmlToDraft = require("html-to-draftjs").default;
 }
-
 
 class Event extends Component {
   constructor(props) {
@@ -49,7 +45,7 @@ class Event extends Component {
       location: "",
       type: "",
       imageTypes: ".jpg",
-      popUPData: []
+      popUPData: [],
     };
   }
 
@@ -58,19 +54,20 @@ class Event extends Component {
   }
 
   componentDidMount() {
-    window.scrollTo(0, 0)
+    window.scrollTo(0, 0);
 
     const libconCode = JSON.parse(localStorage.getItem("libCode"));
-    console.log("libconCode :- ", libconCode, "editorState ", this.state.editorState)
-
+    console.log(
+      "libconCode :- ",
+      libconCode,
+      "editorState ",
+      this.state.editorState
+    );
 
     this.setState({
-      libconCode: libconCode
-    })
-
-
+      libconCode: libconCode,
+    });
   }
-
 
   onEditorStateChange = (editorState) => {
     this.setState({
@@ -80,11 +77,13 @@ class Event extends Component {
   };
 
   openPopUP() {
-    this.setState(prevState => ({ showChngPreview: !prevState.showChngPreview }));
-     this.state.loadingdata=false;
+    this.setState((prevState) => ({
+      showChngPreview: !prevState.showChngPreview,
+    }));
+    this.state.loadingdata = false;
     const libconCode = JSON.parse(localStorage.getItem("libCode"));
 
-    let url = `http://192.168.1.217:1003/showimage?id=0&libcode=${libconCode}`;
+    let url = `${process.env.REACT_APP_API_kEY}showimage?id=0&libcode=${libconCode}`;
 
     fetch(url, {
       method: "GET",
@@ -95,39 +94,51 @@ class Event extends Component {
     })
       .then((result) => {
         result.json().then((resp) => {
-          console.log(resp)
+          console.log(resp);
           if (resp.response === "Success") {
             this.setState({
               popUPData: resp.data,
-              loadingdata:true
-            })
+              loadingdata: true,
+            });
+          } else {
+            this.setState({
+              loadingdata: true,
+              hidePopData: true,
+              messageShow: "No data found",
+            });
           }
         });
-      }).catch((error) => {
-
-
+      })
+      .catch((error) => {
+        this.setState({
+          loadingdata: true,
+          hidePopData: true,
+          messageShow: "Something went wrong. Please try again.",
+        });
       });
-
   }
+
   getImageDetails(item, i) {
-    this.setState(prevState => ({ showChngPreview: !prevState.showChngPreview }));
+    this.setState((prevState) => ({
+      showChngPreview: !prevState.showChngPreview,
+    }));
     this.setState({
       imagePath: item.url,
-      showViewImage: true
-    })
+      showViewImage: true,
+    });
   }
 
   removeImage() {
     this.setState({
       imagePath: "",
-      showViewImage: false
-    })
-
+      showViewImage: false,
+    });
   }
+
   imageHandler = (e) => {
     this.setState({
-      hideImage: false
-    })
+      hideImage: false,
+    });
     const reader = new FileReader();
     reader.onload = () => {
       if (reader.readyState === 2) {
@@ -169,6 +180,9 @@ class Event extends Component {
   };
 
   checkSaveContent() {
+    let editorData = draftToHtml(
+      convertToRaw(this.state.editorState.getCurrentContent())
+    );
     const {
       editorState,
       eventName,
@@ -182,15 +196,22 @@ class Event extends Component {
       registrationLink,
       type,
       id,
-      libconCode
+      libconCode,
     } = this.state;
-    if (this.state.eventName !== "" && this.state.editorState !== "" && location !== "" && registrationLink !== "" && type !== "") {
+    if (
+      this.state.eventName !== "" &&
+      this.state.editorState !== "" &&
+      location !== "" &&
+      registrationLink !== "" &&
+      type !== "" &&
+      editorData !== "<p></p>\n"
+    ) {
       this.setState({
         loading: true,
       });
       if (this.state.profileImg.length === 0) {
-        let typ = ""
-        this.state.imageTypes = typ
+        let typ = "";
+        this.state.imageTypes = typ;
         // console.log("this.state.profileImg :- ",this.state.profileImg.length,this.state.imageTypes)
       }
       this.saveContent();
@@ -216,10 +237,10 @@ class Event extends Component {
       registrationLink,
       type,
       id,
-      libconCode
+      libconCode,
     } = this.state;
 
-    fetch(`http://192.168.1.217:1003/saveevent`, {
+    fetch(`${process.env.REACT_APP_API_kEY}saveevent`, {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -261,8 +282,8 @@ class Event extends Component {
               system: false,
               virtual: false,
             });
-            alert("Event Add Successfully.")
-            this.props.navigate('/events')
+            alert("Event Add Successfully.");
+            this.props.navigate("/events");
           } else {
             this.setState({
               loading: false,
@@ -306,10 +327,8 @@ class Event extends Component {
   );
 
   render() {
-
     return (
       <>
-
         <Helmet>
           <title>Event</title>
         </Helmet>
@@ -359,7 +378,9 @@ class Event extends Component {
                   <input
                     type="text"
                     value={this.state.eventName}
-                    onChange={(e) => this.setState({ eventName: e.target.value })}
+                    onChange={(e) =>
+                      this.setState({ eventName: e.target.value })
+                    }
                     className="form-control"
                     placeholder="Event Name..."
                     required=""
@@ -367,7 +388,6 @@ class Event extends Component {
                     autoComplete="on"
                   />
                 </div>
-
               </div>
 
               <div className="form-row">
@@ -390,32 +410,32 @@ class Event extends Component {
                   <div className="form-row">
                     <div className="col-md-3" style={{ marginTop: "31px" }}>
                       <input
-                      style={{width:"110px"}}
+                        style={{ width: "110px" }}
                         id="contentimage"
                         name="contentimage"
                         type="submit"
                         className="btn-wide btn btn-success"
                         value="Select Image"
                         onClick={() => this.openPopUP()}
-                       
                       />
                     </div>
                     <div className="col-md-3" style={{ marginTop: "31px" }}>
                       <input
-
                         id="contentimage"
                         name="contentimage"
                         type="submit"
                         className="btn-wide btn btn-danger"
                         value="Remove Image"
                         onClick={() => this.removeImage()}
-                      // onChange={this.imageHandler}
+                        // onChange={this.imageHandler}
                       />
                     </div>
                     {/* URL CHANGE .................*/}
                     <div className="col-md-3" style={{ marginTop: "31px" }}>
-                      <a href="http://localhost:3000/addimage" target={"_blank"}>
-
+                      <a
+                        href="http://localhost:3000/addimage"
+                        target={"_blank"}
+                      >
                         <input
                           style={{ width: "110px" }}
                           id="contentimage"
@@ -424,38 +444,30 @@ class Event extends Component {
                           className="btn-wide btn btn-primary"
                           value="Add Image"
                           //onClick={() => this.removeImage()}
-
                         />
-
                       </a>
                     </div>
                     {/* URL CHANGE ....................*/}
 
                     {this.state.showViewImage ? (
-                       <div className="col-md-3" style={{ marginTop: "31px" }}>
-                      <a href={`${this.state.imagePath}`} target={"_blank"}>
-                       
+                      <div className="col-md-3" style={{ marginTop: "31px" }}>
+                        <a href={`${this.state.imagePath}`} target={"_blank"}>
                           <input
-                            style={{width:"110px"}}
+                            style={{ width: "110px" }}
                             id="contentimage"
                             name="contentimage"
                             type="submit"
                             className="btn-wide btn btn-warning"
                             value="View Image"
-                          //onClick={saveimage}
-                          // onChange={this.imageHandler}
+                            //onClick={saveimage}
+                            // onChange={this.imageHandler}
                           />
-                       
-                      </a>
+                        </a>
                       </div>
                     ) : null}
                   </div>
                 </div>
-
               </div>
-
-
-
 
               <div className="form-row">
                 <div className="col-md-8 mb-1">
@@ -465,7 +477,9 @@ class Event extends Component {
                   <input
                     type="text"
                     value={this.state.location}
-                    onChange={(e) => this.setState({ location: e.target.value })}
+                    onChange={(e) =>
+                      this.setState({ location: e.target.value })
+                    }
                     className="form-control"
                     placeholder="Location..."
                     required=""
@@ -481,10 +495,12 @@ class Event extends Component {
                     {this.state.showValidFromDate ? (
                       <DatePicker
                         value={this.state.validFrom}
-                        onChange={(date) => this.setState({
-                          validFrom: date,
-                          showValidFromDate: false
-                        })}
+                        onChange={(date) =>
+                          this.setState({
+                            validFrom: date,
+                            showValidFromDate: false,
+                          })
+                        }
                         // customTimeInput={<ExampleCustomTimeInput />}
                         dateFormat="MM/dd/yyyy h:mm aa"
                         showTimeInput
@@ -502,8 +518,6 @@ class Event extends Component {
                     )}
                   </div>
                 </div>
-
-                
               </div>
 
               <div className="form-row">
@@ -529,16 +543,15 @@ class Event extends Component {
                   <label>Valid Upto</label>
                   <span className="text-danger">*</span>
                   <div className="position-relative form-group ">
-
-
-
                     {this.state.showValidUptoDate ? (
                       <DatePicker
                         value={this.state.validUpto}
-                        onChange={(date) => this.setState({
-                          validUpto: date,
-                          showValidUptoDate: false
-                        })}
+                        onChange={(date) =>
+                          this.setState({
+                            validUpto: date,
+                            showValidUptoDate: false,
+                          })
+                        }
                         timeInputLabel="Time:"
                         dateFormat="MM/dd/yyyy h:mm aa"
                         showTimeInput
@@ -608,10 +621,8 @@ class Event extends Component {
                     textAlign: { inDropdown: false },
                     link: { inDropdown: false },
                     history: { inDropdown: false },
-                    
                   }}
                 />
-                
               </div>
 
               <div
@@ -721,8 +732,7 @@ class Event extends Component {
                       />
 
                       {this.state.showBackBtn ? (
-
-                        <Link to={"/events"} >
+                        <Link to={"/events"}>
                           <input
                             type="reset"
                             value="BACK"
@@ -742,7 +752,6 @@ class Event extends Component {
                             onClick={() => this.reset()}
                           />
                         </Link>
-
                       )}
                     </>
                   ) : (
@@ -763,60 +772,73 @@ class Event extends Component {
                     className="modal fade bd-ChangePassword show"
                     style={{ display: "block" }}
                   >
-                    <div className="modal-dialog " style={{ background: "#fff" }}>
+                    <div
+                      className="modal-dialog "
+                      style={{ background: "#fff" }}
+                    >
                       <div className="modal-content">
                         <div className="modal-header">
                           <h5 id="exampleModalLongTitle">Image List</h5>
-                          
 
-
-                          <button type="button" className="close" onClick={() => this.openPopUP()}>
+                          <button
+                            type="button"
+                            className="close"
+                            onClick={() => this.openPopUP()}
+                          >
                             <span aria-hidden="true">×</span>
                           </button>
                         </div>
-                        
-                        <div className="modal-body" >
-                        {
-                          this.state.loadingdata ?(
-                            <div className="form-row">
-                            {this.state.popUPData.map((item, i) => {
-                              return (
-                                <React.Fragment key={i}>
-                                  <div className="col-4" onClick={() => this.getImageDetails(item, i)} style={{ marginBottom: "2%" }}>
-                                    <img
-                                      src={item.url}
-                                      alt="Content"
-                                      width={150}
-                                      height={100}
-                                      style={{ borderRadius: "5px", backgroundColor: "#ebebeb" }}
-                                    />
-                                  </div>
 
-                                </React.Fragment>
-                              )
-                            })}
-                          </div>
-                          ):(
-                            <div className="btn-wide btn " style={{marginLeft:"40%"}}>
-                      <TailSpin
-                      
-                        color="#00BFFF"
-                        height={30}
-                        width={50}
-                        ariaLabel="loading"
-                      />
-                    </div>
-                          )
-                        }
-                         
+                        <div className="modal-body">
+                          {this.state.loadingdata ? (
+                            <>
+                            {!this.state.hidePopData ? (
+                              <div className="form-row">
+                                {this.state.popUPData.map((item, i) => {
+                                  return (
+                                    <React.Fragment key={i}>
+                                      <div
+                                        className="col-4"
+                                        onClick={() => this.getImageDetails(item, i)}
+                                        style={{ marginBottom: "2%" }}
+                                      >
+                                        <img
+                                          src={item.url}
+                                          alt="Content"
+                                          width={150}
+                                          height={100}
+                                          style={{
+                                            borderRadius: "5px",
+                                            backgroundColor: "#ebebeb",
+                                            cursor: "pointer",
+                                          }}
+                                        />
+                                      </div>
+                                    </React.Fragment>
+                                  );
+                                })}
+                              </div>
+                            ) : (
+                              <h5 className="err">{this.state.messageShow}</h5>
+                            )}
+                          </>
+                          ) : (
+                            <div
+                              className="btn-wide btn "
+                              style={{ marginLeft: "40%" }}
+                            >
+                              <TailSpin
+                                color="#00BFFF"
+                                height={30}
+                                width={50}
+                                ariaLabel="loading"
+                              />
+                            </div>
+                          )}
                         </div>
-
-
-
                       </div>
                     </div>
                   </div>
-
                 </>
               ) : null}
             </div>
@@ -827,5 +849,4 @@ class Event extends Component {
   }
 }
 
-
-export default withRouter(Event)
+export default withRouter(Event);

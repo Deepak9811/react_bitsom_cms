@@ -1,13 +1,6 @@
-
-
-
 import React, { useState, useEffect } from "react";
 
-import {
-  EditorState,
-  convertToRaw,
-  ContentState,
-} from "draft-js";
+import { EditorState, convertToRaw, ContentState } from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import { FiUsers } from "react-icons/fi";
 import { BiShowAlt } from "react-icons/bi";
@@ -16,7 +9,7 @@ import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { TailSpin } from "react-loader-spinner";
 
-import { Link, useSearchParams, useNavigate } from 'react-router-dom'
+import { Link, useSearchParams, useNavigate } from "react-router-dom";
 import Header from "./common/header";
 import { Helmet } from "react-helmet";
 
@@ -26,46 +19,46 @@ if (typeof window === "object") {
 }
 
 export default function Contentedit() {
-  const [editorState, setEditorState] = useState(EditorState.createEmpty())
-  const [profileImg, setprofileImg] = useState('')
-  const [heading, setheading] = useState('')
-  const [showChngPass, setshowChngPass] = useState(false)
-  const [order, setorder] = useState('')
-  const [system, setsystem] = useState(false)
-  const [app, setapp] = useState("")
-  const [loading, setloading] = useState(false)
-  const [contentId, setcontentId] = useState("")
-  const [showBackBtn, setshowBackBtn] = useState(false)
-  const [showimage, setshowimage] = useState(require('./image/noimage.png'))
-  const [libconCode, setlibconCode] = useState("")
-  const [contentData, setcontentData] = useState([])
-  const [showimgHover, setshowimgHover] = useState(false)
-  const [hideImage, sethideImage] = useState(true)
-  const [bigLoader, setbigLoader] = useState(true)
-  const [imageTypes, setimageTypes] = useState(".jpg")
-  const [imagePath, setimagePath] = useState("")
-  const [showChngPreview, setshowChngPreview] = useState(false)
-  const [popUPData, setpopUPData] = useState([])
-  const [showViewImage, setshowViewImage] = useState(false)
-  const [loadingdata, setloadingdata] = useState(false)
+  const [editorState, setEditorState] = useState(EditorState.createEmpty());
+  const [profileImg, setprofileImg] = useState("");
+  const [heading, setheading] = useState("");
+  const [showChngPass, setshowChngPass] = useState(false);
+  const [order, setorder] = useState("");
+  const [system, setsystem] = useState(false);
+  const [app, setapp] = useState("");
+  const [loading, setloading] = useState(false);
+  const [contentId, setcontentId] = useState("");
+  const [showBackBtn, setshowBackBtn] = useState(false);
+  const [showimage, setshowimage] = useState(require("./image/noimage.png"));
+  const [libconCode, setlibconCode] = useState("");
+  const [contentData, setcontentData] = useState([]);
+  const [showimgHover, setshowimgHover] = useState(false);
+  const [hideImage, sethideImage] = useState(true);
+  const [bigLoader, setbigLoader] = useState(true);
+  const [imageTypes, setimageTypes] = useState(".jpg");
+  const [imagePath, setimagePath] = useState("");
+  const [showChngPreview, setshowChngPreview] = useState(false);
+  const [popUPData, setpopUPData] = useState([]);
+  const [showViewImage, setshowViewImage] = useState(false);
+  const [loadingdata, setloadingdata] = useState(false);
+  const [messageShow, setmessageShow] = useState("");
+  const [hidePopData, sethidePopData] = useState(false);
 
-
-  let [searchParams, setSearchParams] = useSearchParams()
-  let naviagte = useNavigate()
-
+  let [searchParams, setSearchParams] = useSearchParams();
+  let naviagte = useNavigate();
 
   useEffect(() => {
-    window.scrollTo(0, 0)
+    window.scrollTo(0, 0);
     const componentwillMount = async () => {
-      const id = searchParams.get('id');
-      const type = searchParams.get('type');
+      const id = searchParams.get("id");
+      const type = searchParams.get("type");
       const libconCode = JSON.parse(localStorage.getItem("libCode"));
       // console.log("libconCode :- ", libconCode);
-      setlibconCode(libconCode)
+      setlibconCode(libconCode);
 
       if (searchParams) {
         // console.log(searchParams);
-        if (searchParams.get('id')) {
+        if (searchParams.get("id")) {
           getContentDetails(id, libconCode);
         }
       }
@@ -74,12 +67,11 @@ export default function Contentedit() {
     componentwillMount();
   }, []);
 
-
   const getContentDetails = (id, libconCode) => {
     // const libconCode =  localStorage.setItem("user_name", JSON.stringify(resp.data.Name));
 
     fetch(
-      `http://192.168.1.217:1003/showcontent?libid=${libconCode}&id=${id}`,
+      `${process.env.REACT_APP_API_kEY}showcontent?libid=${libconCode}&id=${id}`,
       {
         method: "GET",
         headers: {
@@ -87,124 +79,80 @@ export default function Contentedit() {
           "content-type": "application/json",
         },
       }
-    ).then((result) => {
-      result.json().then((resp) => {
-        // console.log(resp);
-        if (resp.response === "Success") {
-          setcontentData(resp.data)
-          setheading(resp.data[0].heading)
-          setshowimgHover(true)
-          setorder(resp.data[0].SortOrder)
-          setsystem(resp.data[0].Active)
-          setapp(resp.data[0].Show)
-          setcontentId(resp.data[0].contentId)
-          setshowBackBtn(true)
-          sethideImage(false)
-          setbigLoader(false)
-          setimagePath(resp.data[0].imageType)
+    )
+      .then((result) => {
+        result.json().then((resp) => {
+          // console.log(resp);
+          if (resp.response === "Success") {
+            setcontentData(resp.data);
+            setheading(resp.data[0].heading);
+            setshowimgHover(true);
+            setorder(resp.data[0].SortOrder);
+            setsystem(resp.data[0].Active);
+            setapp(resp.data[0].Show);
+            setcontentId(resp.data[0].contentId);
+            setshowBackBtn(true);
+            sethideImage(false);
+            setbigLoader(false);
+            setimagePath(resp.data[0].imageType);
 
+            if (resp.data[0].imageType === "") {
+              setshowViewImage(false);
+            } else {
+              setshowViewImage(true);
+            }
 
-          if (resp.data[0].imageType === "") {
-            setshowViewImage(false)
+            if (resp.data[0].contentimage === "") {
+              setshowimage(require("./image/noimage.png"));
+              setshowimgHover(true);
+              sethideImage(false);
+            } else {
+              setshowimgHover(true);
+              sethideImage(false);
+              let img = resp.data[0].contentimage;
+              setshowimage(img);
+            }
+            // console.log("image :- ",showimage)
+            const html = resp.data[0].text;
+            const contentBlock = htmlToDraft(html);
+            if (contentBlock) {
+              const contentState = ContentState.createFromBlockArray(
+                contentBlock.contentBlocks
+              );
+              const editorState = EditorState.createWithContent(contentState);
+              console.log(draftToHtml(convertToRaw(editorState.getCurrentContent())))
+              setEditorState(editorState);
+            }
           } else {
-            setshowViewImage(true)
+            naviagte("/contents");
+            alert("Something went wrong. Please try again.");
+            setbigLoader(false);
           }
-
-
-
-
-
-          if (resp.data[0].contentimage === "") {
-            setshowimage(require('./image/noimage.png'))
-            setshowimgHover(true)
-            sethideImage(false)
-
-          } else {
-            setshowimgHover(true)
-            sethideImage(false)
-            let img = resp.data[0].contentimage
-            setshowimage(img)
-
-          }
-          // console.log("image :- ",showimage)
-          const html = resp.data[0].text;
-          const contentBlock = htmlToDraft(html);
-          if (contentBlock) {
-            const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
-            const editorState = EditorState.createWithContent(contentState);
-            setEditorState(editorState)
-          }
-        } else {
-          naviagte("/contents");
-          alert("Something went wrong. Please try again.");
-          setbigLoader(false)
-        }
+        });
+      })
+      .catch((error) => {
+        naviagte("/contents");
+        alert("There is problem in your credentials.");
       });
-    }).catch((error) => {
-      naviagte("/contents");
-      alert("There is problem in your credentials.");
-    });
-  }
-
+  };
 
   const onEditorStateChange = (editorState) => {
-    setEditorState(editorState)
+    setEditorState(editorState);
     console.log(draftToHtml(convertToRaw(editorState.getCurrentContent())));
   };
 
-
-  const imageHandler = (e) => {
-    // console.log(e)
-    sethideImage(false)
-
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (reader.readyState === 2) {
-        setshowimage(reader.result)
-        setshowimgHover(true)
-
-        let png = reader.result;
-        png = png.includes("data:image/png;base64,");
-
-        let jpg = reader.result;
-        jpg = jpg.includes("data:image/jpg;base64,");
-
-        let jpeg = reader.result;
-        jpeg = jpeg.includes("data:image/jpeg;base64,");
-
-        if (png === true) {
-          let data = reader.result.replace("data:image/png;base64,", "");
-          setprofileImg(data)
-
-          // console.log("replace png :- ", data);
-        } else if (jpg === true) {
-          let data = reader.result.replace("data:image/jpg;base64,", "");
-          setprofileImg(data)
-
-          // console.log("replace jpg :- ", data);
-        } else if (jpeg === true) {
-          let data = reader.result.replace("data:image/jpeg;base64,", "");
-          setprofileImg(data)
-
-          // console.log("replace jpeg :- ", data);
-        }
-      }
-    };
-    reader.readAsDataURL(e.target.files[0]);
-  };
-
-
   const checkSaveContent = () => {
-    if (heading !== "" && order !== "") {
-      setloading(true)
+    let editorData = draftToHtml(convertToRaw(editorState.getCurrentContent()))
+    if (heading !== "" && order !== ""   && editorData !==  "<p></p>\n") {
+      setloading(true);
       if (profileImg.length === 0) {
-        let typ = ""
-        setimageTypes(typ)
+        let typ = "";
+        setimageTypes(typ);
       }
 
       saveContent();
     } else {
-      setloading(false)
+      setloading(false);
       alert("Please fill the details...");
       console.log(
         "heading :- ",
@@ -215,12 +163,10 @@ export default function Contentedit() {
         order
       );
     }
-  }
-
+  };
 
   const saveContent = () => {
-
-    fetch(`http://192.168.1.217:1003/savecontent`, {
+    fetch(`${process.env.REACT_APP_API_kEY}savecontent`, {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -242,43 +188,42 @@ export default function Contentedit() {
         result.json().then((resp) => {
           console.log("response :- ", resp);
           if (resp.response === "Success") {
-            setloading(false)
-            setcontentId("")
-            setheading("")
-            setorder("")
+            setloading(false);
+            setcontentId("");
+            setheading("");
+            setorder("");
             // seteditorState(EditorState.createEmpty())
-            setapp(false)
-            setsystem(false)
-            setprofileImg("")
+            setapp(false);
+            setsystem(false);
+            setprofileImg("");
 
             alert("Content Update Successfully.");
-            naviagte('/contents')
+            naviagte("/contents");
           } else {
-            setloading(false)
+            setloading(false);
 
             alert("Something went wrong.");
           }
         });
       })
       .catch((error) => {
-        setloading(false)
+        setloading(false);
         console.log("There is problem in your credentials." + error.message);
       });
-  }
-
+  };
 
   const openPopUP = () => {
     // this.setState(prevState => ({ showChngPreview: !prevState.showChngPreview }));
 
     if (showChngPreview === true) {
-      setshowChngPreview(false)
+      setshowChngPreview(false);
     } else {
-      setshowChngPreview(true)
+      setshowChngPreview(true);
     }
     setloadingdata(false);
     const libconCode = JSON.parse(localStorage.getItem("libCode"));
 
-    let url = `http://192.168.1.217:1003/showimage?id=0&libcode=${libconCode}`;
+    let url = `${process.env.REACT_APP_API_kEY}showimage?id=0&libcode=${libconCode}`;
 
     fetch(url, {
       method: "GET",
@@ -289,64 +234,66 @@ export default function Contentedit() {
     })
       .then((result) => {
         result.json().then((resp) => {
-          console.log(resp)
+          console.log(resp);
           if (resp.response === "Success") {
-            setpopUPData(resp.data)
-            setloadingdata(true)
+            setpopUPData(resp.data);
+            setloadingdata(true);
+            sethidePopData(false);
+          } else {
+            setloadingdata(true);
+            sethidePopData(true);
+            setmessageShow("No data found");
           }
         });
-      }).catch((error) => {
-
-
+      })
+      .catch((error) => {
+        setloadingdata(true);
+        setmessageShow("Something went wrong. Please try again.");
+        sethidePopData(true);
       });
-
-  }
+  };
 
   const getImageDetails = (item, i) => {
     if (showChngPreview === true) {
-      setshowChngPreview(false)
+      setshowChngPreview(false);
     } else {
-      setshowChngPreview(true)
+      setshowChngPreview(true);
     }
 
-    setimagePath(item.url)
-    setshowViewImage(true)
-  }
+    setimagePath(item.url);
+    setshowViewImage(true);
+  };
 
   const removeImage = () => {
-    setshowViewImage(false)
-    setimagePath("")
-  }
-
+    setshowViewImage(false);
+    setimagePath("");
+  };
 
   const reset = () => {
-    setloading(false)
-    setcontentId("")
-    setheading("")
-    setorder("")
+    setloading(false);
+    setcontentId("");
+    setheading("");
+    setorder("");
     // seteditorState("")
-    setapp(false)
-    setsystem(false)
-    setprofileImg("")
-    sethideImage(true)
+    setapp(false);
+    setsystem(false);
+    setprofileImg("");
+    sethideImage(true);
+  };
 
-  }
-
-  const onlyNuberAllow = (e) => {
+  const onlyNumberAllow = (e) => {
     const re = /^[0-9\b]+$/;
-    if (e.target.value === '' || re.test(e.target.value)) {
-      setorder(e.target.value)
+    if (e.target.value === "" || re.test(e.target.value)) {
+      setorder(e.target.value);
       //  this.setState({order: e.target.value})
     }
-  }
+  };
 
   return (
     <>
-
       <Helmet>
         <title>Content Edit</title>
       </Helmet>
-
 
       <Header />
 
@@ -382,9 +329,7 @@ export default function Contentedit() {
         </div>
 
         <div className="txtb">
-          <div className="card-header bg-info text-white">
-            CONTENT DETAILS
-          </div>
+          <div className="card-header bg-info text-white">CONTENT DETAILS</div>
 
           <div style={{ padding: "1.25rem" }}>
             <div className="form-row">
@@ -403,7 +348,6 @@ export default function Contentedit() {
                   autoComplete="on"
                 />
               </div>
-
             </div>
 
             <div className="form-row">
@@ -437,20 +381,18 @@ export default function Contentedit() {
                   </div>
                   <div className="col-md-3" style={{ marginTop: "31px" }}>
                     <input
-
                       id="contentimage"
                       name="contentimage"
                       type="submit"
                       className="btn-wide btn btn-danger"
                       value="Remove Image"
                       onClick={() => removeImage()}
-                    // onChange={this.imageHandler}
+                      // onChange={this.imageHandler}
                     />
                   </div>
                   {/* URL CHANGE .................*/}
                   <div className="col-md-3" style={{ marginTop: "31px" }}>
                     <a href="http://localhost:3000/addimage" target={"_blank"}>
-
                       <input
                         style={{ width: "110px" }}
                         id="contentimage"
@@ -458,10 +400,8 @@ export default function Contentedit() {
                         type="submit"
                         className="btn-wide btn btn-primary"
                         value="Add Image"
-                      //onClick={() => this.removeImage()}
-
+                        //onClick={() => this.removeImage()}
                       />
-
                     </a>
                   </div>
                   {/* URL CHANGE ....................*/}
@@ -469,7 +409,6 @@ export default function Contentedit() {
                   {showViewImage ? (
                     <div className="col-md-3" style={{ marginTop: "31px" }}>
                       <a href={`${imagePath}`} target={"_blank"}>
-
                         <input
                           style={{ width: "110px" }}
                           id="contentimage"
@@ -477,16 +416,14 @@ export default function Contentedit() {
                           type="submit"
                           className="btn-wide btn btn-warning"
                           value="View Image"
-                        //onClick={saveimage}
-                        // onChange={this.imageHandler}
+                          //onClick={saveimage}
+                          // onChange={this.imageHandler}
                         />
-
                       </a>
                     </div>
                   ) : null}
                 </div>
               </div>
-
             </div>
             <div className="mrt-2">
               <label>Content Description</label>
@@ -519,10 +456,8 @@ export default function Contentedit() {
                   textAlign: { inDropdown: false },
                   link: { inDropdown: false },
                   history: { inDropdown: false },
-
                 }}
               />
-
             </div>
 
             <div
@@ -539,14 +474,14 @@ export default function Contentedit() {
                   type="text"
                   maxLength={3}
                   value={order}
-                  onChange={(e) =>
-                    onlyNuberAllow(e)
+                  onChange={
+                    (e) => onlyNumberAllow(e)
                     // setorder(e.target.value)
                   }
-                // onChange={(e) =>
-                //   {setorder( e.target.value)}
+                  // onChange={(e) =>
+                  //   {setorder( e.target.value)}
 
-                // }
+                  // }
                 />
               </div>
 
@@ -561,9 +496,7 @@ export default function Contentedit() {
                         name="Active"
                         type="checkbox"
                         checked={system ? "checkbox" : null}
-                        onChange={() =>
-                          setsystem(system ? false : true)
-                        }
+                        onChange={() => setsystem(system ? false : true)}
                       />
 
                       <input name="Active" type="hidden" value="false" />
@@ -589,9 +522,7 @@ export default function Contentedit() {
                         name="Show"
                         type="checkbox"
                         checked={app ? "checkbox" : null}
-                        onChange={() =>
-                          setapp(app ? false : true)
-                        }
+                        onChange={() => setapp(app ? false : true)}
                       />
                       <input name="Show" type="hidden" value="false" />
                       <label
@@ -655,7 +586,6 @@ export default function Contentedit() {
           </div>
         </div>
 
-
         {showChngPreview ? (
           <>
             <div
@@ -666,34 +596,54 @@ export default function Contentedit() {
                 <div className="modal-content">
                   <div className="modal-header">
                     <h5 id="exampleModalLongTitle">Image List</h5>
-                    <button type="button" className="close" onClick={() => openPopUP()}>
+                    <button
+                      type="button"
+                      className="close"
+                      onClick={() => openPopUP()}
+                    >
                       <span aria-hidden="true">×</span>
                     </button>
                   </div>
-                  <div className="modal-body" >
+
+                  <div className="modal-body">
                     {loadingdata ? (
-                      <div className="form-row">
-                        {popUPData.map((item, i) => {
-                          return (
-                            <React.Fragment key={i}>
-                              <div className="col-4" onClick={() => getImageDetails(item, i)} style={{ marginBottom: "2%" }}>
-                                <img
-                                  src={item.url}
-                                  alt="Content"
-                                  width={150}
-                                  height={100}
-                                  style={{ borderRadius: "5px", backgroundColor: "#ebebeb" }}
-                                />
-                              </div>
-
-                            </React.Fragment>
-                          )
-                        })}
-                      </div>
+                      <>
+                        {!hidePopData ? (
+                          <div className="form-row">
+                            {popUPData.map((item, i) => {
+                              return (
+                                <React.Fragment key={i}>
+                                  <div
+                                    className="col-4"
+                                    onClick={() => getImageDetails(item, i)}
+                                    style={{ marginBottom: "2%" }}
+                                  >
+                                    <img
+                                      src={item.url}
+                                      alt="Content"
+                                      width={150}
+                                      height={100}
+                                      style={{
+                                        borderRadius: "5px",
+                                        backgroundColor: "#ebebeb",
+                                        cursor: "pointer",
+                                      }}
+                                    />
+                                  </div>
+                                </React.Fragment>
+                              );
+                            })}
+                          </div>
+                        ) : (
+                          <h5 className="err">{messageShow}</h5>
+                        )}
+                      </>
                     ) : (
-                      <div className="btn-wide btn " style={{ marginLeft: "40%" }}>
+                      <div
+                        className="btn-wide btn "
+                        style={{ marginLeft: "40%" }}
+                      >
                         <TailSpin
-
                           color="#00BFFF"
                           height={30}
                           width={50}
@@ -701,18 +651,12 @@ export default function Contentedit() {
                         />
                       </div>
                     )}
-
                   </div>
-
-
-
                 </div>
               </div>
             </div>
-
           </>
         ) : null}
-
 
         {bigLoader ? (
           <div className="ldbi">
@@ -726,5 +670,5 @@ export default function Contentedit() {
         ) : null}
       </div>
     </>
-  )
+  );
 }

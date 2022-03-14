@@ -44,13 +44,7 @@ class Content extends Component {
   }
 
   componentDidMount() {
-    // const id = this.props.params[0].get('id');
-    // const type = this.props.params[0].get('type');
-    // console.log("props :- ",id)
-    // console.log("props  type :- ",type)
-
     window.scrollTo(0, 0)
-
 
     const libconCode = JSON.parse(localStorage.getItem("libCode"));
     console.log("libconCode :- ", libconCode);
@@ -113,7 +107,8 @@ class Content extends Component {
   };
 
   checkSaveContent() {
-    if (this.state.heading !== "" && this.state.order !== "") {
+    let editorData = draftToHtml(convertToRaw(this.state.editorState.getCurrentContent()))
+    if (this.state.heading !== "" && this.state.order !== "" && editorData !==  "<p></p>\n") {
       this.setState({
         loading: true,
       });
@@ -155,7 +150,7 @@ class Content extends Component {
 
 
     console.log(order, system, app)
-    fetch(`http://192.168.1.217:1003/savecontent`, {
+    fetch(`${process.env.REACT_APP_API_kEY}savecontent`, {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -219,7 +214,7 @@ class Content extends Component {
   }
 
 
-  onlyNuberAllow(e) {
+  onlyNumberAllow(e) {
     const re = /^[0-9\b]+$/;
     if (e.target.value === '' || re.test(e.target.value)) {
       this.setState({ order: e.target.value })
@@ -233,7 +228,7 @@ class Content extends Component {
     this.state.loadingdata=false;
     const libconCode = JSON.parse(localStorage.getItem("libCode"));
 
-    let url = `http://192.168.1.217:1003/showimage?id=0&libcode=${libconCode}`;
+    let url = `${process.env.REACT_APP_API_kEY}showimage?id=0&libcode=${libconCode}`;
 
     fetch(url, {
       method: "GET",
@@ -251,14 +246,21 @@ class Content extends Component {
             
               loadingdata:true
             })
-          }
-          else{
-
+          }else {
+            this.setState({
+              loadingdata: true,
+              hidePopData: true,
+              messageShow: "No data found",
+            });
           }
         });
-      }).catch((error) => {
-
-
+      })
+      .catch((error) => {
+        this.setState({
+          loadingdata: true,
+          hidePopData: true,
+          messageShow: "Something went wrong. Please try again.",
+        });
       });
 
   }
@@ -494,7 +496,7 @@ class Content extends Component {
                     maxLength={3}
                     value={this.state.order}
                     onChange={(e) =>
-                      this.onlyNuberAllow(e)
+                      this.onlyNumberAllow(e)
                       // this.setState({
                       //   order: e.target.value,
                       // })
@@ -628,26 +630,38 @@ class Content extends Component {
                           </button>
                         </div>
                         <div className="modal-body" >
-                          {
-                            this.state.loadingdata?(
+                          {this.state.loadingdata?(
+                              <>
+                            {!this.state.hidePopData ? (
                               <div className="form-row">
-                              {this.state.popUPData.map((item, i) => {
-                                return (
-                                  <React.Fragment key={i}>
-                                    <div className="col-4" onClick={() => this.getImageDetails(item, i)} style={{ marginBottom: "2%" }}>
-                                      <img
-                                        src={item.url}
-                                        alt="Content"
-                                        width={150}
-                                        height={100}
-                                        style={{ borderRadius: "5px", backgroundColor: "#ebebeb" }}
-                                      />
-                                    </div>
-  
-                                  </React.Fragment>
-                                )
-                              })}
-                            </div>
+                                {this.state.popUPData.map((item, i) => {
+                                  return (
+                                    <React.Fragment key={i}>
+                                      <div
+                                        className="col-4"
+                                        onClick={() => this.getImageDetails(item, i)}
+                                        style={{ marginBottom: "2%" }}
+                                      >
+                                        <img
+                                          src={item.url}
+                                          alt="Content"
+                                          width={150}
+                                          height={100}
+                                          style={{
+                                            borderRadius: "5px",
+                                            backgroundColor: "#ebebeb",
+                                            cursor: "pointer",
+                                          }}
+                                        />
+                                      </div>
+                                    </React.Fragment>
+                                  );
+                                })}
+                              </div>
+                            ) : (
+                              <h5 className="err">{this.state.messageShow}</h5>
+                            )}
+                          </>
                             ):(
                               <div className="btn-wide btn " style={{marginLeft:"40%"}}>
                       <TailSpin

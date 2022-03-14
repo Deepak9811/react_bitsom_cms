@@ -21,20 +21,18 @@ export default class Showevent extends Component {
   }
 
   componentDidMount() {
-    window.scrollTo(0, 0)
+    window.scrollTo(0, 0);
     const libconCode = JSON.parse(localStorage.getItem("libCode"));
     console.log("libconCode :- ", libconCode);
     this.setState({
       libconCode: libconCode,
     });
-    this.getEvent(libconCode)
-
+    this.getEvent(libconCode);
   }
 
-  
   getEvent() {
     const libconCode = JSON.parse(localStorage.getItem("libCode"));
-    fetch(`http://192.168.1.217:1003/showevent?libid=${libconCode}&id=0`, {
+    fetch(`${process.env.REACT_APP_API_kEY}showevent?libid=${libconCode}&id=0`, {
       method: "GET",
       headers: {
         Accepts: "application/json",
@@ -67,97 +65,100 @@ export default class Showevent extends Component {
           hideTable: true,
         });
       });
-
   }
-
 
   showPreview(item) {
     // console.log("ID", item.id)
-    let id = item.id
+    let id = item.id;
     // console.log(this.state.contentData)
     if (this.state.showChngPreview === false) {
       this.setState({
-        showChngPreview: true
-      })
+        showChngPreview: true,
+        hideimage: true,
+        loadingdata: false,
+      });
     } else {
       this.setState({
-        showChngPreview: false
-      })
+        showChngPreview: false,
+        hideimage: true,
+        loadingdata: false,
+      });
     }
     // console.log(this.state.showChngPreview)
     const libconCode = JSON.parse(localStorage.getItem("libCode"));
 
-    fetch(
-      `http://192.168.1.217:1003/showevent?libid=${libconCode}&id=${id}`,
-      {
-        method: "GET",
-        headers: {
-          Accepts: "application/json",
-          "content-type": "application/json",
-        },
-      }
-    ).then((result) => {
-      result.json().then((resp) => {
-        // console.log(resp);
-        if (resp.response === "Success") {
-
-          const html = resp.data[0].description;
-          this.setState({
-
-            htmlData: html
-          })
-          if (resp.data[0].imageType === "") {
+    fetch(`${process.env.REACT_APP_API_kEY}showevent?libid=${libconCode}&id=${id}`, {
+      method: "GET",
+      headers: {
+        Accepts: "application/json",
+        "content-type": "application/json",
+      },
+    })
+      .then((result) => {
+        result.json().then((resp) => {
+          // console.log(resp);
+          if (resp.response === "Success") {
+            const html = resp.data[0].description;
             this.setState({
-              hideimage: true
-            })
-          }
-          else {
+              htmlData: html,
+              loadingdata: true,
+            });
+            if (resp.data[0].imageType === "") {
+              this.setState({
+                hideimage: true,
+              });
+            } else {
+              this.setState({
+                imgdata: resp.data[0].imageType,
+                hideimage: false,
+              });
+            }
+          } else {
+            // alert("Something went wrong. Please try again.");
             this.setState({
-              imgdata: resp.data[0].imageType,
-              hideimage: false
-            })
-
+              hideimage: true,
+              loadingdata: true,
+              hidePopData: true,
+              messageShow: "No data found",
+            });
           }
-
-        } else {
-          alert("Something went wrong. Please try again.");
-        }
+        });
+      })
+      .catch((error) => {
+        // alert("There is problem ");
+        this.setState({
+          hideimage: true,
+          loadingdata: true,
+          hidePopData: true,
+          messageShow: "Something went wrong. Please try again.",
+        });
       });
-    }).catch((error) => {
-      alert("There is problem ");
-    });
-
-
   }
 
   hidePreview() {
     if (this.state.showChngPreview === false) {
       this.setState({
-        showChngPreview: true
-      })
+        showChngPreview: true,
+      });
     } else {
       this.setState({
-        showChngPreview: false
-      })
+        showChngPreview: false,
+      });
     }
   }
-  
 
   editEvent(item) {
-
     let dk = item.id;
-
   }
   deleteEvent(item) {
     if (window.confirm("Are you sure you want to delete this event?")) {
       this.setState({
-        bigLoader: true
-      })
+        bigLoader: true,
+      });
       // console.log(item);
       let id = item.id;
 
-
-      let url = `http://192.168.1.217:1003/Delete?id=${id}&type=event`;
+      let url = `${process.env.REACT_APP_API_kEY}Delete?id=${id}&type=event`;
 
       fetch(url, {
         method: "POST",
@@ -166,20 +167,17 @@ export default class Showevent extends Component {
           "content-type": "application/json",
         },
       })
-
         .then((result) => {
           result.json().then((resp) => {
             // console.log(resp);
             if (resp.response === "Success") {
               this.setState({
-
-                bigLoader: false
-              })
-              this.getEvent()
-
+                bigLoader: false,
+              });
+              this.getEvent();
             } else {
               this.setState({
-                bigLoader: false
+                bigLoader: false,
               });
               alert("Something went wrong. Please try again.");
             }
@@ -188,14 +186,11 @@ export default class Showevent extends Component {
         .catch((error) => {
           alert("Something went wrong.");
           this.setState({
-            bigLoader: false
-          })
+            bigLoader: false,
+          });
         });
     }
   }
-
-
-
 
   render() {
     return (
@@ -275,18 +270,30 @@ export default class Showevent extends Component {
                                       </p>
                                     </td>
                                   </Link>
-                                  <td className="edt" style={{ cursor: "pointer" }} >
+                                  <td
+                                    className="edt"
+                                    style={{ cursor: "pointer" }}
+                                  >
                                     <p>
-                                      <MdPreview size={22} style={{ color: "green" }} onClick={() => this.showPreview(item)} />
+                                      <MdPreview
+                                        size={22}
+                                        style={{ color: "green" }}
+                                        onClick={() => this.showPreview(item)}
+                                      />
                                     </p>
                                   </td>
-                                  <td className="edt" onClick={() => this.deleteEvent(item)} style={{ cursor: "pointer" }}>
+                                  <td
+                                    className="edt"
+                                    onClick={() => this.deleteEvent(item)}
+                                    style={{ cursor: "pointer" }}
+                                  >
                                     <p>
-                                      <RiDeleteBinLine size={22} style={{ color: "red" }} />
+                                      <RiDeleteBinLine
+                                        size={22}
+                                        style={{ color: "red" }}
+                                      />
                                     </p>
                                   </td>
-
-                                  
                                 </tr>
                               </React.Fragment>
                             );
@@ -324,48 +331,88 @@ export default class Showevent extends Component {
         {/*  */}
         {this.state.showChngPreview ? (
           <>
-
-
             <div
-
               className="modal fade bd-ChangePassword show"
               style={{ display: "block" }}
             >
               <div className="modal-dialog " style={{ background: "#fff" }}>
                 <div className="modal-content">
                   <div className="modal-header">
-                    <h5 className="modal-title" id="exampleModalLongTitle">Event Preview</h5>
-                    <button type="button" className="close" onClick={() => this.hidePreview()}>
+                    <h5 className="modal-title" id="exampleModalLongTitle">
+                      Event Preview
+                    </h5>
+                    <button
+                      type="button"
+                      className="close"
+                      onClick={() => this.hidePreview()}
+                    >
                       <span aria-hidden="true">×</span>
                     </button>
                   </div>
-                  <div className="modal-body" >
-                    <div className="col">
-                      {this.state.hideimage ? (
-                        <img
-                          style={{ display: "none" }}
-                          src={this.state.imgdata}
-                          alt="Content"
-                          width={450}
-                          height={300}
-                        />
-                      ) : (<img
-                        src={this.state.imgdata}
-                        alt="Content"
-                        width={450}
-                        height={300}
-                      />)}
+                  <div className="modal-body">
+                    <>
+                      {this.state.loadingdata ? (
+                        <>
+                          {!this.state.hidePopData ? (
+                            <>
+                              {/* <div className="col">
+                                {!this.state.hideImage ? (
+                                  <img
+                                    src={this.state.imgdata}
+                                    alt="dk"
+                                    width={450}
+                                    height={300}
+                                  />
+                                ) : null}
+                              </div> */}
 
+                              <div className="col">
+                                {this.state.hideimage ? (
+                                  <img
+                                    style={{ display: "none" }}
+                                    src={this.state.imgdata}
+                                    alt="Content"
+                                    width={450}
+                                    height={300}
+                                  />
+                                ) : (
+                                  <img
+                                    src={this.state.imgdata}
+                                    alt="Content"
+                                    width={450}
+                                    height={300}
+                                  />
+                                )}
+                              </div>
 
-                    </div>
-                    <div dangerouslySetInnerHTML={{ __html: this.state.htmlData }}></div>
-
-
+                              <div
+                                dangerouslySetInnerHTML={{
+                                  __html: this.state.htmlData,
+                                }}
+                              ></div>
+                            </>
+                          ) : (
+                            <h5 className="err">{this.state.messageShow}</h5>
+                          )}
+                        </>
+                      ) : (
+                        <div
+                          className="btn-wide btn "
+                          style={{ marginLeft: "40%" }}
+                        >
+                          <TailSpin
+                            color="#00BFFF"
+                            height={30}
+                            width={50}
+                            ariaLabel="loading"
+                          />
+                        </div>
+                      )}
+                    </>
                   </div>
                 </div>
               </div>
             </div>
-
           </>
         ) : null}
       </>

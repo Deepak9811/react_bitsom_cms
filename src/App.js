@@ -2,22 +2,23 @@
 import Home from './home'
 import Login from './login'
 import Event from './Event'
+import Error from './Error'
 import Events from './Events'
 import Content from './Content'
-import Feedback from './feedback'
+import AddImage from './AddImage'
 import Contents from './Contents'
+import Feedback from './feedback'
 import Eventedit from './Eventedit'
 import Contentedit from './Contentedit'
 import Feedbackedit from './feedbackedit'
 import Question from './feedback/questions'
 import FeedbackResponse from './Feedbackresponse'
 
-import AddImage from './AddImage'
+import Protected from './common/Protected';
 
 import {Route,Routes}  from 'react-router-dom';
 
 import { Component } from 'react/cjs/react.production.min';
-import Protected from './common/Protected';
 
 function App() {
  
@@ -51,7 +52,7 @@ function App() {
         <Route exact path='/Feedbackresponse' element={<FeedbackResponse name="Feedback response Page"></FeedbackResponse>}></Route>
         </Route>
   
-       <Route path='*' element={<Login/>} ></Route>
+       <Route path='*' element={<Error/>} ></Route>
       </Routes>
 
 
