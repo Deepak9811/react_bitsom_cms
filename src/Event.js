@@ -15,8 +15,8 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import DatePicker from "react-datepicker";
 import { TailSpin } from "react-loader-spinner";
 import Header from './common/header';
-import { Link    } from 'react-router-dom'
-import {withRouter} from './withRouter'
+import { Link } from 'react-router-dom'
+import { withRouter } from './withRouter'
 import moment from "moment";
 
 import "react-datepicker/dist/react-datepicker.css";
@@ -48,7 +48,8 @@ class Event extends Component {
       registrationLink: "",
       location: "",
       type: "",
-      imageTypes :".jpg",
+      imageTypes: ".jpg",
+      popUPData: []
     };
   }
 
@@ -67,7 +68,7 @@ class Event extends Component {
       libconCode: libconCode
     })
 
-    
+
   }
 
 
@@ -78,6 +79,51 @@ class Event extends Component {
     // console.log(draftToHtml(convertToRaw(editorState.getCurrentContent())));
   };
 
+  openPopUP() {
+    this.setState(prevState => ({ showChngPreview: !prevState.showChngPreview }));
+     this.state.loadingdata=false;
+    const libconCode = JSON.parse(localStorage.getItem("libCode"));
+
+    let url = `http://192.168.1.217:1003/showimage?id=0&libcode=${libconCode}`;
+
+    fetch(url, {
+      method: "GET",
+      headers: {
+        Accepts: "application/json",
+        "content-type": "application/json",
+      },
+    })
+      .then((result) => {
+        result.json().then((resp) => {
+          console.log(resp)
+          if (resp.response === "Success") {
+            this.setState({
+              popUPData: resp.data,
+              loadingdata:true
+            })
+          }
+        });
+      }).catch((error) => {
+
+
+      });
+
+  }
+  getImageDetails(item, i) {
+    this.setState(prevState => ({ showChngPreview: !prevState.showChngPreview }));
+    this.setState({
+      imagePath: item.url,
+      showViewImage: true
+    })
+  }
+
+  removeImage() {
+    this.setState({
+      imagePath: "",
+      showViewImage: false
+    })
+
+  }
   imageHandler = (e) => {
     this.setState({
       hideImage: false
@@ -142,9 +188,9 @@ class Event extends Component {
       this.setState({
         loading: true,
       });
-      if(this.state.profileImg.length === 0){
+      if (this.state.profileImg.length === 0) {
         let typ = ""
-          this.state.imageTypes=typ
+        this.state.imageTypes = typ
         // console.log("this.state.profileImg :- ",this.state.profileImg.length,this.state.imageTypes)
       }
       this.saveContent();
@@ -173,7 +219,7 @@ class Event extends Component {
       libconCode
     } = this.state;
 
-    fetch(`http://bitsom.libcon.co.in/api/saveevent`, {
+    fetch(`http://192.168.1.217:1003/saveevent`, {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -186,7 +232,7 @@ class Event extends Component {
         type: type,
         description: draftToHtml(convertToRaw(editorState.getCurrentContent())),
         organiser: "BITSoM",
-        imageType: this.state.imageTypes,
+        imageType: this.state.imagePath,
         virtualMode: virtual,
         physicalMode: physical,
         validFrom: moment(this.state.validFrom).format("MM-DD-YYYY hh:mm:ss a"),
@@ -260,30 +306,15 @@ class Event extends Component {
   );
 
   render() {
-    // const {
-    //   editorState,
-    //   eventName,
-    //   physical,
-    //   system,
-    //   virtual,
-    //   profileImg,
-    //   validFrom,
-    //   validUpto,
-    //   location,
-    //   registrationLink,
-    //   type,
-    // } = this.state;
-    // console.log(moment(this.state.validUpto).format("MM-DD-YYYY hh:mm:ss"))
-    // console.log(validFrom);
 
     return (
       <>
 
-<Helmet>
+        <Helmet>
           <title>Event</title>
         </Helmet>
-      
- <Header/>
+
+        <Header />
 
         <div className="txt" id="pddd">
           <div className="app-page-title">
@@ -303,15 +334,15 @@ class Event extends Component {
                 </div>
               </div>
               <div className="page-title-actions">
-                  <Link to={"/events"}>
-                    <button type="button" className="mr-1 btn btn-success">
-                      <BiShowAlt
-                        className="fa pe-7s-help1"
-                        style={{ marginBottom: "3%" }}
-                      />{" "}
-                      Show Events
-                    </button>
-                  </Link>
+                <Link to={"/events"}>
+                  <button type="button" className="mr-1 btn btn-success">
+                    <BiShowAlt
+                      className="fa pe-7s-help1"
+                      style={{ marginBottom: "3%" }}
+                    />{" "}
+                    Show Events
+                  </button>
+                </Link>
               </div>
             </div>
           </div>
@@ -337,41 +368,94 @@ class Event extends Component {
                   />
                 </div>
 
-                <div className="col-md-2 mb-1 ">
-                  <label>Image</label>
+              </div>
+
+              <div className="form-row">
+                <div className="col-md-6 mb-1">
+                  <label>Image Path</label>
+                  <span className="text-danger"></span>
+
                   <input
-                    className="form-control-file"
-                    id="contentimage"
-                    name="contentimage"
-                    type="file"
-                    value=""
-                    accept="image/*"
-                    onChange={this.imageHandler}
+                    value={this.state.imagePath}
+                    type="text"
+                    readOnly={true}
+                    className="form-control"
+                    placeholder="Image Path....."
+                    required=""
+                    autoFocus=""
+                    autoComplete="on"
                   />
                 </div>
-
-                {this.state.showimgHover ? (
-                  <div className="col-md-1 mb-1 imghover" style={{ display: this.state.hideImage ? "none" : "block" }}>
-                    <img
-                      src={this.state.showimage}
-                      alt="profile"
-                      className="preImage"
-                      width={500}
-                      height={500}
-                    />
-
-                    <div className="imgh">
-                      <img
-                        src={this.state.showimage}
-                        alt="profile"
-                        className="ImghImage"
-                        width={500}
-                        height={500}
+                <div className="col-md-6">
+                  <div className="form-row">
+                    <div className="col-md-3" style={{ marginTop: "31px" }}>
+                      <input
+                      style={{width:"110px"}}
+                        id="contentimage"
+                        name="contentimage"
+                        type="submit"
+                        className="btn-wide btn btn-success"
+                        value="Select Image"
+                        onClick={() => this.openPopUP()}
+                       
                       />
                     </div>
+                    <div className="col-md-3" style={{ marginTop: "31px" }}>
+                      <input
+
+                        id="contentimage"
+                        name="contentimage"
+                        type="submit"
+                        className="btn-wide btn btn-danger"
+                        value="Remove Image"
+                        onClick={() => this.removeImage()}
+                      // onChange={this.imageHandler}
+                      />
+                    </div>
+                    {/* URL CHANGE .................*/}
+                    <div className="col-md-3" style={{ marginTop: "31px" }}>
+                      <a href="http://localhost:3000/addimage" target={"_blank"}>
+
+                        <input
+                          style={{ width: "110px" }}
+                          id="contentimage"
+                          name="contentimage"
+                          type="submit"
+                          className="btn-wide btn btn-primary"
+                          value="Add Image"
+                          //onClick={() => this.removeImage()}
+
+                        />
+
+                      </a>
+                    </div>
+                    {/* URL CHANGE ....................*/}
+
+                    {this.state.showViewImage ? (
+                       <div className="col-md-3" style={{ marginTop: "31px" }}>
+                      <a href={`${this.state.imagePath}`} target={"_blank"}>
+                       
+                          <input
+                            style={{width:"110px"}}
+                            id="contentimage"
+                            name="contentimage"
+                            type="submit"
+                            className="btn-wide btn btn-warning"
+                            value="View Image"
+                          //onClick={saveimage}
+                          // onChange={this.imageHandler}
+                          />
+                       
+                      </a>
+                      </div>
+                    ) : null}
                   </div>
-                ) : null}
+                </div>
+
               </div>
+
+
+
 
               <div className="form-row">
                 <div className="col-md-8 mb-1">
@@ -391,7 +475,7 @@ class Event extends Component {
                 </div>
 
                 <div className="col-md-3 mb-1 ">
-                  <label>Valid From Date</label>
+                  <label>Valid From </label>
                   <span className="text-danger">*</span>
                   <div className="position-relative form-group ">
                     {this.state.showValidFromDate ? (
@@ -419,17 +503,7 @@ class Event extends Component {
                   </div>
                 </div>
 
-                {/* <div className="col-md-2 mb-1 ">
-                <label>valid From Time</label><span className="text-danger">*</span>
-                <div className="position-relative form-group ">
-
-
-
-                  <TimePicker value={this.state.value} onChange={this.handleChange} className='form-control' />
-
-                </div>
-
-              </div> */}
+                
               </div>
 
               <div className="form-row">
@@ -534,20 +608,10 @@ class Event extends Component {
                     textAlign: { inDropdown: false },
                     link: { inDropdown: false },
                     history: { inDropdown: false },
-                    // image: {
-                    //     urlEnabled: false,
-                    //     uploadEnabled: false,
-                    //     uploadCallback: this.uploadImageCallBack,
-                    //     previewImage: false,
-                    //     alignmentEnabled: false,
-                    //     alt: { present: false, mandatory: false }
-                    // },
+                    
                   }}
                 />
-                {/* <textarea
-                        disabled
-                        value={draftToHtml(convertToRaw(editorState.getCurrentContent()))}
-                    /> */}
+                
               </div>
 
               <div
@@ -658,26 +722,26 @@ class Event extends Component {
 
                       {this.state.showBackBtn ? (
 
-                          <Link to={"/events"} >
-                            <input
-                              type="reset"
-                              value="BACK"
-                              className="btn-wide btn btn-light"
-                              id="btnClear"
-                              style={{ marginLeft: "2%" }}
-                            />
-                          </Link>
+                        <Link to={"/events"} >
+                          <input
+                            type="reset"
+                            value="BACK"
+                            className="btn-wide btn btn-light"
+                            id="btnClear"
+                            style={{ marginLeft: "2%" }}
+                          />
+                        </Link>
                       ) : (
-                          <Link to={"#"}>
-                            <input
-                              type="reset"
-                              value="RESET"
-                              className="btn-wide btn btn-light"
-                              id="btnClear"
-                              style={{ marginLeft: "2%" }}
-                              onClick={() => this.reset()}
-                            />
-                          </Link>
+                        <Link to={"#"}>
+                          <input
+                            type="reset"
+                            value="RESET"
+                            className="btn-wide btn btn-light"
+                            id="btnClear"
+                            style={{ marginLeft: "2%" }}
+                            onClick={() => this.reset()}
+                          />
+                        </Link>
 
                       )}
                     </>
@@ -693,6 +757,68 @@ class Event extends Component {
                   )}
                 </div>
               </div>
+              {this.state.showChngPreview ? (
+                <>
+                  <div
+                    className="modal fade bd-ChangePassword show"
+                    style={{ display: "block" }}
+                  >
+                    <div className="modal-dialog " style={{ background: "#fff" }}>
+                      <div className="modal-content">
+                        <div className="modal-header">
+                          <h5 id="exampleModalLongTitle">Image List</h5>
+                          
+
+
+                          <button type="button" className="close" onClick={() => this.openPopUP()}>
+                            <span aria-hidden="true">×</span>
+                          </button>
+                        </div>
+                        
+                        <div className="modal-body" >
+                        {
+                          this.state.loadingdata ?(
+                            <div className="form-row">
+                            {this.state.popUPData.map((item, i) => {
+                              return (
+                                <React.Fragment key={i}>
+                                  <div className="col-4" onClick={() => this.getImageDetails(item, i)} style={{ marginBottom: "2%" }}>
+                                    <img
+                                      src={item.url}
+                                      alt="Content"
+                                      width={150}
+                                      height={100}
+                                      style={{ borderRadius: "5px", backgroundColor: "#ebebeb" }}
+                                    />
+                                  </div>
+
+                                </React.Fragment>
+                              )
+                            })}
+                          </div>
+                          ):(
+                            <div className="btn-wide btn " style={{marginLeft:"40%"}}>
+                      <TailSpin
+                      
+                        color="#00BFFF"
+                        height={30}
+                        width={50}
+                        ariaLabel="loading"
+                      />
+                    </div>
+                          )
+                        }
+                         
+                        </div>
+
+
+
+                      </div>
+                    </div>
+                  </div>
+
+                </>
+              ) : null}
             </div>
           </div>
         </div>

@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import { AiOutlineRocket } from "react-icons/ai";
-import { BiDirections } from "react-icons/bi";
+import { BiDirections,BiImageAdd} from "react-icons/bi";
 import { HiOutlineUserCircle } from "react-icons/hi";
 import { MdOutlinePersonAddAlt, MdKeyboardArrowDown, MdOutlineFeedback } from "react-icons/md";
-import { Link    } from 'react-router-dom'
-
+import { Link } from 'react-router-dom'
+import AddImage from '../AddImage';
 export default class header extends Component {
     constructor(props) {
         super(props)
@@ -20,17 +20,17 @@ export default class header extends Component {
             newPass: "",
             newPassRetype: "",
             clasID: false,
-            userName:"BITSoM"
+            userName: "BITSoM"
         }
     }
 
 
     componentDidMount() {
         let user_name = JSON.parse(localStorage.getItem("user_name"))
-        if(user_name){
+        if (user_name) {
             this.setState({
                 userName: user_name
-            }) 
+            })
         }
     }
 
@@ -40,7 +40,7 @@ export default class header extends Component {
         } else {
             this.setState({ showDropdown: false })
         }
-        console.log(this.state.showDropdown)
+      
     }
 
 
@@ -108,14 +108,19 @@ export default class header extends Component {
                 showChngPass: false
             })
         }
-        console.log(this.state.showChngPass)
+       
     }
 
 
 
     checkUpdatePass() {
-        if (this.state.newPass !== "" && this.state.newPassRetype !== "") {
-            this.updatePass()
+        if (this.state.newPass === "" && this.state.newPassRetype === "") {
+            alert("Password should not be blank !!!");
+        } else if (this.state.newPass === this.state.newPassRetype) {
+            this.updatePass();
+           
+        } else if (this.state.newPass !== this.state.newPassRetype) {
+            alert("Password not match!!!")
         } else {
             alert("Please enter details correctly.")
         }
@@ -124,7 +129,9 @@ export default class header extends Component {
 
     updatePass() {
         const { newPass, newPassRetype } = this.state
-        fetch(`http://bitsom.libcon.co.in/api/Changepassword?email=${newPass}&password=${newPassRetype}`, {
+        let user_email = JSON.parse(localStorage.getItem("user_email"))
+
+        fetch(`http://bitsom.libcon.co.in/api/Changepassword?email=${user_email}&password=${newPassRetype}`, {
             method: "POST",
             headers: {
                 Accept: "application/json",
@@ -132,7 +139,7 @@ export default class header extends Component {
             }
         }).then((result) => {
             result.json().then((resp) => {
-                console.log(resp)
+               
                 if (resp.response === "Success") {
                     this.setState({
                         showChngPass: false,
@@ -191,26 +198,11 @@ export default class header extends Component {
                                         </button>
                                     }
 
-                                    {/* <button type="button" className="hamburger close-sidebar-btn hamburger--elastic"
-                                        onClick={() => this.showSideNave()}
-                                    >
-                                        <span className="hamburger-box">
-                                            <span className="hamburger-inner"></span>
-                                        </span>
-                                    </button> */}
                                 </div>
                             </div>
                         </div>
                         <div className="app-header__mobile-menu">
                             <div>
-                                {/* <button onClick={() => this.showSideNaveInMobile()} type="button" className="hamburger hamburger--elastic mobile-toggle-nav">
-                                    <span className="hamburger-box">
-                                        <span className="hamburger-inner"></span>
-                                    </span>
-                                </button> */}
-
-
-
 
                                 {this.state.crossBtn ? (
                                     <button onClick={() => this.showSideNaveInMobile()} type="button" className="hamburger hamburger--elastic mobile-toggle-nav">
@@ -246,7 +238,7 @@ export default class header extends Component {
                         <div className="app-header__content">
                             <div className="app-header-left">
                                 <div className="search-wrapper">
-                                <img   src={require('../image/CLBITSOM.png')} alt='logo' width={45} height={45} />
+                                    <img src={require('../image/CLBITSOM.png')} alt='logo' width={45} height={45} />
                                 </div>
 
                             </div>
@@ -257,19 +249,15 @@ export default class header extends Component {
                                             <div className="widget-content-left  ml-3 header-user-info">
                                                 <div className="btn-group">
                                                     <Link to={"#"} className="p-0 btn">
-                                                    <div onClick={() => this.showDrop()}>
-                                                                <div className="widget-heading">{this.state.userName}<MdKeyboardArrowDown style={{
-                                                                    height: "5%",
-                                                                    width: "20px"
-                                                                }} />
-                                                                </div>
-                                                                <div className="widget-subheading">Library User</div>
+                                                        <div onClick={() => this.showDrop()}>
+                                                            <div className="widget-heading">{this.state.userName}<MdKeyboardArrowDown style={{
+                                                                height: "5%",
+                                                                width: "20px"
+                                                            }} />
                                                             </div>
+                                                            <div className="widget-subheading">Library User</div>
+                                                        </div>
                                                     </Link>
-                                                        {/* <a href="#" className="p-0 btn">
-                                                            
-
-                                                        </a> */}
 
                                                     <div style={{ display: this.state.showDropdown ? "block" : "none" }} className="dropdown-menu dropdown-menu-right"
                                                     >
@@ -280,13 +268,9 @@ export default class header extends Component {
 
                                                         <form action="/Account/Logout" method="post">
                                                             <Link to="/login" onClick={() => this.logOUt()}
-                                                                    className="dropdown-item">
-                                                            <MdKeyboardArrowDown />&nbsp;Logout
+                                                                className="dropdown-item">
+                                                                <MdKeyboardArrowDown />&nbsp;Logout
                                                             </Link>
-                                                                {/* <a  href={"/login"} onClick={() => this.logOUt()}
-                                                                    className="dropdown-item"
-                                                                >
-                                                                    </a> */}
 
                                                         </form>
                                                     </div>
@@ -350,49 +334,53 @@ export default class header extends Component {
                                     <ul className="vertical-nav-menu">
                                         <li className="app-sidebar__heading">Dashboards</li>
                                         <li>
-                                        <Link to={"/"}>
-                                                    <><AiOutlineRocket className='svgicon' /></>
-                                                    Dashboard
-                                                </Link>
+                                            <Link to={"/"}>
+                                                <><AiOutlineRocket className='svgicon' /></>
+                                                Dashboard
+                                            </Link>
 
                                         </li>
                                         <li className="app-sidebar__heading">Masters</li>
                                         <li>
-                                        <Link to={"/contents"}>
-                                                    <BiDirections className='svgicon' />Contents
-                                        </Link>
+                                            <Link to={"/contents"}>
+                                                <BiDirections className='svgicon' />Contents
+                                            </Link>
                                         </li>
                                         <li>
-                                        <Link to={"/content"}>
-                                                    <MdOutlinePersonAddAlt className='svgicon' />New Content
-                                                </Link>
+                                            <Link to={"/content"}>
+                                                <MdOutlinePersonAddAlt className='svgicon' />New Content
+                                            </Link>
                                         </li>
                                         <li>
-                                        <Link to={"/events"}>
-                                                    <BiDirections className='svgicon' />Events
-                                                </Link>
+                                            <Link to={"/events"}>
+                                                <BiDirections className='svgicon' />Events
+                                            </Link>
                                         </li>
                                         <li>
-                                        <Link to={"/event"}>
-                                                    <MdOutlinePersonAddAlt className='svgicon' />New Event
-                                                </Link>
-                                        </li>
-
-
-                                        <li>
-                                        <Link to={"/feedback"}>
-                                                    <MdOutlineFeedback className='svgicon' />New Feedback 
-                                                </Link>
+                                            <Link to={"/event"}>
+                                                <MdOutlinePersonAddAlt className='svgicon' />New Event
+                                            </Link>
                                         </li>
 
 
                                         <li>
-                                        <Link to={"/feedback/questions"}>
-                                                    <MdOutlineFeedback className='svgicon' />Show Feedback 
-                                                </Link>
+                                            <Link to={"/feedback"}>
+                                                <MdOutlineFeedback className='svgicon' />New Feedback
+                                            </Link>
                                         </li>
 
 
+                                        <li>
+                                            <Link to={"/feedback/questions"}>
+                                                <MdOutlineFeedback className='svgicon' />Show Feedback
+                                            </Link>
+                                        </li>
+
+                                        <li>
+                                            <Link to={"/addImage"}>
+                                                <BiImageAdd className='svgicon' />Add Image
+                                            </Link>
+                                        </li>
 
                                     </ul>
                                 </div>
@@ -434,13 +422,13 @@ export default class header extends Component {
                                                 <label>New Password</label>
 
                                                 <input
-                                                    type="text"
+                                                    type="password"
                                                     maxLength="50"
                                                     className="form-control"
                                                     placeholder="New Password"
                                                     required=""
                                                     autoFocus=""
-                                                    autoComplete=""
+                                                    autoComplete="off"
                                                     value={newPass}
                                                     onChange={(event) =>
                                                         this.setState({
@@ -455,6 +443,7 @@ export default class header extends Component {
                                                     id="txtRetypePassword"
                                                     maxLength="50"
                                                     type="password"
+                                                    autoComplete="off"
                                                     className="form-control"
                                                     placeholder="Retype Password"
                                                     value={newPassRetype}

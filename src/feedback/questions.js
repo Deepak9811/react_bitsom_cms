@@ -1,7 +1,7 @@
 import React, { Component, Props } from "react";
 import { FaClipboardList } from "react-icons/fa";
 import { FaEdit } from "react-icons/fa";
-// import { BiShowAlt } from "react-icons/bs";
+import { RiDeleteBinLine } from "react-icons/ri";
 import { BiShowAlt } from "react-icons/bi";
 import { TailSpin } from "react-loader-spinner";
 import Header from "../common/header";
@@ -26,7 +26,12 @@ export default class showfeedbacks extends Component {
     this.setState({
       libconCode: libconCode,
     });
+    this.getQuestion(libconCode)
 
+  }
+//`http://bitsom.libcon.co.in/api/getquestion?libcode=${libconCode}&questionid=0` 
+  getQuestion(){
+    const libconCode = JSON.parse(localStorage.getItem("libCode"));
     fetch(
       `http://bitsom.libcon.co.in/api/getquestion?libcode=${libconCode}&questionid=0`,
       {
@@ -64,7 +69,6 @@ export default class showfeedbacks extends Component {
         });
       });
   }
-
   static async getInitialProps({ query }) {
     return { path: query.id };
   }
@@ -79,6 +83,53 @@ export default class showfeedbacks extends Component {
     let questionID = item.questionID;
     // Router.push(`/feedbackresponse?id=${questionID}&type=${item.type}`)
   }
+
+
+  deleteQuestion(item) {
+    if(window.confirm("Are you sure you want to delete this feedback question?")){
+      this.setState({
+        bigLoader:true
+      })
+      console.log(item);
+      let id = item.questionID;
+      
+     
+      let url = `http://192.168.1.217:1003/Delete?id=${id}&type=question`;
+  
+      fetch(url, {
+        method: "POST",
+        headers: {
+          Accepts: "application/json",
+          "content-type": "application/json",
+        },
+      })
+      
+        .then((result) => {
+          result.json().then((resp) => {
+            console.log(resp);
+            if (resp.response === "Success") {
+              this.setState({
+  
+                bigLoader:false
+              })
+              this.getQuestion()
+             
+            } else {
+              this.setState({
+                bigLoader:false
+              });
+              alert("Something went wrong. Please try again.");
+            }
+          });
+        })
+        .catch((error) => {
+          alert("Something went wrong.");
+          this.setState({
+            bigLoader:false
+          })
+        });
+    }
+    }
 
   render() {
     return (
@@ -135,6 +186,7 @@ export default class showfeedbacks extends Component {
                             <th>Active</th>
                             <th>Response</th>
                             <th>Edit</th>
+                            <th style={{width:"20px"}}>Delete</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -162,6 +214,11 @@ export default class showfeedbacks extends Component {
                                       </p>
                                     </Link>
                                   </td>
+                                  <td className="edt" onClick={() => this.deleteQuestion(item)} style={{cursor:"pointer"}}>
+                                    <p>
+                                      <RiDeleteBinLine size={22} style={{color:"red"}}/>
+                                    </p>
+                                  </td>
                                 </tr>
                               </React.Fragment>
                             );
@@ -185,6 +242,16 @@ export default class showfeedbacks extends Component {
               </div>
             )}
           </div>
+          {this.state.bigLoader ? (
+              <div className="ldbi" style={{position:"fixed"}}>
+              <TailSpin
+                color="#00BFFF"
+                height={80}
+                width={100}
+                ariaLabel="loading"
+              />
+            </div>
+            ):null}
         </div>
       </>
     );

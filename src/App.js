@@ -12,6 +12,8 @@ import Feedbackedit from './feedbackedit'
 import Question from './feedback/questions'
 import FeedbackResponse from './Feedbackresponse'
 
+import AddImage from './AddImage'
+
 import {Route,Routes}  from 'react-router-dom';
 
 import { Component } from 'react/cjs/react.production.min';
@@ -29,9 +31,12 @@ function App() {
         <Route exact path='/Login' element={<Login name="Login Page"></Login>}></Route>
         <Route element={<Protected/>}> 
         <Route exact path='/' element={<Home/> }></Route>
+
+        <Route exact path='/addImage' element={<AddImage />}></Route>
         
   
         <Route exact path='/Content' element={<Content />}></Route>
+       
         <Route exact path='/Content/:id' element={<Content />}></Route>
         <Route exact path='/Contents' element={<Contents />}></Route>
         <Route exact path='/Contentedit' element={<Contentedit />}></Route>

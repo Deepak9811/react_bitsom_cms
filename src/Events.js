@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import { FaClipboardList } from "react-icons/fa";
 import { FaEdit } from "react-icons/fa";
-// import { BiShowAlt } from "react-icons/bs";
+import { RiDeleteBinLine } from "react-icons/ri";
 import { BiShowAlt } from "react-icons/bi";
 import { TailSpin } from "react-loader-spinner";
 import Header from "./common/header";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
-
+import { MdPreview } from "react-icons/md";
 export default class Showevent extends Component {
   constructor(props) {
     super(props);
@@ -16,6 +16,7 @@ export default class Showevent extends Component {
       eventData: [],
       loading: true,
       hideTable: false,
+      showChngPreview: false,
     };
   }
 
@@ -26,8 +27,14 @@ export default class Showevent extends Component {
     this.setState({
       libconCode: libconCode,
     });
+    this.getEvent(libconCode)
 
-    fetch(`http://bitsom.libcon.co.in/api/showevent?libid=${libconCode}&id=0`, {
+  }
+
+  
+  getEvent() {
+    const libconCode = JSON.parse(localStorage.getItem("libCode"));
+    fetch(`http://192.168.1.217:1003/showevent?libid=${libconCode}&id=0`, {
       method: "GET",
       headers: {
         Accepts: "application/json",
@@ -36,7 +43,7 @@ export default class Showevent extends Component {
     })
       .then((result) => {
         result.json().then((resp) => {
-          console.log(resp);
+          // console.log(resp);
           if (resp.response === "Success") {
             this.setState({
               eventData: resp.data,
@@ -60,17 +67,135 @@ export default class Showevent extends Component {
           hideTable: true,
         });
       });
+
   }
 
-  editEvent(item) {
-    // console.log(item.contentId)
-    let dk = item.id;
-    // id = this.props
-    // console.log(this.state.id)
-    // this.props.id
-    // console.log(this.props.match.params.id)
-    // Router.push(`/eventedit?id=${dk}`,)
+
+  showPreview(item) {
+    // console.log("ID", item.id)
+    let id = item.id
+    // console.log(this.state.contentData)
+    if (this.state.showChngPreview === false) {
+      this.setState({
+        showChngPreview: true
+      })
+    } else {
+      this.setState({
+        showChngPreview: false
+      })
+    }
+    // console.log(this.state.showChngPreview)
+    const libconCode = JSON.parse(localStorage.getItem("libCode"));
+
+    fetch(
+      `http://192.168.1.217:1003/showevent?libid=${libconCode}&id=${id}`,
+      {
+        method: "GET",
+        headers: {
+          Accepts: "application/json",
+          "content-type": "application/json",
+        },
+      }
+    ).then((result) => {
+      result.json().then((resp) => {
+        // console.log(resp);
+        if (resp.response === "Success") {
+
+          const html = resp.data[0].description;
+          this.setState({
+
+            htmlData: html
+          })
+          if (resp.data[0].imageType === "") {
+            this.setState({
+              hideimage: true
+            })
+          }
+          else {
+            this.setState({
+              imgdata: resp.data[0].imageType,
+              hideimage: false
+            })
+
+          }
+
+        } else {
+          alert("Something went wrong. Please try again.");
+        }
+      });
+    }).catch((error) => {
+      alert("There is problem ");
+    });
+
+
   }
+
+  hidePreview() {
+    if (this.state.showChngPreview === false) {
+      this.setState({
+        showChngPreview: true
+      })
+    } else {
+      this.setState({
+        showChngPreview: false
+      })
+    }
+  }
+  
+
+  editEvent(item) {
+
+    let dk = item.id;
+
+  }
+  deleteEvent(item) {
+    if (window.confirm("Are you sure you want to delete this event?")) {
+      this.setState({
+        bigLoader: true
+      })
+      // console.log(item);
+      let id = item.id;
+
+
+      let url = `http://192.168.1.217:1003/Delete?id=${id}&type=event`;
+
+      fetch(url, {
+        method: "POST",
+        headers: {
+          Accepts: "application/json",
+          "content-type": "application/json",
+        },
+      })
+
+        .then((result) => {
+          result.json().then((resp) => {
+            // console.log(resp);
+            if (resp.response === "Success") {
+              this.setState({
+
+                bigLoader: false
+              })
+              this.getEvent()
+
+            } else {
+              this.setState({
+                bigLoader: false
+              });
+              alert("Something went wrong. Please try again.");
+            }
+          });
+        })
+        .catch((error) => {
+          alert("Something went wrong.");
+          this.setState({
+            bigLoader: false
+          })
+        });
+    }
+  }
+
+
+
 
   render() {
     return (
@@ -125,7 +250,10 @@ export default class Showevent extends Component {
                             <th>Valid From</th>
                             <th>Valid Upto</th>
                             <th>Organiser</th>
-                            <th>Edit</th>
+
+                            <th>Action</th>
+                            <th>Preview</th>
+                            <th style={{ width: "20px" }}>Delete</th>
                           </tr>
                         </thead>
 
@@ -140,13 +268,25 @@ export default class Showevent extends Component {
                                   <td>{item.validUpto.replace("T", " ")}</td>
                                   <td>{item.location}</td>
 
-                                    <Link to={"/Eventedit" + "?id=" + item.id}>
-                                  <td className="edt wd-100">
+                                  <Link to={"/Eventedit" + "?id=" + item.id}>
+                                    <td className="edt wd-100">
                                       <p>
                                         <FaEdit></FaEdit>
                                       </p>
+                                    </td>
+                                  </Link>
+                                  <td className="edt" style={{ cursor: "pointer" }} >
+                                    <p>
+                                      <MdPreview size={22} style={{ color: "green" }} onClick={() => this.showPreview(item)} />
+                                    </p>
                                   </td>
-                                    </Link>
+                                  <td className="edt" onClick={() => this.deleteEvent(item)} style={{ cursor: "pointer" }}>
+                                    <p>
+                                      <RiDeleteBinLine size={22} style={{ color: "red" }} />
+                                    </p>
+                                  </td>
+
+                                  
                                 </tr>
                               </React.Fragment>
                             );
@@ -170,7 +310,64 @@ export default class Showevent extends Component {
               </div>
             )}
           </div>
+          {this.state.bigLoader ? (
+            <div className="ldbi" style={{ position: "fixed" }}>
+              <TailSpin
+                color="#00BFFF"
+                height={80}
+                width={100}
+                ariaLabel="loading"
+              />
+            </div>
+          ) : null}
         </div>
+        {/*  */}
+        {this.state.showChngPreview ? (
+          <>
+
+
+            <div
+
+              className="modal fade bd-ChangePassword show"
+              style={{ display: "block" }}
+            >
+              <div className="modal-dialog " style={{ background: "#fff" }}>
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h5 className="modal-title" id="exampleModalLongTitle">Event Preview</h5>
+                    <button type="button" className="close" onClick={() => this.hidePreview()}>
+                      <span aria-hidden="true">×</span>
+                    </button>
+                  </div>
+                  <div className="modal-body" >
+                    <div className="col">
+                      {this.state.hideimage ? (
+                        <img
+                          style={{ display: "none" }}
+                          src={this.state.imgdata}
+                          alt="Content"
+                          width={450}
+                          height={300}
+                        />
+                      ) : (<img
+                        src={this.state.imgdata}
+                        alt="Content"
+                        width={450}
+                        height={300}
+                      />)}
+
+
+                    </div>
+                    <div dangerouslySetInnerHTML={{ __html: this.state.htmlData }}></div>
+
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </>
+        ) : null}
       </>
     );
   }

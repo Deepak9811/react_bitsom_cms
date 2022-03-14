@@ -398,7 +398,7 @@ class feedback extends Component {
     onlyNuberAllow(e){
         const re = /^[0-9\b]+$/;
           if (e.target.value === '' || re.test(e.target.value)) {
-             this.setState({order: e.target.value})
+             this.setState({sortOrder: e.target.value})
           }
       }
 
