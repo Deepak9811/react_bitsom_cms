@@ -49,7 +49,7 @@ export default function Contentedit() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    const componentwillMount = async () => {
+    const components = async () => {
       const id = searchParams.get("id");
       const type = searchParams.get("type");
       const libconCode = JSON.parse(localStorage.getItem("libCode"));
@@ -64,7 +64,7 @@ export default function Contentedit() {
       }
     };
 
-    componentwillMount();
+    components();
   }, []);
 
   const getContentDetails = (id, libconCode) => {

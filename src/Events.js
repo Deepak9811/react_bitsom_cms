@@ -237,7 +237,8 @@ export default class Showevent extends Component {
                   </div>
                   <div className="card-body">
                     {!this.state.hideTable ? (
-                      <table className="mb-0 table table-hover">
+                      <div class="table-responsive">
+                      <table className="mb-0 table table-striped table-hover">
                         <thead>
                           <tr>
                             <th style={{ width: "200px" }}>Event</th>
@@ -300,6 +301,7 @@ export default class Showevent extends Component {
                           })}
                         </tbody>
                       </table>
+                      </div>
                     ) : (
                       <h5 className="err">{this.state.messageShow}</h5>
                     )}

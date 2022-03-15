@@ -56,7 +56,7 @@ function Eventedit() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    const componentwillMount = async () => {
+    const components = async () => {
       const id = searchParams.get("id");
       const type = searchParams.get("type");
       const libconCode = JSON.parse(localStorage.getItem("libCode"));
@@ -71,7 +71,7 @@ function Eventedit() {
       }
     };
 
-    componentwillMount();
+    components();
   }, []);
 
   const getContentDetails = (libconCode, id) => {

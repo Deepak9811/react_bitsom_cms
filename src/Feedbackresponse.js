@@ -53,10 +53,10 @@ class showfeedbackresponse extends Component {
   }
 
   getResponse(questionID, type, libconCode) {
-    // http://bitsom.libcon.co.in/api/showpercentage?libcode=CLBITSOM&QUESTIONID=1
+    // ${process.env.REACT_APP_API_kEY}showpercentage?libcode=CLBITSOM&QUESTIONID=1
 
     fetch(
-      `http://bitsom.libcon.co.in/api/showpercentage?libcode=${libconCode}&QUESTIONID=${questionID}`,
+      `${process.env.REACT_APP_API_kEY}showpercentage?libcode=${libconCode}&QUESTIONID=${questionID}`,
       {
         method: "GET",
         headers: {

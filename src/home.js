@@ -27,7 +27,7 @@ const Home = () => {
   const getCountData=()=>{
     console.log("Deepak singh")
     const libconCode = JSON.parse(localStorage.getItem("libCode"));
-    let url = `http://bitsom.libcon.co.in/api/count?libid=${libconCode}`
+    let url = `${process.env.REACT_APP_API_kEY}count?libid=${libconCode}`
     fetch(url, {
       method: "GET",
       headers: {

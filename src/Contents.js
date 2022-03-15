@@ -201,58 +201,59 @@ export default class showcontent extends Component {
   }
 
   upData(item, index) {
-    var check = this.state.contentData.findIndex((el) => el.contentId === item.contentId);
-    if(check !== 0){
+    var check = this.state.contentData.findIndex(
+      (el) => el.contentId === item.contentId
+    );
+    if (check !== 0) {
       const addDown = [...this.state.contentData];
 
       addDown[index].SortOrder = check - 1;
       addDown[index - 1].SortOrder = check;
-  
-  
+
       this.setState({
         contentData: addDown,
       });
-  
+
       var tmp = this.state.contentData[check];
       this.state.contentData[check] = this.state.contentData[check - 1];
       this.state.contentData[check - 1] = tmp;
-  
+
       const newmcqNewData = [...this.state.contentData];
-  
+
       this.setState({
         contentData: newmcqNewData,
         showUpDateDataBtn: true,
       });
     }
-    
   }
 
   downData(item, index) {
-    var check = this.state.contentData.findIndex((el) => el.contentId === item.contentId);
+    var check = this.state.contentData.findIndex(
+      (el) => el.contentId === item.contentId
+    );
 
-    if(check !== this.state.contentData.length-1){
-    const addDown = [...this.state.contentData];
+    if (check !== this.state.contentData.length - 1) {
+      const addDown = [...this.state.contentData];
 
-    addDown[index].SortOrder = check + 1;
-    addDown[index + 1].SortOrder = check;
+      addDown[index].SortOrder = check + 1;
+      addDown[index + 1].SortOrder = check;
 
-    this.setState({
-      contentData: addDown,
-    });
+      this.setState({
+        contentData: addDown,
+      });
 
-    var tmp = this.state.contentData[check];
-    this.state.contentData[check] = this.state.contentData[check + 1];
-    this.state.contentData[check + 1] = tmp;
+      var tmp = this.state.contentData[check];
+      this.state.contentData[check] = this.state.contentData[check + 1];
+      this.state.contentData[check + 1] = tmp;
 
-    const newmcqNewData = [...this.state.contentData];
-    this.setState({
-      contentData: newmcqNewData,
-      showUpDateDataBtn: true,
-    });
+      const newmcqNewData = [...this.state.contentData];
+      this.setState({
+        contentData: newmcqNewData,
+        showUpDateDataBtn: true,
+      });
 
-    console.log(check,this.state.contentData[check + 1]);
+      console.log(check, this.state.contentData[check + 1]);
     }
-    
   }
 
   updateData() {
@@ -366,93 +367,88 @@ export default class showcontent extends Component {
 
                   <div className="card-body">
                     {!this.state.hideTable ? (
-                      <table className="mb-0 table table-hover">
-                        <thead>
-                          <tr>
-                            <th>Heading</th>
-                            <th>Sort Order</th>
-                            <th>Active</th>
-                            <th style={{ width: "75px" }}>Action</th>
-                            <th style={{ width: "82px" }}>Preview</th>
-                            <th style={{ width: "20px" }}>Delete</th>
-                            <th style={{ width: "20px" }}>Position</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {this.state.contentData.map((item, i) => {
-                            // console.log(item);
-                            return  (
-                              <tr>
-                                <td>{item.heading}</td>
-                                <td>{item.SortOrder}</td>
-                                <td>
-                                  <p>{item.Active.toString()}</p>
-                                </td>
-                                <Link
-                                  to={"/Contentedit" + "?id=" + item.contentId}
-                                  className="wd-75px"
-                                >
-                                  <td className="edt wd-100">
-                                    <p>
-                                      <FaEdit></FaEdit>
-                                    </p>
-                                  </td>
-                                </Link>
-                                <td
-                                  className="edt"
-                                  style={{ cursor: "pointer" }}
-                                  onClick={() => this.showPreview(item)}
-                                >
-                                  <p>
-                                    <MdPreview
-                                      size={22}
-                                      style={{ color: "green" }}
-                                    />
-                                  </p>
-                                </td>
-                                <td
-                                  className="edt"
-                                  onClick={() => this.deleteContent(item)}
-                                  style={{ cursor: "pointer" }}
-                                >
-                                  <p>
-                                    <RiDeleteBinLine
-                                      size={22}
-                                      style={{ color: "red" }}
-                                    />
-                                  </p>
-                                </td>
+                      <div class="table-responsive">
+                        <table className="mb-0 table table-striped table-hover">
+                          <thead>
+                            <tr>
+                              <th>Heading</th>
+                              {/* <th>Sort Order</th> */}
+                              <th>Active</th>
+                              <th style={{ width: "75px" }}>Action</th>
+                              <th style={{ width: "82px" }}>Preview</th>
+                              <th style={{ width: "20px" }}>Delete</th>
+                              <th style={{ width: "20px" }}>Position</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {this.state.contentData.map((item, i) => {
+                              // console.log(item);
+                              return (
+                                <React.Fragment key={i}>
+                                  <tr>
+                                    <td>{item.heading}</td>
+                                    {/* <td>{item.SortOrder}</td> */}
+                                    <td>
+                                      <p>{item.Active.toString()}</p>
+                                    </td>
+                                    <Link
+                                      to={
+                                        "/Contentedit" + "?id=" + item.contentId
+                                      }
+                                      className="wd-75px"
+                                    >
+                                      <td className="edt wd-100">
+                                        <p>
+                                          <FaEdit></FaEdit>
+                                        </p>
+                                      </td>
+                                    </Link>
+                                    <td
+                                      className="edt"
+                                      style={{ cursor: "pointer" }}
+                                      onClick={() => this.showPreview(item)}
+                                    >
+                                      <p style={{ marginBottom: "5px" }}>
+                                        <MdPreview
+                                          size={22}
+                                          style={{ color: "green" }}
+                                        />
+                                      </p>
+                                    </td>
+                                    <td
+                                      className="edt"
+                                      onClick={() => this.deleteContent(item)}
+                                      style={{ cursor: "pointer" }}
+                                    >
+                                      <p style={{ marginBottom: "5px" }}>
+                                        <RiDeleteBinLine
+                                          size={22}
+                                          style={{ color: "red" }}
+                                        />
+                                      </p>
+                                    </td>
 
-                                <td
-                                  style={{
-                                    display: "flex",
-                                    position: "absolute",
-                                  }}
-                                >
-                                  <p
-                                    onClick={() => this.upData(item, i)}
-                                    style={{ cursor: "pointer" }}
-                                  >
-                                    <AiOutlineUp
-                                      size={20}
-                                      style={{ color: "black" }}
-                                    />
-                                  </p>
-                                  <p
-                                    onClick={() => this.downData(item, i)}
-                                    style={{ cursor: "pointer" ,marginLeft: "30%"}}
-                                  >
-                                    <AiOutlineDown
-                                      size={20}
-                                      style={{ color: "black" }}
-                                    />
-                                  </p>
-                                </td>
-                              </tr>
-                            ) 
-                          })}
-                        </tbody>
-                      </table>
+                                    <td>
+                                      <p
+                                        onClick={() => this.upData(item, i)}
+                                        className="wd-50 crp"
+                                      >
+                                        <AiOutlineUp color="#000" size={20} />
+                                      </p>
+                                      <p
+                                        onClick={() => this.downData(item, i)}
+                                        className="wd-50 crp"
+                                      >
+                                        <AiOutlineDown size={20} color="#000" />
+                                      </p>
+                                    </td>
+                                  </tr>
+                                </React.Fragment>
+                              );
+                            })}
+                          </tbody>
+                        </table>
+                      </div>
                     ) : (
                       <h5 className="err">{this.state.messageShow}</h5>
                     )}

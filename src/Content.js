@@ -1,25 +1,21 @@
 import React, { Component } from "react";
-import {
-  EditorState,
-  convertToRaw,
-} from "draft-js";
+import { EditorState, convertToRaw } from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import { FiUsers } from "react-icons/fi";
 import { BiShowAlt } from "react-icons/bi";
 
 import { TailSpin } from "react-loader-spinner";
 import { Editor } from "react-draft-wysiwyg";
-import Header from './common/header';
-import { Link } from 'react-router-dom'
+import Header from "./common/header";
+import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
 
-import { withRouter } from './withRouter'
+import { withRouter } from "./withRouter";
 
 let htmlToDraft = null;
 if (typeof window === "object") {
   htmlToDraft = require("html-to-draftjs").default;
 }
-
 
 class Content extends Component {
   constructor(props) {
@@ -39,27 +35,25 @@ class Content extends Component {
       heading: "",
       imageTypes: ".jpg",
       dk: "",
-      popUPData: []
+      popUPData: [],
     };
   }
 
   componentDidMount() {
-    window.scrollTo(0, 0)
+    window.scrollTo(0, 0);
 
     const libconCode = JSON.parse(localStorage.getItem("libCode"));
-    console.log("libconCode :- ", libconCode);
+    // console.log("libconCode :- ", libconCode);
     this.setState({
       libconCode: libconCode,
     });
   }
 
-
-
   onEditorStateChange = (editorState) => {
     this.setState({
       editorState,
     });
-    console.log(draftToHtml(convertToRaw(editorState.getCurrentContent())));
+    // console.log(draftToHtml(convertToRaw(editorState.getCurrentContent())));
   };
 
   imageHandler = (e) => {
@@ -87,19 +81,19 @@ class Content extends Component {
           this.setState({
             profileImg: data,
           });
-          console.log("replace png :- ", data);
+          // console.log("replace png :- ", data);
         } else if (jpg === true) {
           let data = reader.result.replace("data:image/jpg;base64,", "");
           this.setState({
             profileImg: data,
           });
-          console.log("replace jpg :- ", data);
+          // console.log("replace jpg :- ", data);
         } else if (jpeg === true) {
           let data = reader.result.replace("data:image/jpeg;base64,", "");
           this.setState({
             profileImg: data,
           });
-          console.log("replace jpeg :- ", data);
+          // console.log("replace jpeg :- ", data);
         }
       }
     };
@@ -107,49 +101,48 @@ class Content extends Component {
   };
 
   checkSaveContent() {
-    let editorData = draftToHtml(convertToRaw(this.state.editorState.getCurrentContent()))
-    if (this.state.heading !== "" && this.state.order !== "" && editorData !==  "<p></p>\n") {
+    let editorData = draftToHtml(
+      convertToRaw(this.state.editorState.getCurrentContent())
+    );
+    if (
+      this.state.heading !== "" &&
+      this.state.order !== "" &&
+      editorData !== "<p></p>\n"
+    ) {
       this.setState({
         loading: true,
       });
       if (this.state.profileImg.length === 0) {
-        let typ = ""
-        this.state.imageTypes = typ
-        // console.log("this.state.profileImg :- ",this.state.profileImg.length,this.state.imageTypes)
+        let typ = "";
+        this.state.imageTypes = typ;
       }
-      // console.log("this.state.profileImg :- ",this.state.profileImg.length," type :- ",this.state.imageTypes,JSON.stringify(this.state.dk))
+     
       this.saveContent();
     } else {
       this.setState({
         loading: false,
       });
       alert("Please fill the details...");
-      console.log(
-        "heading :- ",
-        this.state.heading,
-        ", editor :- ",
-        this.state.editorState,
-        " order :- ",
-        this.state.order
-      );
+      // console.log(
+      //   "heading :- ",
+      //   this.state.heading,
+      //   ", editor :- ",
+      //   this.state.editorState,
+      //   " order :- ",
+      //   this.state.order
+      // );
     }
   }
 
   saveContent() {
     const {
       editorState,
-      heading,
       order,
       system,
       app,
-      profileImg,
-      contentId,
-      libconCode,
     } = this.state;
 
-
-
-    console.log(order, system, app)
+    // console.log(order, system, app);
     fetch(`${process.env.REACT_APP_API_kEY}savecontent`, {
       method: "POST",
       headers: {
@@ -170,7 +163,7 @@ class Content extends Component {
     })
       .then((result) => {
         result.json().then((resp) => {
-          console.log("response :- ", resp);
+          // console.log("response :- ", resp);
           if (resp.response === "Success") {
             this.setState({
               loading: false,
@@ -183,7 +176,7 @@ class Content extends Component {
               app: false,
               profileImg: "",
             });
-            this.props.navigate('/contents')
+            this.props.navigate("/contents");
             alert("Content Add Successfully.");
           } else {
             this.setState({
@@ -213,19 +206,19 @@ class Content extends Component {
     });
   }
 
-
   onlyNumberAllow(e) {
     const re = /^[0-9\b]+$/;
-    if (e.target.value === '' || re.test(e.target.value)) {
-      this.setState({ order: e.target.value })
+    if (e.target.value === "" || re.test(e.target.value)) {
+      this.setState({ order: e.target.value });
     }
   }
 
-
   openPopUP() {
-    this.setState(prevState => ({ showChngPreview: !prevState.showChngPreview }));
-   
-    this.state.loadingdata=false;
+    this.setState((prevState) => ({
+      showChngPreview: !prevState.showChngPreview,
+    }));
+
+    this.state.loadingdata = false;
     const libconCode = JSON.parse(localStorage.getItem("libCode"));
 
     let url = `${process.env.REACT_APP_API_kEY}showimage?id=0&libcode=${libconCode}`;
@@ -239,14 +232,14 @@ class Content extends Component {
     })
       .then((result) => {
         result.json().then((resp) => {
-          console.log(resp)
+          console.log(resp);
           if (resp.response === "Success") {
             this.setState({
               popUPData: resp.data,
-            
-              loadingdata:true
-            })
-          }else {
+
+              loadingdata: true,
+            });
+          } else {
             this.setState({
               loadingdata: true,
               hidePopData: true,
@@ -262,29 +255,27 @@ class Content extends Component {
           messageShow: "Something went wrong. Please try again.",
         });
       });
-
   }
 
-
   getImageDetails(item, i) {
-    this.setState(prevState => ({ showChngPreview: !prevState.showChngPreview }));
+    this.setState((prevState) => ({
+      showChngPreview: !prevState.showChngPreview,
+    }));
     this.setState({
       imagePath: item.url,
-      showViewImage: true
-    })
+      showViewImage: true,
+    });
   }
 
   removeImage() {
     this.setState({
       imagePath: "",
-      showViewImage: false
-    })
-
+      showViewImage: false,
+    });
   }
 
-
   render() {
-    console.log("props :- ", this.props)
+    console.log("props :- ", this.props);
     return (
       <>
         <Helmet>
@@ -292,8 +283,6 @@ class Content extends Component {
         </Helmet>
 
         <Header />
-
-
 
         <div className="txt" id="pddd">
           <div className="app-page-title">
@@ -348,8 +337,6 @@ class Content extends Component {
                     autoComplete="on"
                   />
                 </div>
-
-
               </div>
               <div className="form-row">
                 <div className="col-md-6 mb-1">
@@ -372,67 +359,56 @@ class Content extends Component {
                   <div className="form-row">
                     <div className="col-md-3" style={{ marginTop: "31px" }}>
                       <input
-                      style={{width:"110px"}}
+                        style={{ width: "110px" }}
                         id="contentimage"
                         name="contentimage"
                         type="submit"
                         className="btn-wide btn btn-success"
                         value="Select Image"
                         onClick={() => this.openPopUP()}
-                      
                       />
                     </div>
                     <div className="col-md-3" style={{ marginTop: "31px" }}>
                       <input
-
                         id="contentimage"
                         name="contentimage"
                         type="submit"
                         className="btn-wide btn btn-danger"
                         value="Remove Image"
                         onClick={() => this.removeImage()}
-                      // onChange={this.imageHandler}
                       />
                     </div>
 
                     {/* URL CHANGE .................*/}
                     <div className="col-md-3" style={{ marginTop: "31px" }}>
-                    <a href="http://localhost:3000/addimage" target={"_blank"}>
-                     
+                      <a href="/addimage" target={"_blank"}>
                         <input
-                        style={{width:"110px"}}
+                          style={{ width: "110px" }}
                           id="contentimage"
                           name="contentimage"
                           type="submit"
                           className="btn-wide btn btn-primary"
                           value="Add Image"
-                          //onClick={() => this.removeImage()}
-                        
                         />
-                      
-                    </a>
+                      </a>
                     </div>
                     {/* URL CHANGE ....................*/}
                     {this.state.showViewImage ? (
-                       <div className="col-md-3" style={{ marginTop: "31px" }}>
-                      <a href={`${this.state.imagePath}`} target={"_blank"}>
-                       
+                      <div className="col-md-3" style={{ marginTop: "31px" }}>
+                        <a href={`${this.state.imagePath}`} target={"_blank"}>
                           <input
-                            style={{width:"110px"}}
+                            style={{ width: "110px" }}
                             id="contentimage"
                             name="contentimage"
                             type="submit"
                             className="btn-wide btn btn-warning"
                             value="View Image"
-                          
                           />
-                        
-                      </a>
+                        </a>
                       </div>
                     ) : null}
                   </div>
                 </div>
-
               </div>
               <div className="mrt-2">
                 <label>Content Description</label>
@@ -446,7 +422,6 @@ class Content extends Component {
                   wrapperClassName="wrapper-class"
                   editorClassName="editor-class"
                   onEditorStateChange={this.onEditorStateChange}
-                  // toolbarOnFocus
                   toolbar={{
                     options: [
                       "inline",
@@ -466,17 +441,8 @@ class Content extends Component {
                     textAlign: { inDropdown: false },
                     link: { inDropdown: false },
                     history: { inDropdown: false },
-                    // image: {
-                    //     urlEnabled: false,
-                    //     uploadEnabled: false,
-                    //     uploadCallback: this.uploadImageCallBack,
-                    //     previewImage: false,
-                    //     alignmentEnabled: false,
-                    //     alt: { present: false, mandatory: false }
-                    // },
                   }}
                 />
-
               </div>
 
               <div
@@ -491,16 +457,10 @@ class Content extends Component {
                     id="SortOrder"
                     name="SortOrder"
                     type="text"
-
                     size={3}
                     maxLength={3}
                     value={this.state.order}
-                    onChange={(e) =>
-                      this.onlyNumberAllow(e)
-                      // this.setState({
-                      //   order: e.target.value,
-                      // })
-                    }
+                    onChange={(e) => this.onlyNumberAllow(e)}
                   />
                 </div>
 
@@ -611,81 +571,82 @@ class Content extends Component {
                 </div>
               </div>
 
-
               {this.state.showChngPreview ? (
                 <>
                   <div
                     className="modal fade bd-ChangePassword show"
                     style={{ display: "block" }}
                   >
-                    <div className="modal-dialog " style={{ background: "#fff" }}>
+                    <div
+                      className="modal-dialog "
+                      style={{ background: "#fff" }}
+                    >
                       <div className="modal-content">
                         <div className="modal-header">
                           <h5 id="exampleModalLongTitle">Image List</h5>
 
-                          
-
-                          <button type="button" className="close" onClick={() => this.openPopUP()}>
+                          <button
+                            type="button"
+                            className="close"
+                            onClick={() => this.openPopUP()}
+                          >
                             <span aria-hidden="true">×</span>
                           </button>
                         </div>
-                        <div className="modal-body" >
-                          {this.state.loadingdata?(
-                              <>
-                            {!this.state.hidePopData ? (
-                              <div className="form-row">
-                                {this.state.popUPData.map((item, i) => {
-                                  return (
-                                    <React.Fragment key={i}>
-                                      <div
-                                        className="col-4"
-                                        onClick={() => this.getImageDetails(item, i)}
-                                        style={{ marginBottom: "2%" }}
-                                      >
-                                        <img
-                                          src={item.url}
-                                          alt="Content"
-                                          width={150}
-                                          height={100}
-                                          style={{
-                                            borderRadius: "5px",
-                                            backgroundColor: "#ebebeb",
-                                            cursor: "pointer",
-                                          }}
-                                        />
-                                      </div>
-                                    </React.Fragment>
-                                  );
-                                })}
-                              </div>
-                            ) : (
-                              <h5 className="err">{this.state.messageShow}</h5>
-                            )}
-                          </>
-                            ):(
-                              <div className="btn-wide btn " style={{marginLeft:"40%"}}>
-                      <TailSpin
-                      
-                        color="#00BFFF"
-                        height={30}
-                        width={50}
-                        ariaLabel="loading"
-                      />
-                    </div>
-                            )
-                          }
-                          {/* <div className="form-row">
-
-                          </div> */}
-                         
+                        <div className="modal-body">
+                          {this.state.loadingdata ? (
+                            <>
+                              {!this.state.hidePopData ? (
+                                <div className="form-row">
+                                  {this.state.popUPData.map((item, i) => {
+                                    return (
+                                      <React.Fragment key={i}>
+                                        <div
+                                          className="col-4"
+                                          onClick={() =>
+                                            this.getImageDetails(item, i)
+                                          }
+                                          style={{ marginBottom: "2%" }}
+                                        >
+                                          <img
+                                            src={item.url}
+                                            alt="Content"
+                                            width={150}
+                                            height={100}
+                                            style={{
+                                              borderRadius: "5px",
+                                              backgroundColor: "#ebebeb",
+                                              cursor: "pointer",
+                                            }}
+                                          />
+                                        </div>
+                                      </React.Fragment>
+                                    );
+                                  })}
+                                </div>
+                              ) : (
+                                <h5 className="err">
+                                  {this.state.messageShow}
+                                </h5>
+                              )}
+                            </>
+                          ) : (
+                            <div
+                              className="btn-wide btn "
+                              style={{ marginLeft: "40%" }}
+                            >
+                              <TailSpin
+                                color="#00BFFF"
+                                height={30}
+                                width={50}
+                                ariaLabel="loading"
+                              />
+                            </div>
+                          )}
                         </div>
-                         
-
-
                       </div>
                     </div>
                   </div>
-
                 </>
               ) : null}
             </div>
@@ -696,5 +657,4 @@ class Content extends Component {
   }
 }
 
-
-export default withRouter(Content)
+export default withRouter(Content);

@@ -47,7 +47,7 @@ const FeedbackEdit = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0)
-    const componentwillMount = async () => {
+    const components = async () => {
       const id = searchParams.get("id");
       const type = searchParams.get("type");
       const libconCode = JSON.parse(localStorage.getItem("libCode"));
@@ -62,12 +62,12 @@ const FeedbackEdit = () => {
       }
     };
 
-    componentwillMount();
+    components();
   }, []);
 
   const getFeedBackData = (id, libconCode) => {
     fetch(
-      `http://bitsom.libcon.co.in/api/getquestion?libcode=${libconCode}&questionid=${id}`,
+      `${process.env.REACT_APP_API_kEY}getquestion?libcode=${libconCode}&questionid=${id}`,
       {
         method: "GET",
         headers: {
@@ -140,7 +140,7 @@ const FeedbackEdit = () => {
       // console.log("cheking :- ", question_type,  " question :-",    question );
       setloading(true);
 
-      fetch(`http://bitsom.libcon.co.in/api/questions`, {
+      fetch(`${process.env.REACT_APP_API_kEY}questions`, {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -244,7 +244,7 @@ const FeedbackEdit = () => {
   const addMcq = () => {
     setloading(true);
 
-    fetch(`http://bitsom.libcon.co.in/api/insertmcq`, {
+    fetch(`${process.env.REACT_APP_API_kEY}insertmcq`, {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -378,7 +378,7 @@ const FeedbackEdit = () => {
 
     setUpdateloading(true);
 
-    fetch(`http://bitsom.libcon.co.in/api/updatemcq`, {
+    fetch(`${process.env.REACT_APP_API_kEY}updatemcq`, {
       method: "POST",
       headers: {
         Accept: "application/json",

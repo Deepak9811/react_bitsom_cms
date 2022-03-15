@@ -76,7 +76,7 @@ class feedback extends Component {
 
     getFeedBackData(id, libconCode) {
 
-        fetch(`http://bitsom.libcon.co.in/api/getquestion?libcode=${libconCode}&questionid=${id}`, {
+        fetch(`${process.env.REACT_APP_API_kEY}getquestion?libcode=${libconCode}&questionid=${id}`, {
             method: "GET",
             headers: {
                 Accepts: "application/json",
@@ -133,7 +133,7 @@ class feedback extends Component {
             this.setState({
                 loading: true
             })
-            fetch(`http://bitsom.libcon.co.in/api/questions`, {
+            fetch(`${process.env.REACT_APP_API_kEY}questions`, {
                 method: "POST",
                 headers: {
                     Accept: "application/json",
@@ -214,7 +214,7 @@ class feedback extends Component {
             this.setState({
                 loading: true
             })
-            fetch(`http://bitsom.libcon.co.in/api/insertmcq`, {
+            fetch(`${process.env.REACT_APP_API_kEY}insertmcq`, {
                 method: "POST",
                 headers: {
                     Accept: "application/json",
@@ -351,7 +351,7 @@ class feedback extends Component {
         })
         console.log(JSON.stringify(mcqNewData))
 
-        fetch(`http://bitsom.libcon.co.in/api/updatemcq`, {
+        fetch(`${process.env.REACT_APP_API_kEY}updatemcq`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',

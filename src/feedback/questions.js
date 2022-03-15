@@ -20,20 +20,18 @@ export default class showfeedbacks extends Component {
   }
 
   componentDidMount() {
-    console.log("hello");
     const libconCode = JSON.parse(localStorage.getItem("libCode"));
-    console.log("libconCode :- ", libconCode);
     this.setState({
       libconCode: libconCode,
     });
     this.getQuestion(libconCode)
 
   }
-//`http://bitsom.libcon.co.in/api/getquestion?libcode=${libconCode}&questionid=0` 
+//`${process.env.REACT_APP_API_kEY}getquestion?libcode=${libconCode}&questionid=0` 
   getQuestion(){
     const libconCode = JSON.parse(localStorage.getItem("libCode"));
     fetch(
-      `http://bitsom.libcon.co.in/api/getquestion?libcode=${libconCode}&questionid=0`,
+      `${process.env.REACT_APP_API_kEY}getquestion?libcode=${libconCode}&questionid=0`,
       {
         method: "GET",
         headers: {
@@ -44,7 +42,6 @@ export default class showfeedbacks extends Component {
     )
       .then((result) => {
         result.json().then((resp) => {
-          console.log(resp);
           if (resp.response === "Success") {
             this.setState({
               contentData: resp.data,
@@ -69,20 +66,7 @@ export default class showfeedbacks extends Component {
         });
       });
   }
-  static async getInitialProps({ query }) {
-    return { path: query.id };
-  }
 
-  editFeedback(item) {
-    let questionID = item.questionID;
-    // Router.push(`/feedbackedit?id=${questionID}`,)
-  }
-
-  showResponse(item) {
-    console.log(item);
-    let questionID = item.questionID;
-    // Router.push(`/feedbackresponse?id=${questionID}&type=${item.type}`)
-  }
 
 
   deleteQuestion(item) {
@@ -90,7 +74,6 @@ export default class showfeedbacks extends Component {
       this.setState({
         bigLoader:true
       })
-      console.log(item);
       let id = item.questionID;
       
      
@@ -106,10 +89,8 @@ export default class showfeedbacks extends Component {
       
         .then((result) => {
           result.json().then((resp) => {
-            console.log(resp);
             if (resp.response === "Success") {
               this.setState({
-  
                 bigLoader:false
               })
               this.getQuestion()
@@ -176,8 +157,9 @@ export default class showfeedbacks extends Component {
 
                   <div className="card-body">
                     {!this.state.hideTable ? (
-                      <table className="mb-0 table table-hover">
-                        <thead>
+                      <div class="table-responsive">
+                      <table className="mb-0 table table-striped table-hover">
+                        <thead  className="table-light">
                           <tr>
                             <th>Type</th>
                             <th>Heading</th>
@@ -191,7 +173,6 @@ export default class showfeedbacks extends Component {
                         </thead>
                         <tbody>
                           {this.state.contentData.map((item, i) => {
-                            console.log(item.Active);
                             return (
                               <React.Fragment key={i}>
                                 <tr>
@@ -225,6 +206,7 @@ export default class showfeedbacks extends Component {
                           })}
                         </tbody>
                       </table>
+                      </div>
                     ) : (
                       <h5 className="err">{this.state.messageShow}</h5>
                     )}
