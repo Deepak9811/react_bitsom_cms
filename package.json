@@ -1,5 +1,6 @@
 {
   "name": "bitsomcms",
+  "homepage": "https://Deepak9811.github.io/react_bitsom_cms",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -9,6 +10,7 @@
     "bootstrap": "^5.1.3",
     "draft-js": "^0.11.7",
     "draftjs-to-html": "^0.9.1",
+    "gh-pages": "^3.2.3",
     "html-to-draftjs": "^1.5.0",
     "html-to-react": "^1.4.8",
     "jodit-react": "^1.2.6",
@@ -28,6 +30,8 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
