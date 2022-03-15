@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/react_bitsom_cms/static/css/main.ac07f281.css",
+    "main.js": "/react_bitsom_cms/static/js/main.3d8b5681.js",
+    "static/js/787.baa39b8a.chunk.js": "/react_bitsom_cms/static/js/787.baa39b8a.chunk.js",
+    "static/media/noimage.png": "/react_bitsom_cms/static/media/noimage.b21add8f8faeb33dea19.png",
+    "static/media/CLBITSOM.png": "/react_bitsom_cms/static/media/CLBITSOM.6cb606be743160b1ab30.png",
+    "index.html": "/react_bitsom_cms/index.html",
+    "main.ac07f281.css.map": "/react_bitsom_cms/static/css/main.ac07f281.css.map",
+    "main.3d8b5681.js.map": "/react_bitsom_cms/static/js/main.3d8b5681.js.map",
+    "787.baa39b8a.chunk.js.map": "/react_bitsom_cms/static/js/787.baa39b8a.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.ac07f281.css",
+    "static/js/main.3d8b5681.js"
+  ]
+}
