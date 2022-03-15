@@ -440,7 +440,7 @@ function Eventedit() {
 
                   {/* URL CHANGE .................*/}
                   <div className="col-md-3" style={{ marginTop: "31px" }}>
-                    <a href="http://localhost:3000/addimage" target={"_blank"}>
+                    <a href="/addimage" target={"_blank"}>
                       <input
                         style={{ width: "110px" }}
                         id="contentimage"

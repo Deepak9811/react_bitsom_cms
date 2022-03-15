@@ -433,7 +433,7 @@ class Event extends Component {
                     {/* URL CHANGE .................*/}
                     <div className="col-md-3" style={{ marginTop: "31px" }}>
                       <a
-                        href="http://localhost:3000/addimage"
+                        href="/addimage"
                         target={"_blank"}
                       >
                         <input
