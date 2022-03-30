@@ -41,7 +41,7 @@ export default class showcontent extends Component {
   getContent() {
     const libconCode = JSON.parse(localStorage.getItem("libCode"));
     console.log("libconCode :- ", libconCode);
-    let url = `${process.env.REACT_APP_API_kEY}showcontent?libid=${libconCode}&id=0`;
+    let url = `${process.env.REACT_APP_API_kEY}getparent?libid=${libconCode}`;
 
     fetch(url, {
       method: "GET",
@@ -76,6 +76,9 @@ export default class showcontent extends Component {
         });
       });
   }
+
+
+  
 
   showPreview(item) {
     // console.log(item.contentId,)
@@ -375,6 +378,7 @@ export default class showcontent extends Component {
                               {/* <th>Sort Order</th> */}
                               <th>Active</th>
                               <th style={{ width: "75px" }}>Action</th>
+                              <th style={{ width: "20px" }}>Options</th>
                               <th style={{ width: "82px" }}>Preview</th>
                               <th style={{ width: "20px" }}>Delete</th>
                               <th style={{ width: "20px" }}>Position</th>
@@ -391,21 +395,26 @@ export default class showcontent extends Component {
                                     <td>
                                       <p>{item.Active.toString()}</p>
                                     </td>
-                                    <Link
-                                      to={
-                                        "/Contentedit" + "?id=" + item.contentId
-                                      }
-                                      className="wd-75px"
-                                    >
+                                    <Link  to={"/Contentedit" + "?id=" + item.contentId}  className="wd-100" >
                                       <td className="edt wd-100">
-                                        <p>
+                                        <p style={{ marginTop: "5px" }}>
                                           <FaEdit></FaEdit>
                                         </p>
                                       </td>
                                     </Link>
-                                    <td
-                                      className="edt"
-                                      style={{ cursor: "pointer" }}
+
+
+
+                                      <td className="edt ">
+                                    <Link  to={"/Subcontent" + "?id=" + item.contentId +"&parent="+ item.heading}  className="wd-100" >
+                                        <p style={{ marginBottom: "5px" }}>
+                                          <BiShowAlt style={{ color: "#16aaff" }} size={22}/>
+                                        </p>
+                                    </Link>
+                                      </td>
+
+
+                                    <td className="edt" style={{ cursor: "pointer" }}
                                       onClick={() => this.showPreview(item)}
                                     >
                                       <p style={{ marginBottom: "5px" }}>
@@ -415,6 +424,7 @@ export default class showcontent extends Component {
                                         />
                                       </p>
                                     </td>
+
                                     <td
                                       className="edt"
                                       onClick={() => this.deleteContent(item)}

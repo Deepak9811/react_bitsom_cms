@@ -36,6 +36,9 @@ class Content extends Component {
       imageTypes: ".jpg",
       dk: "",
       popUPData: [],
+      childData: [],
+      parentId:"0",
+      disabledChild:false
     };
   }
 
@@ -47,6 +50,41 @@ class Content extends Component {
     this.setState({
       libconCode: libconCode,
     });
+
+    this.getChildData();
+  }
+
+  getChildData() {
+    const libconCode = JSON.parse(localStorage.getItem("libCode"));
+    console.log("libconCode :- ", libconCode);
+    let url = `${process.env.REACT_APP_API_kEY}getParent?libid=CLBITSOM`;
+
+    fetch(url, {
+      method: "GET",
+      headers: {
+        Accepts: "application/json",
+        "content-type": "application/json",
+      },
+    })
+      .then((result) => {
+        result.json().then((resp) => {
+          console.log(resp);
+          if (resp.response === "Success") {
+            this.setState({
+              childData: resp.data,
+            });
+          } else {
+            this.setState({
+              messageChildDataShow: "No data found",
+            });
+          }
+        });
+      })
+      .catch((error) => {
+        this.setState({
+          messageShow: "Something went wrong. Please try again.",
+        });
+      });
   }
 
   onEditorStateChange = (editorState) => {
@@ -116,7 +154,7 @@ class Content extends Component {
         let typ = "";
         this.state.imageTypes = typ;
       }
-     
+
       this.saveContent();
     } else {
       this.setState({
@@ -135,12 +173,7 @@ class Content extends Component {
   }
 
   saveContent() {
-    const {
-      editorState,
-      order,
-      system,
-      app,
-    } = this.state;
+    const { editorState, order, system, app } = this.state;
 
     // console.log(order, system, app);
     fetch(`${process.env.REACT_APP_API_kEY}savecontent`, {
@@ -151,6 +184,7 @@ class Content extends Component {
       },
       body: JSON.stringify({
         contentId: this.state.contentId,
+        parentId: this.state.parentId,
         libcode: this.state.libconCode,
         heading: this.state.heading,
         text: draftToHtml(convertToRaw(editorState.getCurrentContent())),
@@ -275,7 +309,6 @@ class Content extends Component {
   }
 
   render() {
-    console.log("props :- ", this.props);
     return (
       <>
         <Helmet>
@@ -337,7 +370,41 @@ class Content extends Component {
                     autoComplete="on"
                   />
                 </div>
+
+                <div className="col-md-3 mb-1 ">
+                  <label>Type</label>
+                  {/* <span className="text-danger">*</span> */}
+                  <div className="position-relative form-group ">
+                    <select
+                      disabled={this.state.disabledChild ? true : false }
+                      id=""
+                      className="form-control"
+                      value={this.state.parentId}
+                      aria-label="parentId"
+                      name="parentId"
+                      title="parentId"
+                      onChange={(e) =>
+                        this.setState({ parentId: e.target.value })
+                      }
+                    >
+                      <option value="" >
+                        Select Parent
+                      </option>
+                      {this.state.childData.map((item,i)=>{
+
+                      return(
+                        <React.Fragment key={i}>
+                          <option value={item.contentId}>{item.heading}</option>
+                        </React.Fragment>
+                      )
+                      })}
+                      {/* <option value="MCQ" style={{ padding: "5%" }}></option>
+                      <option value="RATE"></option> */}
+                    </select>
+                  </div>
+                </div>
               </div>
+
               <div className="form-row">
                 <div className="col-md-6 mb-1">
                   <label>Image Path</label>

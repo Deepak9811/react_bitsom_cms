@@ -18,6 +18,7 @@ import Protected from './common/Protected';
 
 import {Route,Routes}  from 'react-router-dom';
 
+import { Subcontent } from './Subcontent'
 import { Component } from 'react/cjs/react.production.min';
 
 function App() {
@@ -41,6 +42,7 @@ function App() {
         <Route exact path='/Content/:id' element={<Content />}></Route>
         <Route exact path='/Contents' element={<Contents />}></Route>
         <Route exact path='/Contentedit' element={<Contentedit />}></Route>
+        <Route exact path='/Subcontent' element={<Subcontent />}></Route>
   
         <Route exact path='/Events' element={<Events name="Events Page"></Events>}></Route>
         <Route exact path='/Event' element={<Event name="Event Page"></Event>}></Route>

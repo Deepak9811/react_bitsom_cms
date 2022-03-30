@@ -43,17 +43,34 @@ export default function Contentedit() {
   const [loadingdata, setloadingdata] = useState(false);
   const [messageShow, setmessageShow] = useState("");
   const [hidePopData, sethidePopData] = useState(false);
+  const [content_type, setcontent_type] = useState("");
+  const [parentId, setparentId] = useState(0);
+  const [disabledChild, setdisabledChild] = useState(false);
+  const [contentNameParents, setcontentNameParents] = useState("");
+  const [childData, setchildData] = useState([]);
+  const [messageChildDataShow, setmessageChildDataShow] = useState("");
 
   let [searchParams, setSearchParams] = useSearchParams();
   let naviagte = useNavigate();
 
   useEffect(() => {
+    getChildData();
     window.scrollTo(0, 0);
     const components = async () => {
       const id = searchParams.get("id");
-      const type = searchParams.get("type");
+      const parentname = searchParams.get("parentname");
+      const childId = searchParams.get("childId");
+
+      if (parentname !== null && childId !== null) {
+        console.log("parentname :- ", parentname);
+        setdisabledChild(true);
+        setcontentNameParents(parentname);
+      } else {
+       
+        setdisabledChild(false);
+      }
+
       const libconCode = JSON.parse(localStorage.getItem("libCode"));
-      // console.log("libconCode :- ", libconCode);
       setlibconCode(libconCode);
 
       if (searchParams) {
@@ -95,6 +112,7 @@ export default function Contentedit() {
             sethideImage(false);
             setbigLoader(false);
             setimagePath(resp.data[0].imageType);
+            setparentId(resp.data[0].parentId);
 
             if (resp.data[0].imageType === "") {
               setshowViewImage(false);
@@ -120,7 +138,9 @@ export default function Contentedit() {
                 contentBlock.contentBlocks
               );
               const editorState = EditorState.createWithContent(contentState);
-              console.log(draftToHtml(convertToRaw(editorState.getCurrentContent())))
+              console.log(
+                draftToHtml(convertToRaw(editorState.getCurrentContent()))
+              );
               setEditorState(editorState);
             }
           } else {
@@ -136,14 +156,41 @@ export default function Contentedit() {
       });
   };
 
+  const getChildData = () => {
+    const libconCode = JSON.parse(localStorage.getItem("libCode"));
+    console.log("libconCode :- ", libconCode);
+    let url = `${process.env.REACT_APP_API_kEY}getParent?libid=CLBITSOM`;
+
+    fetch(url, {
+      method: "GET",
+      headers: {
+        Accepts: "application/json",
+        "content-type": "application/json",
+      },
+    })
+      .then((result) => {
+        result.json().then((resp) => {
+          console.log(resp);
+          if (resp.response === "Success") {
+            setchildData(resp.data);
+          } else {
+            setmessageChildDataShow("No data found");
+          }
+        });
+      })
+      .catch((error) => {
+        setmessageChildDataShow("Something went wrong. Please try again.");
+      });
+  };
+
   const onEditorStateChange = (editorState) => {
     setEditorState(editorState);
     console.log(draftToHtml(convertToRaw(editorState.getCurrentContent())));
   };
 
   const checkSaveContent = () => {
-    let editorData = draftToHtml(convertToRaw(editorState.getCurrentContent()))
-    if (heading !== "" && order !== ""   && editorData !==  "<p></p>\n") {
+    let editorData = draftToHtml(convertToRaw(editorState.getCurrentContent()));
+    if (heading !== "" && order !== "" && editorData !== "<p></p>\n") {
       setloading(true);
       if (profileImg.length === 0) {
         let typ = "";
@@ -174,6 +221,7 @@ export default function Contentedit() {
       },
       body: JSON.stringify({
         contentId: contentId,
+        parentId: parentId,
         libcode: libconCode,
         heading: heading,
         text: draftToHtml(convertToRaw(editorState.getCurrentContent())),
@@ -347,6 +395,56 @@ export default function Contentedit() {
                   autoFocus=""
                   autoComplete="on"
                 />
+              </div>
+
+              <div className="col-md-3 mb-1 ">
+                <label>Type</label>
+                {/* <span className="text-danger">*</span> */}
+                <div className="position-relative form-group ">
+                  <select
+                    // disabled={disabledChild ? true : false}
+                    id=""
+                    className="form-control"
+                    value={!disabledChild ? contentNameParents : parentId}
+                    aria-label="question_type"
+                    name="question_type"
+                    title="question_type"
+                    onChange={
+                      // (e) => setcontent_type(e.target.value)
+                      (e) => setparentId(e.target.value) 
+                      // this.setState({ question_type: e.target.value })
+                    }
+                  >
+                    {/* {disabledChild && (
+                      <option value="" hidden>
+                        {contentNameParents}
+                      </option>
+                    )} */}
+
+                    {/* {!disabledChild && ( */}
+                      {/* <> */}
+                        <option value="0" style={{ padding: "5%" }}>
+                          Select Parent Content
+                        </option>
+                        {childData.map((item, i) => {
+                          return (
+                            <React.Fragment key={i}>
+                              <option value={item.contentId}>
+                                {item.heading}
+                              </option>
+                            </React.Fragment>
+                          );
+                        })}
+                      {/* </>
+                    )} */}
+
+                    {/* <option value="Main">Main</option> */}
+                    {/* <option value="MCQ" style={{ padding: "5%" }}>
+                        
+                      </option>
+                      <option value="RATE"></option> */}
+                  </select>
+                </div>
               </div>
             </div>
 
