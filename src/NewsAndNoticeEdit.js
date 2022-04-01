@@ -38,6 +38,7 @@ function NewsAndNotice() {
   let [searchParams, setsearchParams] = useSearchParams();
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     let id = searchParams.get("id");
     getNewsAndNotices(id);
   }, []);
@@ -173,7 +174,7 @@ function NewsAndNotice() {
 
   const saveNewsAndNotice = () => {
     // let url = `${process.env.REACT_APP_API_kEY}savecontent`
-    let code = localStorage.getItem("libCode");
+    let code = JSON.parse(localStorage.getItem("libCode"));
     let url = `http://192.168.1.217:1003/savenews`;
     fetch(url, {
       method: "POST",
@@ -235,7 +236,7 @@ function NewsAndNotice() {
                 <RiCalendarEventLine className="pe-7s-users icon-gradient bg-mean-fruit" />
               </div>
               <div>
-                News And Notice - ADD/UPDATE
+                News And Notice - UPDATE
                 <div className="page-title-subheading">
                   <p>
                     Enter the details and click on SAVE button to save the
@@ -451,23 +452,35 @@ function NewsAndNotice() {
 
             <div className="card-footer">
               <div className="col-md-12 mb-0 text-center">
-                <input
-                  onClick={() => checkNewsAndNotice()}
-                  type="submit"
-                  name="created"
-                  value="SAVE"
-                  className="btn-wide btn btn-success"
-                />
-
-                <Link to={"#"}>
-                  <input
-                    type="reset"
-                    value="RESET"
-                    className="btn-wide btn btn-light"
-                    id="btnClear"
-                    style={{ marginLeft: "2%" }}
-                  />
-                </Link>
+                {!loading ? (
+                  <>
+                    <input
+                      onClick={() => checkNewsAndNotice()}
+                      type="submit"
+                      name="created"
+                      value="SAVE"
+                      className="btn-wide btn btn-success"
+                    />
+                    <Link to={"/newsandnotices"}>
+                      <input
+                        type="reset"
+                        value="BACK"
+                        className="btn-wide btn btn-light"
+                        id="btnClear"
+                        style={{ marginLeft: "2%" }}
+                      />
+                    </Link>
+                  </>
+                ) : (
+                  <div className="btn-wide btn ">
+                    <TailSpin
+                      color="#00BFFF"
+                      height={30}
+                      width={50}
+                      ariaLabel="loading"
+                    />
+                  </div>
+                )}
               </div>
             </div>
           </div>

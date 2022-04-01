@@ -100,7 +100,7 @@ function NewsAndNotice() {
 
   const checkSaveContent = () => {
     let editorData = draftToHtml(convertToRaw(editorState.getCurrentContent()));
-    if (heading !== "" &&  editorData !== "<p></p>\n") {
+    if (heading !== "" && editorData !== "<p></p>\n") {
       setloading(true);
       if (profileImg.length === 0) {
         let typ = "";
@@ -111,20 +111,15 @@ function NewsAndNotice() {
     } else {
       setloading(false);
       alert("Please fill the details...");
-      console.log(
-        "heading :- ",
-        heading,
-        ", editor :- ",
-        editorState,
-      );
+      console.log("heading :- ", heading, ", editor :- ", editorState);
     }
   };
 
   const saveContent = () => {
     // console.log(order, system, app);
     // let url = `${process.env.REACT_APP_API_kEY}savecontent`
-    let code = localStorage.getItem("libCode")
-    let url = `http://192.168.1.217:1003/savenews`
+    let code = JSON.parse(localStorage.getItem("libCode"));
+    let url = `http://192.168.1.217:1003/savenews`;
     fetch(url, {
       method: "POST",
       headers: {
@@ -163,10 +158,18 @@ function NewsAndNotice() {
       });
   };
 
+  const reset = () => {
+    setshowViewImage(false);
+    window.scrollTo(0, 0);
+    setEditorState("");
+    setheading("");
+    setimagePath("");
+  };
+
   return (
     <>
       <Helmet>
-        <title>NewsAndNotice</title>
+        <title>News And Notice</title>
       </Helmet>
 
       <Header />
@@ -179,7 +182,7 @@ function NewsAndNotice() {
                 <RiCalendarEventLine className="pe-7s-users icon-gradient bg-mean-fruit" />
               </div>
               <div>
-                News And Notice - ADD/UPDATE
+                News And Notice - ADD
                 <div className="page-title-subheading">
                   <p>
                     Enter the details and click on SAVE button to save the
@@ -222,7 +225,6 @@ function NewsAndNotice() {
                   autoFocus=""
                   autoComplete="on"
                   onChange={(e) => setheading(e.target.value)}
-
                 />
               </div>
             </div>
@@ -396,23 +398,36 @@ function NewsAndNotice() {
 
             <div className="card-footer">
               <div className="col-md-12 mb-0 text-center">
-                <input
-                  onClick={() => checkSaveContent()}
-                  type="submit"
-                  name="created"
-                  value="SAVE"
-                  className="btn-wide btn btn-success"
-                />
-
-                <Link to={"#"}>
-                  <input
-                    type="reset"
-                    value="RESET"
-                    className="btn-wide btn btn-light"
-                    id="btnClear"
-                    style={{ marginLeft: "2%" }}
-                  />
-                </Link>
+                {!loading ? (
+                  <>
+                    <input
+                      onClick={() => checkSaveContent()}
+                      type="submit"
+                      name="created"
+                      value="SAVE"
+                      className="btn-wide btn btn-success"
+                    />
+                      <Link to={"#"}>
+                        <input
+                          type="reset"
+                          value="RESET"
+                          className="btn-wide btn btn-light"
+                          id="btnClear"
+                          style={{ marginLeft: "2%" }}
+                          onClick={() => reset()}
+                        />
+                      </Link>
+                  </>
+                ) : (
+                  <div className="btn-wide btn ">
+                    <TailSpin
+                      color="#00BFFF"
+                      height={30}
+                      width={50}
+                      ariaLabel="loading"
+                    />
+                  </div>
+                )}
               </div>
             </div>
           </div>

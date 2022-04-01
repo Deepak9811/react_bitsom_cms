@@ -22,6 +22,7 @@ export default class shownewsandnotice extends Component {
   }
 
   componentDidMount() {
+    window.scrollTo(0, 0);
       
     this.getData();
     
@@ -70,11 +71,138 @@ export default class shownewsandnotice extends Component {
       });
   }
 
+
+  showPreview(item) {
+    // console.log(item.ID,)
+    let id = item.ID;
+    // console.log(this.state.contentData)
+    // if (this.state.showChngPreview === false) {
+    //   this.setState({
+    //     showChngPreview: true,
+    //     hideImageType: true,
+    //     loadingdata: false,
+    //   });
+    // } else {
+    //   this.setState({
+    //     showChngPreview: false,
+    //     hideImageType: true,
+    //     loadingdata: false,
+    //   });
+    // }
+    // console.log(this.state.showChngPreview)
+    const libconCode = JSON.parse(localStorage.getItem("libCode"));
+    let url = `http://192.168.1.217:1003/shownews?id=${id}&libcode=${libconCode}`;
+    // let url = `${process.env.REACT_APP_API_kEY}getparent?libid=${libconCode}`;
+
+    fetch(url,
+      {
+        method: "GET",
+        headers: {
+          Accepts: "application/json",
+          "content-type": "application/json",
+        },
+      }
+    )
+      .then((result) => {
+        result.json().then((resp) => {
+          // console.log(resp);
+          if (resp.response === "Success") {
+            const html = resp.data[0].maintext;
+            this.setState({
+              htmlData: html,
+              loadingdata: true,
+              showChngPreview: true,
+            });
+
+            if (resp.data[0].imagetype === "") {
+              this.setState({
+                hideImageType: true,
+              });
+            } else {
+              this.setState({
+                imgdata: resp.data[0].imagetype,
+                hideImageType: false,
+              });
+            }
+          } else {
+            this.setState({
+              hideImageType: true,
+              loadingdata: true,
+              hidePopData: true,
+              messageShow: "No data found",
+            });
+          }
+        });
+      })
+      .catch((error) => {
+        this.setState({
+          hideImageType: true,
+          loadingdata: true,
+          hidePopData: true,
+          messageShow: "Something went wrong. Please try again.",
+        });
+      });
+  }
+
+  hidePreview() {
+    if (this.state.showChngPreview === false) {
+      this.setState({
+        showChngPreview: true,
+      });
+    } else {
+      this.setState({
+        showChngPreview: false,
+      });
+    }
+  }
+
+  deleteContent(item) {
+    if (window.confirm("Are you sure you want to delete this content?")) {
+      this.setState({
+        bigLoader: true,
+      });
+      // console.log(item);
+      let id = item.ID;
+    //   let url = `${process.env.REACT_APP_API_kEY}Delete?id=${id}&type=News`;
+      let url = `http://192.168.1.217:1003/Delete?id=${id}&type=News`;
+
+      fetch(url, {
+        method: "POST",
+        headers: {
+          Accepts: "application/json",
+          "content-type": "application/json",
+        },
+      })
+        .then((result) => {
+          result.json().then((resp) => {
+            // console.log(resp);
+            if (resp.response === "Success") {
+              this.setState({
+                bigLoader: false,
+              });
+              this.getData();
+            } else {
+              this.setState({
+                bigLoader: false,
+              });
+              alert("Something went wrong. Please try again.");
+            }
+          });
+        })
+        .catch((error) => {
+          alert("Something went wrong.");
+          this.setState({
+            bigLoader: false,
+          });
+        });
+    }
+  }
+
   render() {
     return (
         <>
         <Helmet>
-          <title>Contents</title>
+          <title>News And Notices</title>
         </Helmet>
         <Header />
 
@@ -87,7 +215,7 @@ export default class shownewsandnotice extends Component {
                     <FaClipboardList></FaClipboardList>
                   </div>
                   <div>
-                    CONTENT LIST
+                         News And Notice LIST
                     <div className="page-title-subheading">
                       Click on New Content to add new content to the system.
                     </div>
@@ -100,7 +228,7 @@ export default class shownewsandnotice extends Component {
                         className="fa pe-7s-help1"
                         style={{ marginBottom: "3%" }}
                       />{" "}
-                      New Content
+                      Add News And Notice
                     </button>
                   </Link>
                 </div>
@@ -111,7 +239,7 @@ export default class shownewsandnotice extends Component {
               <>
                 <div className="main-card mb-0 card">
                   <div className="card-header bg-info text-white">
-                    List of contentS
+                    List of News And Notices
                     {this.state.showUpDateDataBtn ? (
                       <div className="col-md-3 ps-a">
                         {!this.state.updateLoader ? (
@@ -148,7 +276,7 @@ export default class shownewsandnotice extends Component {
                               {/* <th>Sort Order</th> */}
                               <th>Active</th>
                               <th style={{ width: "75px" }}>Edit</th>
-                              <th style={{ width: "20px" }}>Options</th>
+                              <th style={{ width: "20px" }}>Preview</th>
                               <th style={{ width: "20px" }}>Delete</th>
                             </tr>
                           </thead>
@@ -242,7 +370,7 @@ export default class shownewsandnotice extends Component {
                 <div className="modal-content">
                   <div className="modal-header">
                     <h5 className="modal-title" id="exampleModalLongTitle">
-                      Content Preview
+                      News And Notice Preview
                     </h5>
                     <button
                       type="button"
