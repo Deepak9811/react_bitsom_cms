@@ -44,7 +44,7 @@ export default function Contentedit() {
   const [messageShow, setmessageShow] = useState("");
   const [hidePopData, sethidePopData] = useState(false);
   const [content_type, setcontent_type] = useState("");
-  const [parentId, setparentId] = useState(0);
+  const [parentId, setparentId] = useState('0');
   const [disabledChild, setdisabledChild] = useState(false);
   const [contentNameParents, setcontentNameParents] = useState("");
   const [childData, setchildData] = useState([]);
@@ -337,6 +337,8 @@ export default function Contentedit() {
     }
   };
 
+  console.log(contentNameParents)
+
   return (
     <>
       <Helmet>
@@ -411,7 +413,7 @@ export default function Contentedit() {
                     title="question_type"
                     onChange={
                       // (e) => setcontent_type(e.target.value)
-                      (e) => setparentId(e.target.value) 
+                      (e) =>   {!disabledChild ? setcontentNameParents(e.target.value) : setparentId(e.target.value)}
                       // this.setState({ question_type: e.target.value })
                     }
                   >
@@ -426,6 +428,7 @@ export default function Contentedit() {
                         <option value="0" style={{ padding: "5%" }}>
                           Select Parent Content
                         </option>
+
                         {childData.map((item, i) => {
                           return (
                             <React.Fragment key={i}>
@@ -526,6 +529,7 @@ export default function Contentedit() {
             <div className="mrt-2">
               <label>Content Description</label>
               <span className="text-danger">*</span>
+            
             </div>
 
             <div className="textEditor">

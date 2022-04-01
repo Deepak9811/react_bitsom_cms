@@ -1,43 +1,37 @@
-import React, { Component } from "react";
+﻿import React, { Component } from "react";
 import { FaClipboardList } from "react-icons/fa";
 import { FaEdit } from "react-icons/fa";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { AiOutlineDown, AiOutlineUp } from "react-icons/ai";
-
 import { MdPreview } from "react-icons/md";
 import { BiShowAlt } from "react-icons/bi";
 import { TailSpin } from "react-loader-spinner";
 import { Link } from "react-router-dom";
 import Header from "./common/header";
 import { Helmet } from "react-helmet";
-export default class showcontent extends Component {
+export default class shownewsandnotice extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      contentData: [],
-      loading: true,
+      data: [],
       hideTable: false,
-      bigLoader: false,
-      showChngPreview: false,
-      imgdata: "",
-      showUpDateDataBtn: false,
-      updateLoader: false,
+      bigLoader: true,
+      loading: true,
     };
   }
 
   componentDidMount() {
-    window.scrollTo(0, 0);
-
-    this.getContent();
-
-   
+      
+    this.getData();
+    
   }
 
-  getContent() {
+  getData() {
     const libconCode = JSON.parse(localStorage.getItem("libCode"));
     console.log("libconCode :- ", libconCode);
-    let url = `${process.env.REACT_APP_API_kEY}getparent?libid=${libconCode}`;
+    let url = `http://192.168.1.217:1003/shownews?id=0&libcode=${libconCode}`;
+    // let url = `${process.env.REACT_APP_API_kEY}getparent?libid=${libconCode}`;
 
     fetch(url, {
       method: "GET",
@@ -51,15 +45,17 @@ export default class showcontent extends Component {
           // console.log(resp);
           if (resp.response === "Success") {
             this.setState({
-              contentData: resp.data,
+              data: resp.data,
               loading: false,
               hideTable: false,
+              bigLoader: false
             });
           } else {
             this.setState({
               loading: false,
               messageShow: "No data found",
               hideTable: true,
+              bigLoader: false
             });
           }
         });
@@ -69,236 +65,14 @@ export default class showcontent extends Component {
           loading: false,
           messageShow: "Something went wrong. Please try again.",
           hideTable: true,
+          bigLoader: false
         });
-      });
-  }
-
-
-  
-
-  showPreview(item) {
-    // console.log(item.contentId,)
-    let id = item.contentId;
-    // console.log(this.state.contentData)
-    if (this.state.showChngPreview === false) {
-      this.setState({
-        showChngPreview: true,
-        hideImageType: true,
-        loadingdata: false,
-      });
-    } else {
-      this.setState({
-        showChngPreview: false,
-        hideImageType: true,
-        loadingdata: false,
-      });
-    }
-    // console.log(this.state.showChngPreview)
-    const libconCode = JSON.parse(localStorage.getItem("libCode"));
-
-    fetch(
-      `${process.env.REACT_APP_API_kEY}showcontent?libid=${libconCode}&id=${id}`,
-      {
-        method: "GET",
-        headers: {
-          Accepts: "application/json",
-          "content-type": "application/json",
-        },
-      }
-    )
-      .then((result) => {
-        result.json().then((resp) => {
-          // console.log(resp);
-          if (resp.response === "Success") {
-            const html = resp.data[0].text;
-            this.setState({
-              htmlData: html,
-              loadingdata: true,
-            });
-
-            if (resp.data[0].imageType === "") {
-              this.setState({
-                hideImageType: true,
-              });
-            } else {
-              this.setState({
-                imgdata: resp.data[0].imageType,
-                hideImageType: false,
-              });
-            }
-          } else {
-            this.setState({
-              hideImageType: true,
-              loadingdata: true,
-              hidePopData: true,
-              messageShow: "No data found",
-            });
-          }
-        });
-      })
-      .catch((error) => {
-        this.setState({
-          hideImageType: true,
-          loadingdata: true,
-          hidePopData: true,
-          messageShow: "Something went wrong. Please try again.",
-        });
-      });
-  }
-
-  hidePreview() {
-    if (this.state.showChngPreview === false) {
-      this.setState({
-        showChngPreview: true,
-      });
-    } else {
-      this.setState({
-        showChngPreview: false,
-      });
-    }
-  }
-
-  deleteContent(item) {
-    if (window.confirm("Are you sure you want to delete this content?")) {
-      this.setState({
-        bigLoader: true,
-      });
-      // console.log(item);
-      let id = item.contentId;
-      let url = `${process.env.REACT_APP_API_kEY}Delete?id=${id}&type=content`;
-
-      fetch(url, {
-        method: "POST",
-        headers: {
-          Accepts: "application/json",
-          "content-type": "application/json",
-        },
-      })
-        .then((result) => {
-          result.json().then((resp) => {
-            // console.log(resp);
-            if (resp.response === "Success") {
-              this.setState({
-                bigLoader: false,
-              });
-              this.getContent();
-            } else {
-              this.setState({
-                bigLoader: false,
-              });
-              alert("Something went wrong. Please try again.");
-            }
-          });
-        })
-        .catch((error) => {
-          alert("Something went wrong.");
-          this.setState({
-            bigLoader: false,
-          });
-        });
-    }
-  }
-
-  upData(item, index) {
-    var check = this.state.contentData.findIndex(
-      (el) => el.contentId === item.contentId
-    );
-    if (check !== 0) {
-      const addDown = [...this.state.contentData];
-
-      addDown[index].SortOrder = check - 1;
-      addDown[index - 1].SortOrder = check;
-
-      this.setState({
-        contentData: addDown,
-      });
-
-      var tmp = this.state.contentData[check];
-      this.state.contentData[check] = this.state.contentData[check - 1];
-      this.state.contentData[check - 1] = tmp;
-
-      const newmcqNewData = [...this.state.contentData];
-
-      this.setState({
-        contentData: newmcqNewData,
-        showUpDateDataBtn: true,
-      });
-    }
-  }
-
-  downData(item, index) {
-    var check = this.state.contentData.findIndex(
-      (el) => el.contentId === item.contentId
-    );
-
-    if (check !== this.state.contentData.length - 1) {
-      const addDown = [...this.state.contentData];
-
-      addDown[index].SortOrder = check + 1;
-      addDown[index + 1].SortOrder = check;
-
-      this.setState({
-        contentData: addDown,
-      });
-
-      var tmp = this.state.contentData[check];
-      this.state.contentData[check] = this.state.contentData[check + 1];
-      this.state.contentData[check + 1] = tmp;
-
-      const newmcqNewData = [...this.state.contentData];
-      this.setState({
-        contentData: newmcqNewData,
-        showUpDateDataBtn: true,
-      });
-
-      console.log(check, this.state.contentData[check + 1]);
-    }
-  }
-
-  updateData() {
-    console.log(this.state.contentData);
-    this.setState({
-      updateLoader: true,
-    });
-
-    let url = `${process.env.REACT_APP_API_kEY}updatecontent`;
-
-    fetch(url, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(this.state.contentData),
-    })
-      .then((result) => {
-        result.json().then((resp) => {
-          console.log("response update :- ", resp);
-          if (resp.response === "Success") {
-            alert("Contents Upadate Succesfully.");
-            this.getContent();
-            this.setState({
-              updateLoader: false,
-              showUpDateDataBtn: false,
-            });
-          } else {
-            this.setState({
-              updateLoader: false,
-            });
-          }
-        });
-      })
-      .catch((error) => {
-        this.setState({
-          updateLoader: false,
-        });
-        alert("Something went wrong. Please try again.");
       });
   }
 
   render() {
     return (
-      <>
+        <>
         <Helmet>
           <title>Contents</title>
         </Helmet>
@@ -366,48 +140,35 @@ export default class showcontent extends Component {
 
                   <div className="card-body">
                     {!this.state.hideTable ? (
-                      <div class="table-responsive">
+                      <div className="table-responsive">
                         <table className="mb-0 table table-striped table-hover">
                           <thead>
                             <tr>
                               <th>Heading</th>
                               {/* <th>Sort Order</th> */}
                               <th>Active</th>
-                              <th style={{ width: "75px" }}>Action</th>
+                              <th style={{ width: "75px" }}>Edit</th>
                               <th style={{ width: "20px" }}>Options</th>
-                              <th style={{ width: "82px" }}>Preview</th>
                               <th style={{ width: "20px" }}>Delete</th>
-                              <th style={{ width: "20px" }}>Position</th>
                             </tr>
                           </thead>
                           <tbody>
-                            {this.state.contentData.map((item, i) => {
+                            {this.state.data.map((item, i) => {
                               // console.log(item);
                               return (
                                 <React.Fragment key={i}>
                                   <tr>
-                                    <td>{item.heading}</td>
-                                    {/* <td>{item.SortOrder}</td> */}
+                                    <td>{item.newsheading}</td>
                                     <td>
-                                      <p>{item.Active.toString()}</p>
+                                      <p>{item.active.toString()}</p>
                                     </td>
-                                    <Link  to={"/Contentedit" + "?id=" + item.contentId}  className="wd-100" >
+                                    <Link  to={"/NewsAndNoticeEdit" + "?id=" + item.ID}  className="wd-100" >
                                       <td className="edt wd-100">
                                         <p style={{ marginTop: "5px" }}>
                                           <FaEdit></FaEdit>
                                         </p>
                                       </td>
                                     </Link>
-
-
-
-                                      <td className="edt ">
-                                    <Link  to={"/Subcontent" + "?id=" + item.contentId +"&parent="+ item.heading}  className="wd-100" >
-                                        <p style={{ marginBottom: "5px" }}>
-                                          <BiShowAlt style={{ color: "#16aaff" }} size={22}/>
-                                        </p>
-                                    </Link>
-                                      </td>
 
 
                                     <td className="edt" style={{ cursor: "pointer" }}
@@ -431,21 +192,6 @@ export default class showcontent extends Component {
                                           size={22}
                                           style={{ color: "red" }}
                                         />
-                                      </p>
-                                    </td>
-
-                                    <td>
-                                      <p
-                                        onClick={() => this.upData(item, i)}
-                                        className="wd-50 crp"
-                                      >
-                                        <AiOutlineUp color="#000" size={20} />
-                                      </p>
-                                      <p
-                                        onClick={() => this.downData(item, i)}
-                                        className="wd-50 crp"
-                                      >
-                                        <AiOutlineDown size={20} color="#000" />
                                       </p>
                                     </td>
                                   </tr>
@@ -473,7 +219,7 @@ export default class showcontent extends Component {
             )}
           </div>
 
-          {this.state.bigLoader ? (
+          {/* {this.state.bigLoader ? (
             <div className="ldbi" style={{ position: "fixed" }}>
               <TailSpin
                 color="#00BFFF"
@@ -482,7 +228,7 @@ export default class showcontent extends Component {
                 ariaLabel="loading"
               />
             </div>
-          ) : null}
+          ) : null} */}
         </div>
 
         {/*  */}

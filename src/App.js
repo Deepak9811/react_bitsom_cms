@@ -12,7 +12,11 @@ import Eventedit from './Eventedit'
 import Contentedit from './Contentedit'
 import Feedbackedit from './feedbackedit'
 import Question from './feedback/questions'
+import NewsAndNotice from './NewsAndNotice'
+import NewsAndNotices from './NewsAndNotices'
+import NewsAndNoticeEdit from './NewsAndNoticeEdit'
 import FeedbackResponse from './Feedbackresponse'
+
 
 import Protected from './common/Protected';
 
@@ -35,6 +39,10 @@ function App() {
         <Route exact path='/' element={<Home/> }></Route>
 
         <Route exact path='/addImage' element={<AddImage />}></Route>
+
+        <Route exact path='/NewsAndNotice' element={<NewsAndNotice />}></Route>
+        <Route exact path='/NewsAndNotices' element={<NewsAndNotices />}></Route>
+        <Route exact path='/NewsAndNoticeedit' element={<NewsAndNoticeEdit />}></Route>
         
   
         <Route exact path='/Content' element={<Content />}></Route>

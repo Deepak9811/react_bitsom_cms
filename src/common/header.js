@@ -370,7 +370,7 @@ export default class header extends Component {
                     <li>
                       <Link to={"/content"}>
                         <MdOutlinePersonAddAlt className="svgicon" />
-                        New Content
+                        Add Content
                       </Link>
                     </li>
                     <li>
@@ -382,14 +382,14 @@ export default class header extends Component {
                     <li>
                       <Link to={"/event"}>
                         <MdOutlinePersonAddAlt className="svgicon" />
-                        New Event
+                        Add Event
                       </Link>
                     </li>
 
                     <li>
                       <Link to={"/feedback"}>
                         <MdOutlineFeedback className="svgicon" />
-                        New Feedback
+                        Add Feedback
                       </Link>
                     </li>
 
@@ -406,6 +406,23 @@ export default class header extends Component {
                         Add Image
                       </Link>
                     </li>
+
+                    <li>
+                      <Link to={"/NewsAndNotices"}>
+                        <BiImageAdd className="svgicon" />
+                       News And Notices
+                      </Link>
+                    </li>
+
+
+                    <li>
+                      <Link to={"/NewsAndNotice"}>
+                        <BiImageAdd className="svgicon" />
+                       Add News And Notices
+                      </Link>
+                    </li>
+
+                   
                   </ul>
                 </div>
               </div>
