@@ -348,7 +348,7 @@ export default class header extends Component {
                   </button>
                 </span>
               </div>
-              <div className="scrollbar-sidebar">
+              <div className="scrollbar-sidebar" style={{overflow: "auto"}}>
                 <div className="app-sidebar__inner">
                   <ul className="vertical-nav-menu">
                     <li className="app-sidebar__heading">Dashboards</li>

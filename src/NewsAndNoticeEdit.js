@@ -33,6 +33,7 @@ function NewsAndNotice() {
   const [profileImg, setprofileImg] = useState("");
   const [imageTypes, setimageTypes] = useState(".jpg");
   const [bigLoader, setbigLoader] = useState(true);
+  const [newId, setnewId] = useState('')
 
   let navigate = useNavigate();
   let [searchParams, setsearchParams] = useSearchParams();
@@ -40,13 +41,15 @@ function NewsAndNotice() {
   useEffect(() => {
     window.scrollTo(0, 0);
     let id = searchParams.get("id");
+    setnewId(id)
+
     getNewsAndNotices(id);
   }, []);
 
   const getNewsAndNotices = (id) => {
     const libconCode = JSON.parse(localStorage.getItem("libCode"));
     console.log("libconCode :- ", libconCode);
-    let url = `http://192.168.1.217:1003/shownews?id=${id}&libcode=${libconCode}`;
+    let url = `${process.env.REACT_APP_API_kEY}shownews?id=${id}&libcode=${libconCode}`;
     // let url = `${process.env.REACT_APP_API_kEY}getparent?libid=${libconCode}`;
 
     fetch(url, {
@@ -175,7 +178,7 @@ function NewsAndNotice() {
   const saveNewsAndNotice = () => {
     // let url = `${process.env.REACT_APP_API_kEY}savecontent`
     let code = JSON.parse(localStorage.getItem("libCode"));
-    let url = `http://192.168.1.217:1003/savenews`;
+    let url = `${process.env.REACT_APP_API_kEY}savenews`;
     fetch(url, {
       method: "POST",
       headers: {
@@ -183,7 +186,7 @@ function NewsAndNotice() {
         "content-type": "application/json",
       },
       body: JSON.stringify({
-        ID: "0",
+        ID: newId,
         newsheading: heading,
         libcode: code,
         maintext: draftToHtml(convertToRaw(editorState.getCurrentContent())),
@@ -360,7 +363,7 @@ function NewsAndNotice() {
             </div>
 
             <div className="mrt-2">
-              <label>NewsAndNotice Description</label>
+              <label>News And Notice Description</label>
               <span className="text-danger">*</span>
             </div>
 

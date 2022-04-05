@@ -269,6 +269,8 @@ const AddImage = () => {
                                     accept="image/*"
                                     onChange={imageHandler}
                                 />
+                                <p style={{marginBottom:'0px'}}>Image Should Be Less 300KB,</p>
+                                <p style={{marginBottom:'0px'}}>Resolution 300 x 250 OR Approx</p>
                             </div>
 
                             <div className="col-md-1 mb--2 imghover"

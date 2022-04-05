@@ -8694,7 +8694,10 @@ button,
 .app-header__logo .logo-src {
   height: 40px;
   width: 132px;
-  background-image: url("../image/logo-inverse.png");
+  background-image: url("../image/logo.png");
+  background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
 }
 .app-header__menu,
 .app-header__mobile-menu {
@@ -8859,7 +8862,11 @@ button,
   background: rgba(255, 255, 255, 0.8);
 }
 .app-header.header-text-light .app-header__logo .logo-src {
-  background: url("../image/logo-inverse.png");
+  /* background: url("../image/logo-inverse.png"); */
+  background-image: url("../image/logo.png");
+  background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
 }
 .app-header.header-text-light .app-header__mobile-menu .hamburger-inner,
 .app-header.header-text-light .app-header__mobile-menu .hamburger-inner::before,
@@ -8978,7 +8985,11 @@ button,
   background: rgba(0, 0, 0, 0.8);
 }
 .app-header.header-text-dark .app-header__logo .logo-src {
-  background: url("../image/logo-inverse.png");
+  /* background: url("../image/logo-inverse.png"); */
+  background-image: url("../image/logo.png");
+  background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
 }
 .app-sidebar {
   width: 280px;
@@ -9215,7 +9226,11 @@ button,
   background: rgba(255, 255, 255, 0.2);
 }
 .app-sidebar.sidebar-text-light .app-header__logo .logo-src {
-  background: url("../image/logo-inverse.png");
+  /* background: url("../image/logo-inverse.png"); */
+  background-image: url("../image/logo.png");
+  background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
 }
 .app-sidebar.sidebar-text-light .app-header__logo .hamburger-inner,
 .app-sidebar.sidebar-text-light .app-header__logo .hamburger-inner::before,

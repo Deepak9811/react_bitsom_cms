@@ -221,7 +221,7 @@ export default function Contentedit() {
       },
       body: JSON.stringify({
         contentId: contentId,
-        parentId: parentId,
+        parentId: !disabledChild ? contentNameParents : parentId,
         libcode: libconCode,
         heading: heading,
         text: draftToHtml(convertToRaw(editorState.getCurrentContent())),

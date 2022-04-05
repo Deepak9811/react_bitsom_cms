@@ -31,7 +31,7 @@ export default class shownewsandnotice extends Component {
   getData() {
     const libconCode = JSON.parse(localStorage.getItem("libCode"));
     console.log("libconCode :- ", libconCode);
-    let url = `http://192.168.1.217:1003/shownews?id=0&libcode=${libconCode}`;
+    let url = `${process.env.REACT_APP_API_kEY}shownews?id=0&libcode=${libconCode}`;
     // let url = `${process.env.REACT_APP_API_kEY}getparent?libid=${libconCode}`;
 
     fetch(url, {
@@ -91,7 +91,7 @@ export default class shownewsandnotice extends Component {
     // }
     // console.log(this.state.showChngPreview)
     const libconCode = JSON.parse(localStorage.getItem("libCode"));
-    let url = `http://192.168.1.217:1003/shownews?id=${id}&libcode=${libconCode}`;
+    let url = `${process.env.REACT_APP_API_kEY}shownews?id=${id}&libcode=${libconCode}`;
     // let url = `${process.env.REACT_APP_API_kEY}getparent?libid=${libconCode}`;
 
     fetch(url,
@@ -164,7 +164,7 @@ export default class shownewsandnotice extends Component {
       // console.log(item);
       let id = item.ID;
     //   let url = `${process.env.REACT_APP_API_kEY}Delete?id=${id}&type=News`;
-      let url = `http://192.168.1.217:1003/Delete?id=${id}&type=News`;
+      let url = `${process.env.REACT_APP_API_kEY}Delete?id=${id}&type=News`;
 
       fetch(url, {
         method: "POST",
@@ -222,7 +222,7 @@ export default class shownewsandnotice extends Component {
                   </div>
                 </div>
                 <div className="page-title-actions">
-                  <Link to="/content">
+                  <Link to="/NewsAndNotice">
                     <button type="button" className="mr-1 btn btn-success">
                       <BiShowAlt
                         className="fa pe-7s-help1"

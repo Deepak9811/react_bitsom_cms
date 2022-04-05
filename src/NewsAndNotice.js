@@ -119,7 +119,7 @@ function NewsAndNotice() {
     // console.log(order, system, app);
     // let url = `${process.env.REACT_APP_API_kEY}savecontent`
     let code = JSON.parse(localStorage.getItem("libCode"));
-    let url = `http://192.168.1.217:1003/savenews`;
+    let url = `${process.env.REACT_APP_API_kEY}savenews`;
     fetch(url, {
       method: "POST",
       headers: {
@@ -244,6 +244,7 @@ function NewsAndNotice() {
                   autoFocus=""
                   autoComplete="on"
                 />
+                
               </div>
               <div className="col-md-6">
                 <div className="form-row">
@@ -301,12 +302,14 @@ function NewsAndNotice() {
                       </a>
                     </div>
                   ) : null}
+                  
                 </div>
               </div>
+                    
             </div>
 
             <div className="mrt-2">
-              <label>NewsAndNotice Description</label>
+              <label>News And Notice Description</label>
               <span className="text-danger">*</span>
             </div>
 
