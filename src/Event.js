@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 import { EditorState, convertToRaw } from "draft-js";
 import draftToHtml from "draftjs-to-html";
-import { FiUsers } from "react-icons/fi";
+import { BsCalendar4Event } from "react-icons/bs";
 // import { BiShowAlt } from "react-icons/bs";
 import { BiShowAlt } from "react-icons/bi";
 
@@ -340,7 +340,7 @@ class Event extends Component {
             <div className="page-title-wrapper">
               <div className="page-title-heading">
                 <div className="page-title-icon">
-                  <FiUsers className="pe-7s-users icon-gradient bg-mean-fruit" />
+                  <BsCalendar4Event className="pe-7s-users icon-gradient bg-mean-fruit" />
                 </div>
                 <div>
                   EVENT - ADD/UPDATE
@@ -652,7 +652,7 @@ class Event extends Component {
                           className="custom-control-label"
                           htmlFor="exampleCustomInline6"
                         >
-                          Physical
+                          Active
                         </label>
                       </div>
                     </div>
@@ -681,7 +681,7 @@ class Event extends Component {
                           className="custom-control-label"
                           htmlFor="exampleCustomInline1"
                         >
-                          Virtual
+                          Active
                         </label>
                       </div>
                     </div>

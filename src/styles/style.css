@@ -96,6 +96,10 @@ a {
   float: right;
 }
 
+.txtU {
+  text-transform: uppercase !important;
+}
+
 /* --------------------------HEADER-------------------------------------------- */
 
 .modal-content {

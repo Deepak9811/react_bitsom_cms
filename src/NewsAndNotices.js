@@ -214,10 +214,13 @@ export default class shownewsandnotice extends Component {
                   <div className="page-title-icon">
                     <FaClipboardList></FaClipboardList>
                   </div>
-                  <div>
+                  <div >
+                    <div className="txtU"> 
+
                          News And Notice LIST
+                    </div>
                     <div className="page-title-subheading">
-                      Click on New Content to add new content to the system.
+                      Click on Add News And Notice to add new detail to the system.
                     </div>
                   </div>
                 </div>

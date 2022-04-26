@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import { EditorState, convertToRaw, ContentState } from "draft-js";
 import draftToHtml from "draftjs-to-html";
-import { FiUsers } from "react-icons/fi";
+import { RiCalendarEventLine } from "react-icons/ri";
 import { BiShowAlt } from "react-icons/bi";
 
 import { Editor } from "react-draft-wysiwyg";
@@ -316,10 +316,10 @@ function Eventedit() {
           <div className="page-title-wrapper">
             <div className="page-title-heading">
               <div className="page-title-icon">
-                <FiUsers className="pe-7s-users icon-gradient bg-mean-fruit" />
+                <RiCalendarEventLine className="pe-7s-users icon-gradient bg-mean-fruit" />
               </div>
               <div>
-                EVENT - ADD/UPDATE
+                EVENT - UPDATE
                 <div className="page-title-subheading">
                   <p>
                     Enter the details and click on SAVE button to save the
@@ -654,7 +654,7 @@ function Eventedit() {
                         className="custom-control-label"
                         htmlFor="exampleCustomInline6"
                       >
-                        Physical
+                        Active
                       </label>
                     </div>
                   </div>
@@ -684,7 +684,7 @@ function Eventedit() {
                         className="custom-control-label"
                         htmlFor="exampleCustomInline1"
                       >
-                        Virtual
+                        Active
                       </label>
                     </div>
                   </div>

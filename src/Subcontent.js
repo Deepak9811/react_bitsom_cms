@@ -323,7 +323,7 @@ export const Subcontent = () => {
         result.json().then((resp) => {
           console.log("response update :- ", resp);
           if (resp.response === "Success") {
-            alert("Contents Upadate Succesfully.");
+            alert("Sub-Contents Upadate Succesfully.");
             setupdateLoader(false);
             getChildData();
             setshowUpDateDataBtn(false);
@@ -361,9 +361,9 @@ export const Subcontent = () => {
                   <FaClipboardList></FaClipboardList>
                 </div>
                 <div>
-                  CONTENT LIST
+                 SUB-CONTENT LIST
                   <div className="page-title-subheading">
-                    Click on New Content to add new content to the system.
+                    Click on show content to show the content list.
                   </div>
                 </div>
               </div>
@@ -385,7 +385,7 @@ export const Subcontent = () => {
             <>
               <div className="main-card mb-0 card">
                 <div className="card-header bg-info text-white">
-                  List of contentS
+                  List of sub-contentS
                   {showUpDateDataBtn ? (
                     <div className="col-md-3 ps-a">
                       {!updateLoader ? (
@@ -421,7 +421,7 @@ export const Subcontent = () => {
                             <th>Heading</th>
                             {/* <th>Sort Order</th> */}
                             <th>Active</th>
-                            <th style={{ width: "75px" }}>Action</th>
+                            <th style={{ width: "75px" }}>Edit</th>
                             <th style={{ width: "82px" }}>Preview</th>
                             <th style={{ width: "20px" }}>Delete</th>
                             <th style={{ width: "20px" }}>Position</th>
@@ -543,8 +543,8 @@ export const Subcontent = () => {
             <div className="modal-dialog " style={{ background: "#fff" }}>
               <div className="modal-content">
                 <div className="modal-header">
-                  <h5 className="modal-title" id="exampleModalLongTitle">
-                    Content Preview
+                  <h5 className="modal-title" >
+                   Sub-Content Preview
                   </h5>
                   <button
                     type="button"

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import { TailSpin } from "react-loader-spinner";
-import { FiUsers } from "react-icons/fi";
+import { GrDocumentUpdate } from "react-icons/gr";
 // import { BiShowAlt } from "react-icons/bs";
 import { BiShowAlt } from "react-icons/bi";
 import moment from "moment";
@@ -218,7 +218,7 @@ const FeedbackEdit = () => {
                 setvalidUpto(new Date());
                 setactive(false);
 
-                alert("Feedback Question Add Successfully.");
+                alert("Feedback Question Update Successfully.");
                 naviagte("/feedback/questions");
                 naviagte("/feedback/questions");
               }
@@ -415,7 +415,7 @@ const FeedbackEdit = () => {
             setactive(false);
             naviagte("/feedback/questions");
             // Router.push("/feedback/questions");
-            alert("Feedback Update Successfully.");
+            alert("Feedback Question Update Successfully.");
           } else {
             alert("Something wents wrong.");
             setUpdateloading(false);
@@ -550,10 +550,10 @@ const FeedbackEdit = () => {
           <div className="page-title-wrapper">
             <div className="page-title-heading">
               <div className="page-title-icon">
-                <FiUsers className="pe-7s-users icon-gradient bg-mean-fruit" />
+                <GrDocumentUpdate className="pe-7s-users icon-gradient bg-mean-fruit" />
               </div>
               <div>
-                FEEDBACK - ADD/UPDATE
+                FEEDBACK - UPDATE
                 <div className="page-title-subheading">
                   <p>
                     Enter the details and click on SAVE button to save the

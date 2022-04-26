@@ -96,7 +96,7 @@ const AddImage = () => {
                 if (resp.response === "Success") {
                     setloading(false)
                     setshowimage("")
-                    alert("Uploaded image.")
+                    alert("Image Uploaded Successfully.")
                     setImagetype('')
                     sethideImage(true)
                     ShowImage();
@@ -117,7 +117,15 @@ const AddImage = () => {
 
 
     const imageHandler = (e) => {
-        sethideImage(false)
+        
+       
+
+        let dk = e.target.files[0]
+
+        if (dk.size < 300000) {
+
+            sethideImage(false)
+
 
         const reader = new FileReader();
         reader.onload = () => {
@@ -158,6 +166,10 @@ const AddImage = () => {
             }
         };
         reader.readAsDataURL(e.target.files[0]);
+
+    }else{
+        alert("Image should be less than 300KB");
+    }
     };
 
     const deleteContent = (currEle) => {
@@ -260,6 +272,7 @@ const AddImage = () => {
 
                             <div className="col-md-4 mb-1 mt-1">
                                 <label>Image</label>
+                                <span className="text-danger">*</span>
                                 <input
                                     className="form-control-file"
                                     id="contentimage"
@@ -268,10 +281,33 @@ const AddImage = () => {
                                     value=""
                                     accept="image/*"
                                     onChange={imageHandler}
+                                    style={{marginBottom:"2%"}}
                                 />
                                 <p style={{marginBottom:'0px'}}>Image Should Be Less 300KB,</p>
                                 <p style={{marginBottom:'0px'}}>Resolution 300 x 250 OR Approx</p>
                             </div>
+
+
+                            {/* <div className="col-md-4 mb-1">
+                                <label>Image</label>
+                                <span className="text-danger">*</span>
+                                <input
+                                    // className="form-control-file"
+                                    id="contentimage"
+                                    name="contentimage"
+                                    type="file"
+                                    value=""
+                                    accept="image/*"
+                                    onChange={imageHandler}
+                                    style={{display:"none"}}
+                                />
+                                <div className="position-relative form-group ">
+
+                                <label className="form-control" htmlFor="contentimage">Select Image</label>
+                                <p style={{marginBottom:'0px'}}>Image Should Be Less 300KB,</p>
+                                <p style={{marginBottom:'0px'}}>Resolution 300 x 250 OR Approx</p>
+                                </div>
+                            </div> */}
 
                             <div className="col-md-1 mb--2 imghover"
 

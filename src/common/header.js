@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import { AiOutlineRocket } from "react-icons/ai";
 import { BiDirections, BiImageAdd ,BiDotsVerticalRounded} from "react-icons/bi";
+import { BsNewspaper,BsCalendar4Event} from "react-icons/bs";
+import { AiOutlineFileAdd} from "react-icons/ai";
+import { MdOutlineContentPaste} from "react-icons/md";
 import { HiOutlineUserCircle } from "react-icons/hi";
 import {
   MdOutlinePersonAddAlt,
@@ -351,7 +354,7 @@ export default class header extends Component {
               <div className="scrollbar-sidebar" style={{overflow: "auto"}}>
                 <div className="app-sidebar__inner">
                   <ul className="vertical-nav-menu">
-                    <li className="app-sidebar__heading">Dashboards</li>
+                    <li className="app-sidebar__heading">Dashboard</li>
                     <li>
                       <Link to={"/"}>
                         <>
@@ -363,33 +366,26 @@ export default class header extends Component {
                     <li className="app-sidebar__heading">Masters</li>
                     <li>
                       <Link to={"/contents"}>
-                        <BiDirections className="svgicon" />
+                        <MdOutlineContentPaste className="svgicon" />
                         Contents
                       </Link>
                     </li>
                     <li>
                       <Link to={"/content"}>
-                        <MdOutlinePersonAddAlt className="svgicon" />
+                        <AiOutlineFileAdd className="svgicon" />
                         Add Content
                       </Link>
                     </li>
                     <li>
                       <Link to={"/events"}>
-                        <BiDirections className="svgicon" />
+                        <BsCalendar4Event className="svgicon" />
                         Events
                       </Link>
                     </li>
                     <li>
                       <Link to={"/event"}>
-                        <MdOutlinePersonAddAlt className="svgicon" />
+                        <AiOutlineFileAdd className="svgicon" />
                         Add Event
-                      </Link>
-                    </li>
-
-                    <li>
-                      <Link to={"/feedback"}>
-                        <MdOutlineFeedback className="svgicon" />
-                        Add Feedback
                       </Link>
                     </li>
 
@@ -401,6 +397,15 @@ export default class header extends Component {
                     </li>
 
                     <li>
+                      <Link to={"/feedback"}>
+                        <AiOutlineFileAdd className="svgicon" />
+                        Add Feedback
+                      </Link>
+                    </li>
+
+                   
+
+                    <li>
                       <Link to={"/addImage"}>
                         <BiImageAdd className="svgicon" />
                         Add Image
@@ -409,7 +414,7 @@ export default class header extends Component {
 
                     <li>
                       <Link to={"/NewsAndNotices"}>
-                        <BiImageAdd className="svgicon" />
+                        <BsNewspaper className="svgicon" />
                        News And Notices
                       </Link>
                     </li>
@@ -417,8 +422,8 @@ export default class header extends Component {
 
                     <li>
                       <Link to={"/NewsAndNotice"}>
-                        <BiImageAdd className="svgicon" />
-                       Add News And Notices
+                        <AiOutlineFileAdd className="svgicon" />
+                       Add News And Notice
                       </Link>
                     </li>
 

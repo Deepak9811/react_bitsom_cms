@@ -141,7 +141,7 @@ function NewsAndNotice() {
           // console.log("response :- ", resp);
           if (resp.response === "Success") {
             naviagte("/newsandnotices");
-            alert("Add Successfully.");
+            alert("Add News And Notice Successfully.");
           } else {
             // this.setState({
             //   loading: false,
@@ -182,7 +182,10 @@ function NewsAndNotice() {
                 <RiCalendarEventLine className="pe-7s-users icon-gradient bg-mean-fruit" />
               </div>
               <div>
+              <div className="txtU"> 
+
                 News And Notice - ADD
+                </div>
                 <div className="page-title-subheading">
                   <p>
                     Enter the details and click on SAVE button to save the

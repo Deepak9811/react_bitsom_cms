@@ -21,8 +21,8 @@ function NewsAndNotice() {
   const [heading, setheading] = useState("");
   const [imagePath, setimagePath] = useState("");
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
-  const [system, setsystem] = useState(true);
-  const [inapp, setinapp] = useState(true);
+  const [system, setsystem] = useState(false);
+  const [inapp, setinapp] = useState(false);
   const [showChngPreview, setshowChngPreview] = useState(false);
   const [loadingdata, setloadingdata] = useState(false);
   const [popUPData, setpopUPData] = useState([]);
@@ -200,7 +200,7 @@ function NewsAndNotice() {
           // console.log("response :- ", resp);
           if (resp.response === "Success") {
             navigate("/newsandnotices");
-            alert("Update Successfully.");
+            alert("News And Notice Update Successfully.");
           } else {
             alert("Something went wrong.Please try again.");
           }
@@ -239,7 +239,10 @@ function NewsAndNotice() {
                 <RiCalendarEventLine className="pe-7s-users icon-gradient bg-mean-fruit" />
               </div>
               <div>
+              <div className="txtU"> 
+
                 News And Notice - UPDATE
+                </div>
                 <div className="page-title-subheading">
                   <p>
                     Enter the details and click on SAVE button to save the

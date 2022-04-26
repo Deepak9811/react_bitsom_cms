@@ -241,13 +241,13 @@ export default class Showevent extends Component {
                       <table className="mb-0 table table-striped table-hover">
                         <thead>
                           <tr>
-                            <th style={{ width: "200px" }}>Event</th>
+                            <th style={{ width: "200px" }}>Event Name</th>
                             <th>Type</th>
                             <th>Valid From</th>
                             <th>Valid Upto</th>
-                            <th>Organiser</th>
+                            <th>Location</th>
 
-                            <th>Action</th>
+                            <th>Edit</th>
                             <th>Preview</th>
                             <th style={{ width: "20px" }}>Delete</th>
                           </tr>

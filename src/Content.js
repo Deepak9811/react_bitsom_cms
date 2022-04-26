@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { EditorState, convertToRaw } from "draft-js";
 import draftToHtml from "draftjs-to-html";
-import { FiUsers } from "react-icons/fi";
+import { MdOutlineContentPaste } from "react-icons/md";
 import { BiShowAlt } from "react-icons/bi";
 
 import { TailSpin } from "react-loader-spinner";
@@ -30,6 +30,7 @@ class Content extends Component {
       system: false,
       app: "",
       loading: false,
+      systemContent:false,
       contentId: "",
       showBackBtn: false,
       heading: "",
@@ -192,12 +193,13 @@ class Content extends Component {
         imageType: this.state.imagePath,
         Active: this.state.system,
         Show: this.state.app,
+        systemContent:this.state.systemContent,
         contentimage: this.state.profileImg,
       }),
     })
       .then((result) => {
         result.json().then((resp) => {
-          // console.log("response :- ", resp);
+          console.log("response :- ", resp);
           if (resp.response === "Success") {
             this.setState({
               loading: false,
@@ -322,10 +324,10 @@ class Content extends Component {
             <div className="page-title-wrapper">
               <div className="page-title-heading">
                 <div className="page-title-icon">
-                  <FiUsers className="pe-7s-users icon-gradient bg-mean-fruit" />
+                  <MdOutlineContentPaste className="pe-7s-users icon-gradient bg-mean-fruit" />
                 </div>
                 <div>
-                  CONTENT - ADD/UPDATE
+                  CONTENT - ADD
                   <div className="page-title-subheading">
                     <p>
                       Enter the details and click on SAVE button to save the
@@ -514,7 +516,7 @@ class Content extends Component {
 
               <div
                 className="form-row"
-                style={{ marginTop: "2%", marginBottom: "2%" }}
+                style={{ marginTop: "2%", marginBottom: "2%", }}
               >
                 <div className="col-md-2 mb-1">
                   <label>Sort Order</label>
@@ -531,7 +533,7 @@ class Content extends Component {
                   />
                 </div>
 
-                <div className="col-md-3 mb-1" style={{ marginLeft: "8%" }}>
+                <div className="col-md-3 mb-1" style={{ marginLeft: "5%" }}>
                   <label>Keep Active In The System</label>
                   <div className="position-relative form-group m-2">
                     <div>
@@ -561,7 +563,7 @@ class Content extends Component {
                   </div>
                 </div>
 
-                <div className="col-md-3 mb-1" style={{ marginLeft: "8%" }}>
+                <div className="col-md-3 mb-1" >
                   <label>Keep Showing On The App</label>
                   <div className="position-relative form-group m-2">
                     <div>
@@ -589,6 +591,36 @@ class Content extends Component {
                     </div>
                   </div>
                 </div>
+
+                <div className="col-md-3 mb-1" >
+                  <label>Is System Content</label>
+                  <div className="position-relative form-group m-2">
+                    <div>
+                      <div className="custom-checkbox custom-control">
+                        <input
+                          className="custom-control-input"
+                          id="systemContent"
+                          name="Show"
+                          type="checkbox"
+                          checked={this.state.systemContent ? "checkbox" : null}
+                          onChange={() =>
+                            this.setState({
+                              systemContent: this.state.systemContent ? false : true,
+                            })
+                          }
+                        />
+                        <input name="Show" type="hidden" value="false" />
+                        <label
+                          className="custom-control-label"
+                          htmlFor="systemContent"
+                        >
+                          Show
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
               </div>
 
               <div className="card-footer">

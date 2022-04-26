@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import { EditorState, convertToRaw, ContentState } from "draft-js";
 import draftToHtml from "draftjs-to-html";
-import { FiUsers } from "react-icons/fi";
+import { MdOutlineContentPaste } from "react-icons/md";
 import { BiShowAlt } from "react-icons/bi";
 
 import { Editor } from "react-draft-wysiwyg";
@@ -49,6 +49,7 @@ export default function Contentedit() {
   const [contentNameParents, setcontentNameParents] = useState("");
   const [childData, setchildData] = useState([]);
   const [messageChildDataShow, setmessageChildDataShow] = useState("");
+  const [systemContent, setsystemContent] = useState(false)
 
   let [searchParams, setSearchParams] = useSearchParams();
   let naviagte = useNavigate();
@@ -113,6 +114,7 @@ export default function Contentedit() {
             setbigLoader(false);
             setimagePath(resp.data[0].imageType);
             setparentId(resp.data[0].parentId);
+            setsystemContent(resp.data[0].systemContent);
 
             if (resp.data[0].imageType === "") {
               setshowViewImage(false);
@@ -229,6 +231,7 @@ export default function Contentedit() {
         imageType: imagePath,
         Active: system,
         Show: app,
+        systemContent:systemContent,
         contentimage: "",
       }),
     })
@@ -352,10 +355,10 @@ export default function Contentedit() {
           <div className="page-title-wrapper">
             <div className="page-title-heading">
               <div className="page-title-icon">
-                <FiUsers className="pe-7s-users icon-gradient bg-mean-fruit" />
+                <MdOutlineContentPaste className="pe-7s-users icon-gradient bg-mean-fruit" />
               </div>
               <div>
-                CONTENT - ADD/UPDATE
+                CONTENT - UPDATE
                 <div className="page-title-subheading">
                   <p>
                     Enter the details and click on SAVE button to save the
@@ -587,7 +590,7 @@ export default function Contentedit() {
                 />
               </div>
 
-              <div className="col-md-3 mb-1" style={{ marginLeft: "8%" }}>
+              <div className="col-md-3 mb-1" style={{ marginLeft: "5%" }}>
                 <label>Keep Active In The System</label>
                 <div className="position-relative form-group m-2">
                   <div>
@@ -613,7 +616,7 @@ export default function Contentedit() {
                 </div>
               </div>
 
-              <div className="col-md-3 mb-1" style={{ marginLeft: "8%" }}>
+              <div className="col-md-3 mb-1" >
                 <label>Keep Showing On The App</label>
                 <div className="position-relative form-group m-2">
                   <div>
@@ -630,6 +633,33 @@ export default function Contentedit() {
                       <label
                         className="custom-control-label"
                         htmlFor="exampleCustomInline1"
+                      >
+                        Show
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+
+              <div className="col-md-3 mb-1"  >
+                <label>Is System Content</label>
+                <div className="position-relative form-group m-2">
+                  <div>
+                    <div className="custom-checkbox custom-control">
+                      <input
+                        className="custom-control-input"
+                        id="systemContent"
+                        name="Show"
+                        type="checkbox"
+                        checked={systemContent ? "checkbox" : null}
+                        onChange={() => setsystemContent(systemContent ? false : true)}
+                      />
+                      <input name="Show" type="hidden" value="false" />
+                      <label
+                        className="custom-control-label"
+                        htmlFor="systemContent"
                       >
                         Show
                       </label>

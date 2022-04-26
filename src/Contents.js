@@ -373,8 +373,8 @@ export default class showcontent extends Component {
                               <th>Heading</th>
                               {/* <th>Sort Order</th> */}
                               <th>Active</th>
-                              <th style={{ width: "75px" }}>Action</th>
-                              <th style={{ width: "20px" }}>Options</th>
+                              <th style={{ width: "75px" }}>Edit</th>
+                              <th style={{ width: "11%" }}>Sub-Content</th>
                               <th style={{ width: "82px" }}>Preview</th>
                               <th style={{ width: "20px" }}>Delete</th>
                               <th style={{ width: "20px" }}>Position</th>
