@@ -44,12 +44,14 @@ export default function Contentedit() {
   const [messageShow, setmessageShow] = useState("");
   const [hidePopData, sethidePopData] = useState(false);
   const [content_type, setcontent_type] = useState("");
-  const [parentId, setparentId] = useState('0');
+  const [parentId, setparentId] = useState("0");
   const [disabledChild, setdisabledChild] = useState(false);
   const [contentNameParents, setcontentNameParents] = useState("");
   const [childData, setchildData] = useState([]);
   const [messageChildDataShow, setmessageChildDataShow] = useState("");
-  const [systemContent, setsystemContent] = useState(false)
+  const [systemContent, setsystemContent] = useState(false);
+  const [disableSystemContentEdit, setdisableSystemContentEdit] =
+    useState(false);
 
   let [searchParams, setSearchParams] = useSearchParams();
   let naviagte = useNavigate();
@@ -67,7 +69,6 @@ export default function Contentedit() {
         setdisabledChild(true);
         setcontentNameParents(parentname);
       } else {
-       
         setdisabledChild(false);
       }
 
@@ -115,6 +116,12 @@ export default function Contentedit() {
             setimagePath(resp.data[0].imageType);
             setparentId(resp.data[0].parentId);
             setsystemContent(resp.data[0].systemContent);
+
+            if (resp.data[0].systemContent === true) {
+              setdisableSystemContentEdit(true);
+            } else {
+              setdisableSystemContentEdit(false);
+            }
 
             if (resp.data[0].imageType === "") {
               setshowViewImage(false);
@@ -231,7 +238,7 @@ export default function Contentedit() {
         imageType: imagePath,
         Active: system,
         Show: app,
-        systemContent:systemContent,
+        systemContent: systemContent,
         contentimage: "",
       }),
     })
@@ -340,7 +347,7 @@ export default function Contentedit() {
     }
   };
 
-  console.log(contentNameParents)
+  console.log(contentNameParents);
 
   return (
     <>
@@ -391,6 +398,7 @@ export default function Contentedit() {
                 <span className="text-danger">*</span>
 
                 <input
+                  disabled={disableSystemContentEdit ? true : false}
                   type="text"
                   value={heading}
                   onChange={(e) => setheading(e.target.value)}
@@ -402,137 +410,145 @@ export default function Contentedit() {
                 />
               </div>
 
-              <div className="col-md-3 mb-1 ">
-                <label>Type</label>
-                {/* <span className="text-danger">*</span> */}
-                <div className="position-relative form-group ">
-                  <select
-                    // disabled={disabledChild ? true : false}
-                    id=""
-                    className="form-control"
-                    value={!disabledChild ? contentNameParents : parentId}
-                    aria-label="question_type"
-                    name="question_type"
-                    title="question_type"
-                    onChange={
-                      // (e) => setcontent_type(e.target.value)
-                      (e) =>   {!disabledChild ? setcontentNameParents(e.target.value) : setparentId(e.target.value)}
-                      // this.setState({ question_type: e.target.value })
-                    }
-                  >
-                    {/* {disabledChild && (
-                      <option value="" hidden>
-                        {contentNameParents}
-                      </option>
-                    )} */}
+              {!disableSystemContentEdit && (
+                <div className="col-md-3 mb-1 ">
+                  <label>Type</label>
+                  {/* <span className="text-danger">*</span> */}
+                  <div className="position-relative form-group ">
+                    <select
+                      // disabled={disabledChild ? true : false}
+                      id=""
+                      className="form-control"
+                      value={!disabledChild ? contentNameParents : parentId}
+                      aria-label="question_type"
+                      name="question_type"
+                      title="question_type"
+                      onChange={
+                        // (e) => setcontent_type(e.target.value)
+                        (e) => {
+                          !disabledChild
+                            ? setcontentNameParents(e.target.value)
+                            : setparentId(e.target.value);
+                        }
+                        // this.setState({ question_type: e.target.value })
+                      }
+                    >
+                      {/* {disabledChild && (
+       <option value="" hidden>
+         {contentNameParents}
+       </option>
+     )} */}
 
-                    {/* {!disabledChild && ( */}
+                      {/* {!disabledChild && ( */}
                       {/* <> */}
-                        <option value="0" style={{ padding: "5%" }}>
-                          Select Parent Content
-                        </option>
-
-                        {childData.map((item, i) => {
-                          return (
-                            <React.Fragment key={i}>
-                              <option value={item.contentId}>
-                                {item.heading}
-                              </option>
-                            </React.Fragment>
-                          );
-                        })}
-                      {/* </>
-                    )} */}
-
-                    {/* <option value="Main">Main</option> */}
-                    {/* <option value="MCQ" style={{ padding: "5%" }}>
-                        
+                      <option value="0" style={{ padding: "5%" }}>
+                        Select Parent Content
                       </option>
-                      <option value="RATE"></option> */}
-                  </select>
+
+                      {childData.map((item, i) => {
+                        return (
+                          <React.Fragment key={i}>
+                            <option value={item.contentId}>
+                              {item.heading}
+                            </option>
+                          </React.Fragment>
+                        );
+                      })}
+                      {/* </>
+     )} */}
+
+                      {/* <option value="Main">Main</option> */}
+                      {/* <option value="MCQ" style={{ padding: "5%" }}>
+         
+       </option>
+       <option value="RATE"></option> */}
+                    </select>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
 
-            <div className="form-row">
-              <div className="col-md-6 mb-1">
-                <label>Image Path</label>
-                <span className="text-danger"></span>
+            {!disableSystemContentEdit && (
+              <div className="form-row">
+                <div className="col-md-6 mb-1">
+                  <label>Image Path</label>
+                  <span className="text-danger"></span>
 
-                <input
-                  value={imagePath}
-                  type="text"
-                  readOnly={true}
-                  className="form-control"
-                  placeholder="Image Path....."
-                  required=""
-                  autoFocus=""
-                  autoComplete="on"
-                />
-              </div>
-              <div className="col-md-6">
-                <div className="form-row">
-                  <div className="col-md-3" style={{ marginTop: "31px" }}>
-                    <input
-                      style={{ width: "110px" }}
-                      id="contentimage"
-                      name="contentimage"
-                      type="submit"
-                      className="btn-wide btn btn-success"
-                      value="Select Image"
-                      onClick={() => openPopUP()}
-                    />
-                  </div>
-                  <div className="col-md-3" style={{ marginTop: "31px" }}>
-                    <input
-                      id="contentimage"
-                      name="contentimage"
-                      type="submit"
-                      className="btn-wide btn btn-danger"
-                      value="Remove Image"
-                      onClick={() => removeImage()}
-                      // onChange={this.imageHandler}
-                    />
-                  </div>
-                  {/* URL CHANGE .................*/}
-                  <div className="col-md-3" style={{ marginTop: "31px" }}>
-                    <a href="/addimage" target={"_blank"}>
+                  <input
+                    value={imagePath}
+                    type="text"
+                    readOnly={true}
+                    className="form-control"
+                    placeholder="Image Path....."
+                    required=""
+                    autoFocus=""
+                    autoComplete="on"
+                  />
+                </div>
+                <div className="col-md-6">
+                  <div className="form-row">
+                    <div className="col-md-3" style={{ marginTop: "31px" }}>
                       <input
                         style={{ width: "110px" }}
                         id="contentimage"
                         name="contentimage"
                         type="submit"
-                        className="btn-wide btn btn-primary"
-                        value="Add Image"
-                        //onClick={() => this.removeImage()}
+                        className="btn-wide btn btn-success"
+                        value="Select Image"
+                        onClick={() => openPopUP()}
                       />
-                    </a>
-                  </div>
-                  {/* URL CHANGE ....................*/}
-
-                  {showViewImage ? (
+                    </div>
                     <div className="col-md-3" style={{ marginTop: "31px" }}>
-                      <a href={`${imagePath}`} target={"_blank"}>
+                      <input
+                        id="contentimage"
+                        name="contentimage"
+                        type="submit"
+                        className="btn-wide btn btn-danger"
+                        value="Remove Image"
+                        onClick={() => removeImage()}
+                        // onChange={this.imageHandler}
+                      />
+                    </div>
+                    {/* URL CHANGE .................*/}
+                    <div className="col-md-3" style={{ marginTop: "31px" }}>
+                      <a href="/addimage" target={"_blank"}>
                         <input
                           style={{ width: "110px" }}
                           id="contentimage"
                           name="contentimage"
                           type="submit"
-                          className="btn-wide btn btn-warning"
-                          value="View Image"
-                          //onClick={saveimage}
-                          // onChange={this.imageHandler}
+                          className="btn-wide btn btn-primary"
+                          value="Add Image"
+                          //onClick={() => this.removeImage()}
                         />
                       </a>
                     </div>
-                  ) : null}
+                    {/* URL CHANGE ....................*/}
+
+                    {showViewImage ? (
+                      <div className="col-md-3" style={{ marginTop: "31px" }}>
+                        <a href={`${imagePath}`} target={"_blank"}>
+                          <input
+                            style={{ width: "110px" }}
+                            id="contentimage"
+                            name="contentimage"
+                            type="submit"
+                            className="btn-wide btn btn-warning"
+                            value="View Image"
+                            //onClick={saveimage}
+                            // onChange={this.imageHandler}
+                          />
+                        </a>
+                      </div>
+                    ) : null}
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
+
             <div className="mrt-2">
               <label>Content Description</label>
               <span className="text-danger">*</span>
-            
             </div>
 
             <div className="textEditor">
@@ -569,104 +585,114 @@ export default function Contentedit() {
               className="form-row"
               style={{ marginTop: "2%", marginBottom: "2%" }}
             >
-              <div className="col-md-2 mb-1">
-                <label>Sort Order</label>
-                <span className="text-danger">*</span>
-                <input
-                  className="form-control"
-                  id="SortOrder"
-                  name="SortOrder"
-                  type="text"
-                  maxLength={3}
-                  value={order}
-                  onChange={
-                    (e) => onlyNumberAllow(e)
-                    // setorder(e.target.value)
-                  }
-                  // onChange={(e) =>
-                  //   {setorder( e.target.value)}
+              {!disableSystemContentEdit && (
+                <>
+                  <div className="col-md-2 mb-1">
+                    <label>Sort Order</label>
+                    <span className="text-danger">*</span>
+                    <input
+                      disabled={disableSystemContentEdit ? true : false}
+                      className="form-control"
+                      id="SortOrder"
+                      name="SortOrder"
+                      type="text"
+                      maxLength={3}
+                      value={order}
+                      onChange={
+                        (e) => onlyNumberAllow(e)
+                        // setorder(e.target.value)
+                      }
+                      // onChange={(e) =>
+                      //   {setorder( e.target.value)}
 
-                  // }
-                />
-              </div>
+                      // }
+                    />
+                  </div>
 
-              <div className="col-md-3 mb-1" style={{ marginLeft: "5%" }}>
-                <label>Keep Active In The System</label>
-                <div className="position-relative form-group m-2">
-                  <div>
-                    <div className="custom-checkbox custom-control">
-                      <input
-                        className="custom-control-input"
-                        id="exampleCustomInline6"
-                        name="Active"
-                        type="checkbox"
-                        checked={system ? "checkbox" : null}
-                        onChange={() => setsystem(system ? false : true)}
-                      />
+                  <div className="col-md-3 mb-1" style={{ marginLeft: "5%" }}>
+                    <label>Keep Active In The System</label>
+                    <div className="position-relative form-group m-2">
+                      <div>
+                        <div className="custom-checkbox custom-control">
+                          <input
+                            disabled={disableSystemContentEdit ? true : false}
+                            className="custom-control-input"
+                            id="exampleCustomInline6"
+                            name="Active"
+                            type="checkbox"
+                            checked={system ? "checkbox" : null}
+                            onChange={() => setsystem(system ? false : true)}
+                          />
 
-                      <input name="Active" type="hidden" value="false" />
-                      <label
-                        className="custom-control-label"
-                        htmlFor="exampleCustomInline6"
-                      >
-                        Active
-                      </label>
+                          <input name="Active" type="hidden" value="false" />
+                          <label
+                            className="custom-control-label"
+                            htmlFor="exampleCustomInline6"
+                          >
+                            Active
+                          </label>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
 
-              <div className="col-md-3 mb-1" >
-                <label>Keep Showing On The App</label>
-                <div className="position-relative form-group m-2">
-                  <div>
-                    <div className="custom-checkbox custom-control">
-                      <input
-                        className="custom-control-input"
-                        id="exampleCustomInline1"
-                        name="Show"
-                        type="checkbox"
-                        checked={app ? "checkbox" : null}
-                        onChange={() => setapp(app ? false : true)}
-                      />
-                      <input name="Show" type="hidden" value="false" />
-                      <label
-                        className="custom-control-label"
-                        htmlFor="exampleCustomInline1"
-                      >
-                        Show
-                      </label>
+                  <div className="col-md-3 mb-1">
+                    <label>Keep Showing On The App</label>
+                    <div className="position-relative form-group m-2">
+                      <div>
+                        <div className="custom-checkbox custom-control">
+                          <input
+                            disabled={disableSystemContentEdit ? true : false}
+                            className="custom-control-input"
+                            id="exampleCustomInline1"
+                            name="Show"
+                            type="checkbox"
+                            checked={app ? "checkbox" : null}
+                            onChange={() => setapp(app ? false : true)}
+                          />
+                          <input name="Show" type="hidden" value="false" />
+                          <label
+                            className="custom-control-label"
+                            htmlFor="exampleCustomInline1"
+                          >
+                            Show
+                          </label>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
 
-
-
-              <div className="col-md-3 mb-1"  >
-                <label>Is System Content</label>
-                <div className="position-relative form-group m-2">
-                  <div>
-                    <div className="custom-checkbox custom-control">
-                      <input
-                        className="custom-control-input"
-                        id="systemContent"
-                        name="Show"
-                        type="checkbox"
-                        checked={systemContent ? "checkbox" : null}
-                        onChange={() => setsystemContent(systemContent ? false : true)}
-                      />
-                      <input name="Show" type="hidden" value="false" />
-                      <label
-                        className="custom-control-label"
-                        htmlFor="systemContent"
-                      >
-                        Show
-                      </label>
+                  {disableSystemContentEdit && (
+                    <div className="col-md-3 mb-1">
+                    <label>Is System Content</label>
+                    <div className="position-relative form-group m-2">
+                      <div>
+                        <div className="custom-checkbox custom-control">
+                          <input
+                            disabled={disableSystemContentEdit ? true : false}
+                            className="custom-control-input"
+                            id="systemContent"
+                            name="Show"
+                            type="checkbox"
+                            checked={systemContent ? "checkbox" : null}
+                            onChange={() =>
+                              setsystemContent(systemContent ? false : true)
+                            }
+                          />
+                          <input name="Show" type="hidden" value="false" />
+                          <label
+                            className="custom-control-label"
+                            htmlFor="systemContent"
+                          >
+                            Show
+                          </label>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
+                  )}
+                </>
+              )}
             </div>
 
             <div className="card-footer">
